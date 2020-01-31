@@ -65,6 +65,13 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <dependency>
+            <artifactId>nplusone-core</artifactId>
+            <groupId>com.grexdev</groupId>
+            <version>${parent.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
