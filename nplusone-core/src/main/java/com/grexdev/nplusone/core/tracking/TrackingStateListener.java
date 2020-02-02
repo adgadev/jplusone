@@ -18,8 +18,8 @@ public class TrackingStateListener implements StateListener {
     }
 
     @Override
-    public void statementExecuted() {
-        log.info("########## STATEMENT EXECUTED ##########");
+    public void statementExecuted(String sql) {
+        log.info("########## STATEMENT EXECUTED: {} ##########", sql);
         new StackTraceAnalyzer().check();
     }
 }

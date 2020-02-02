@@ -6,6 +6,5 @@ public interface StateListener {
 
     void sessionClosed();
 
-    void statementExecuted();
-
+    void statementExecuted(String sql);
 }

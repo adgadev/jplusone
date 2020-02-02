@@ -79,7 +79,8 @@ public class StackTraceAnalyzer {
         }
 
         private boolean isClassNotAProxy(Class<?> clazz) {
-            return clazz.getCanonicalName().contains("$HibernateProxy") == false
+            return clazz.getCanonicalName().contains("$Proxy") == false
+                    && clazz.getCanonicalName().contains("$HibernateProxy") == false
                     && clazz.getCanonicalName().contains("$$EnhancerBySpringCGLIB") == false;
         }
     }
