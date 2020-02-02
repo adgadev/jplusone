@@ -1,6 +1,5 @@
 package com.grexdev.nplusone.core.proxy.datasource;
 
-import com.grexdev.nplusone.core.proxy.StateListener;
 import lombok.experimental.Delegate;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,14 +16,11 @@ public class ProxyPreparedStatement implements PreparedStatement {
 
     private final ProxyContext context;
 
-    private final StateListener stateListener;
-
     private final ParametrizedSql parametrizedSql;
 
-    public ProxyPreparedStatement(PreparedStatement delegate, ProxyContext context, StateListener stateListener, String sql) {
+    public ProxyPreparedStatement(PreparedStatement delegate, ProxyContext context, String sql) {
         this.delegate = delegate;
         this.context = context;
-        this.stateListener = stateListener;
         this.parametrizedSql = ParametrizedSql.forSql(sql);
     }
 
@@ -54,26 +50,26 @@ public class ProxyPreparedStatement implements PreparedStatement {
 
     @Override
     public ResultSet executeQuery() throws SQLException {
-        if (context.isRecording()) {
-            stateListener.statementExecuted(parametrizedSql.getSqlWithParameters());
-        }
+        trackStatementExecution();
         return delegate.executeQuery();
     }
 
     @Override
     public int executeUpdate() throws SQLException {
-        if (context.isRecording()) {
-            stateListener.statementExecuted(parametrizedSql.getSqlWithParameters());
-        }
+        trackStatementExecution();
         return delegate.executeUpdate();
     }
 
     @Override
     public boolean execute() throws SQLException {
-        if (context.isRecording()) {
-            stateListener.statementExecuted(parametrizedSql.getSqlWithParameters());
-        }
+        trackStatementExecution();
         return delegate.execute();
+    }
+
+    private void trackStatementExecution() {
+        if (context.isRecording()) {
+            context.getStateListener().statementExecuted(parametrizedSql.getSqlWithParameters());
+        }
     }
 
     private interface PreparedStatementOverwrite {

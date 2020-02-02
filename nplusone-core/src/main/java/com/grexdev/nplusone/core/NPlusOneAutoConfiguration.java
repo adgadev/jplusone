@@ -9,12 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+// TODO: add conditionals
 public class NPlusOneAutoConfiguration {
-
-    @Bean
-    public ProxyContext proxyContext() {
-        return new ProxyContext();
-    }
 
     @Bean
     public StateListener stateListener() {
@@ -22,8 +18,13 @@ public class NPlusOneAutoConfiguration {
     }
 
     @Bean
-    public BeanPostProcessor nplusOneProxyBeanPostProcessor(ProxyContext proxyContext, StateListener stateListener) {
-        return new NPlusOneBeanBeanPostProcessor(proxyContext, stateListener);
+    public ProxyContext proxyContext(StateListener stateListener) {
+        return new ProxyContext(stateListener);
+    }
+
+    @Bean
+    public BeanPostProcessor nplusOneProxyBeanPostProcessor(ProxyContext proxyContext) {
+        return new NPlusOneBeanBeanPostProcessor(proxyContext);
     }
 
 }

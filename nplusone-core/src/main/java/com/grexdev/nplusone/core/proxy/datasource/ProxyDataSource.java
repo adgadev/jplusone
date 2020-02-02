@@ -1,6 +1,5 @@
 package com.grexdev.nplusone.core.proxy.datasource;
 
-import com.grexdev.nplusone.core.proxy.StateListener;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Delegate;
 
@@ -16,14 +15,14 @@ public class ProxyDataSource implements DataSource {
 
     private final ProxyContext context;
 
-    private final StateListener stateListener;
-
     public Connection getConnection() throws SQLException {
-        return new ProxyConnection(delegate.getConnection(), context, stateListener);
+        Connection connection = delegate.getConnection();
+        return new ProxyConnection(connection, context);
     }
 
     public Connection getConnection(String username, String password) throws SQLException {
-        return new ProxyConnection(delegate.getConnection(username, password), context, stateListener);
+        Connection connection = delegate.getConnection(username, password);
+        return new ProxyConnection(connection, context);
     }
 
     private interface DataSourceOverwrite {

@@ -15,8 +15,6 @@ public class NPlusOneBeanBeanPostProcessor implements BeanPostProcessor {
 
     private final ProxyContext context;
 
-    private final StateListener stateListener;
-
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         return bean;
@@ -25,11 +23,11 @@ public class NPlusOneBeanBeanPostProcessor implements BeanPostProcessor {
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         if (bean instanceof DataSource) {
-            return new ProxyDataSource((DataSource) bean, context, stateListener);
+            return new ProxyDataSource((DataSource) bean, context);
         }
 
         if (bean instanceof EntityManagerFactory) {
-            return new EntityManagerFactoryProxy((EntityManagerFactory) bean, stateListener);
+            return new EntityManagerFactoryProxy((EntityManagerFactory) bean, context.getStateListener());
         }
 
         return bean;
