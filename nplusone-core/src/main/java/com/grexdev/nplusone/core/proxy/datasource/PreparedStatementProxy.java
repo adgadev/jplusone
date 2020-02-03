@@ -1,5 +1,6 @@
 package com.grexdev.nplusone.core.proxy.datasource;
 
+import com.grexdev.nplusone.core.proxy.StateListener;
 import lombok.experimental.Delegate;
 import lombok.extern.slf4j.Slf4j;
 
@@ -9,18 +10,18 @@ import java.sql.SQLException;
 import java.sql.Wrapper;
 
 @Slf4j
-public class ProxyPreparedStatement implements PreparedStatement {
+class PreparedStatementProxy implements PreparedStatement {
 
     @Delegate(types = {PreparedStatement.class, Wrapper.class}, excludes = PreparedStatementOverwrite.class)
     private final PreparedStatement delegate;
 
-    private final ProxyContext context;
+    private final StateListener stateListener;
 
     private final ParametrizedSql parametrizedSql;
 
-    public ProxyPreparedStatement(PreparedStatement delegate, ProxyContext context, String sql) {
+    PreparedStatementProxy(PreparedStatement delegate, StateListener stateListener, String sql) {
         this.delegate = delegate;
-        this.context = context;
+        this.stateListener = stateListener;
         this.parametrizedSql = ParametrizedSql.forSql(sql);
     }
 
@@ -67,9 +68,7 @@ public class ProxyPreparedStatement implements PreparedStatement {
     }
 
     private void trackStatementExecution() {
-        if (context.isRecording()) {
-            context.getStateListener().statementExecuted(parametrizedSql.getSqlWithParameters());
-        }
+        stateListener.statementExecuted(parametrizedSql::getSqlWithParameters);
     }
 
     private interface PreparedStatementOverwrite {

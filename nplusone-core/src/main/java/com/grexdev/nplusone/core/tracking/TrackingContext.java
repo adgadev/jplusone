@@ -1,6 +1,5 @@
-package com.grexdev.nplusone.core.proxy.datasource;
+package com.grexdev.nplusone.core.tracking;
 
-import com.grexdev.nplusone.core.proxy.StateListener;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationListener;
@@ -8,9 +7,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 
 @Getter
 @RequiredArgsConstructor
-public class ProxyContext implements ApplicationListener<ContextRefreshedEvent> {
-
-    private final StateListener stateListener;
+public class TrackingContext implements ApplicationListener<ContextRefreshedEvent> {
 
     private boolean recording = false;
 

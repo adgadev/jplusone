@@ -9,13 +9,14 @@ import javax.persistence.EntityManager;
 
 @Slf4j
 @RequiredArgsConstructor
-public class EntityManagerProxy implements EntityManager {
+class EntityManagerProxy implements EntityManager {
 
     @Delegate(excludes = EntityManagerOverwrite.class)
     private final EntityManager delegate;
 
     private final StateListener stateListener;
 
+    @Override
     public void close() {
         stateListener.sessionClosed();
         delegate.close();

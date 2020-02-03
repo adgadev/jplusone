@@ -1,8 +1,8 @@
 package com.grexdev.nplusone.core;
 
-import com.grexdev.nplusone.core.proxy.NPlusOneBeanBeanPostProcessor;
+import com.grexdev.nplusone.core.proxy.ProxiedRootsBeanPostProcessor;
 import com.grexdev.nplusone.core.proxy.StateListener;
-import com.grexdev.nplusone.core.proxy.datasource.ProxyContext;
+import com.grexdev.nplusone.core.tracking.TrackingContext;
 import com.grexdev.nplusone.core.tracking.TrackingStateListener;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.Bean;
@@ -13,18 +13,18 @@ import org.springframework.context.annotation.Configuration;
 public class NPlusOneAutoConfiguration {
 
     @Bean
-    public StateListener stateListener() {
-        return new TrackingStateListener();
+    public TrackingContext proxyContext() {
+        return new TrackingContext();
     }
 
     @Bean
-    public ProxyContext proxyContext(StateListener stateListener) {
-        return new ProxyContext(stateListener);
+    public StateListener stateListener(TrackingContext context) {
+        return new TrackingStateListener(context);
     }
 
     @Bean
-    public BeanPostProcessor nplusOneProxyBeanPostProcessor(ProxyContext proxyContext) {
-        return new NPlusOneBeanBeanPostProcessor(proxyContext);
+    public BeanPostProcessor proxiedRootsBeanPostProcessor(StateListener stateListener) {
+        return new ProxiedRootsBeanPostProcessor(stateListener);
     }
 
 }

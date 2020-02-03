@@ -1,5 +1,7 @@
 package com.grexdev.nplusone.core.proxy;
 
+import java.util.function.Supplier;
+
 public interface StateListener {
 
     void sessionCreated();
@@ -7,4 +9,6 @@ public interface StateListener {
     void sessionClosed();
 
     void statementExecuted(String sql);
+
+    void statementExecuted(Supplier<String> sqlSupplier);
 }
