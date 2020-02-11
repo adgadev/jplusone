@@ -21,7 +21,8 @@ class Domain1Service {
     public List<String> getDataFromAAndFetchDataFromB() {
         Optional<DomainA> domainA1 = domainARepository.findById(1L);
         DomainA domainA = domainA1.get();
-                
+
+        domainA.getDomainB().action();
         return asList(domainA.getName(), domainA.getDomainB().getName());
     }
 }
