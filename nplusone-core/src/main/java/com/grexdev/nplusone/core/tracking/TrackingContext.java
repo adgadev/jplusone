@@ -11,6 +11,8 @@ public class TrackingContext implements ApplicationListener<ContextRefreshedEven
 
     private boolean recording = false;
 
+    private String applicationRootPackage = "com.grexdev.nplusone.test";
+
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         this.recording = true;

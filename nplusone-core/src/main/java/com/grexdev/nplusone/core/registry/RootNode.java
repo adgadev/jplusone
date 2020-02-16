@@ -10,4 +10,5 @@ public class RootNode {
     public void addSession(SessionNode session) {
         sessions.add(session);
     }
+
 }

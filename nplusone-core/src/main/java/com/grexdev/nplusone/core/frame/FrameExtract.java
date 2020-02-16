@@ -1,5 +1,8 @@
 package com.grexdev.nplusone.core.frame;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode
 public class FrameExtract {
 
     private final FrameClassKind type;
@@ -29,4 +32,6 @@ public class FrameExtract {
                 ? "[" + type + "] " + className + '.' + methodName + "(" + fileName + ":" + lineNumber + ")"
                 : "[" + type + "] " + className + '.' + methodName + "(N/A)";
     }
+
+    // TODO: implement cached hashcode
 }

@@ -1,11 +1,13 @@
 package com.grexdev.nplusone.core.registry;
 
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import static com.grexdev.nplusone.core.registry.StatementNode.StatementType.READ;
 import static com.grexdev.nplusone.core.registry.StatementNode.StatementType.WRITE;
 
+@Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class StatementNode {
 
@@ -24,4 +26,5 @@ public class StatementNode {
         // TODO: implement
         return sql;
     }
+
 }
