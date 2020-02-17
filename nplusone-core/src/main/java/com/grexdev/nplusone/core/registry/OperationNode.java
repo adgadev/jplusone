@@ -1,9 +1,13 @@
 package com.grexdev.nplusone.core.registry;
 
+import com.grexdev.nplusone.core.frame.FrameExtract;
 import lombok.Getter;
 
+import javax.persistence.Entity;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.Boolean.FALSE;
 
 @Getter
 public class OperationNode {
@@ -31,8 +35,13 @@ public class OperationNode {
     }
 
     private OperationType resolveOperationType(FrameStack callFramesStack) {
-        // TODO: implicit
-        return OperationType.IMPLICIT;
+        boolean isLastAppCallOnEntityClass = callFramesStack.findLastMatchingFrame(FrameExtract::isNotThirdPartyClass)
+                .map(frameExtract -> frameExtract.getClazz())
+                .map(clazz -> clazz.isAnnotationPresent(Entity.class))
+                .orElse(FALSE);
+
+        return isLastAppCallOnEntityClass ? OperationType.IMPLICIT : OperationType.EXPLICIT;
     }
+
 
 }

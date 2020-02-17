@@ -9,7 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 import static java.util.Collections.emptyList;
 
@@ -57,6 +60,20 @@ public class FrameStack {
         framesIterator.forEachRemaining(remainingFrames::add);
 
         return new FrameStack(remainingFrames);
+    }
+
+    Optional<FrameExtract> findLastMatchingFrame(Predicate<FrameExtract> predicate) {
+        ListIterator<FrameExtract> iterator = callFrames.listIterator(callFrames.size());
+
+        while (iterator.hasPrevious()) {
+            FrameExtract frame = iterator.previous();
+
+            if (predicate.test(frame)) {
+                return Optional.ofNullable(frame);
+            }
+        }
+
+        return Optional.empty();
     }
 
 }
