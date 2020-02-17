@@ -4,10 +4,23 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collector;
+
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toList;
 
 public class StreamUtils {
+
+    public static <T> Collector<T, ?, List<T>> toListReversed() {
+        return collectingAndThen(toList(), list -> {
+            Collections.reverse(list);
+            return list;
+        });
+    }
 
     public static <T> Function<T, Tupple<T>> currentAndPreviousElements() {
         Holder<T> previousElementHolder = new Holder<>();

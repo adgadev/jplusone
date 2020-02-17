@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static com.grexdev.nplusone.core.utils.StreamUtils.toListReversed;
 import static java.lang.StackWalker.Option.SHOW_HIDDEN_FRAMES;
-import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -40,6 +40,7 @@ public class FramesProvider {
                 //.map(StreamUtils.currentAndPreviousElements())
                 //.filter(StreamUtils.anyElementMatches())
                 //.map(Tupple::getMainElement)
-                .collect(toList());
+                .collect(toListReversed());
     }
+
 }
