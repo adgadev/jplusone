@@ -1,6 +1,5 @@
 package com.grexdev.nplusone.core.registry;
 
-import com.grexdev.nplusone.core.frame.FrameExtract;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -13,13 +12,13 @@ public class OperationNode {
 
     private final List<StatementNode> statements = new ArrayList<>();
 
-    private final List<FrameExtract> callFrames;
+    private final FrameStack callFramesStack;
 
     private final OperationType operationType;
 
-    public OperationNode(List<FrameExtract> callFrames) {
-        this.callFrames = callFrames;
-        this.operationType = resolveOperationType(callFrames);
+    public OperationNode(FrameStack callFramesStack) {
+        this.callFramesStack = callFramesStack;
+        this.operationType = resolveOperationType(callFramesStack);
     }
 
     void addStatement(String sql) {
@@ -27,11 +26,11 @@ public class OperationNode {
         statements.add(statement);
     }
 
-    boolean hasCallFrames(List<FrameExtract> callFrames) {
-        return this.callFrames.equals(callFrames);
+    boolean hasCallFramesStack(FrameStack callFramesStack) {
+        return this.callFramesStack.equals(callFramesStack);
     }
 
-    private OperationType resolveOperationType(List<FrameExtract> callFrames) {
+    private OperationType resolveOperationType(FrameStack callFramesStack) {
         // TODO: implicit
         return OperationType.IMPLICIT;
     }

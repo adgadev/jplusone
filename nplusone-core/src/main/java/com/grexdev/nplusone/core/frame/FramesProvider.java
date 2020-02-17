@@ -1,5 +1,6 @@
 package com.grexdev.nplusone.core.frame;
 
+import com.grexdev.nplusone.core.registry.FrameStack;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,16 +28,18 @@ public class FramesProvider {
         this.frameClassFactory = new FrameClassFactory(applicationRootPackage, PROXY_CLASS_NAME_MARKERS);
     }
 
-    public List<FrameExtract> captureCallFrames() {
-        return StackWalker.getInstance(WALKER_OPTIONS)
+    public FrameStack captureCallFrames() {
+        List<FrameExtract> callFrames = StackWalker.getInstance(WALKER_OPTIONS)
                 .walk(this::collectFrames);
+
+        return new FrameStack(callFrames);
     }
 
     private List<FrameExtract> collectFrames(Stream<StackFrame> stream) {
         return stream
                 .map(frameClassFactory::createFrameClass)
                 .map(FrameExtract::new)
-                .peek(appFrame -> log.info(appFrame.toString()))
+                //.peek(appFrame -> log.info(appFrame.toString()))
                 //.map(StreamUtils.currentAndPreviousElements())
                 //.filter(StreamUtils.anyElementMatches())
                 //.map(Tupple::getMainElement)

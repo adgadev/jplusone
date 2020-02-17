@@ -1,6 +1,5 @@
 package com.grexdev.nplusone.core.registry;
 
-import com.grexdev.nplusone.core.frame.FrameExtract;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,34 +16,23 @@ public class SessionNode {
 
     private final List<OperationNode> operations = new ArrayList<>();
 
-    private final List<FrameExtract> callFrames;
+    private final FrameStack initialCallFrameStack;
 
-    // TODO: refactor
-    public void addStatement(String sql, List<FrameExtract> operationCallFrames) {
-        if (startsWith(callFrames)) {
-            List<FrameExtract> callFrames = operationCallFrames.subList(this.callFrames.size(), operationCallFrames.size());
+    private FrameStack sessionCallFrameStack;
 
-            getLastOperationNode()
-                    .filter(operationNode -> operationNode.hasCallFrames(callFrames))
-                    .ifPresentOrElse(
-                            addStatementToLastOperation(sql),
-                            addStatementToNewOperation(sql, callFrames));
-
-        } else {
-            log.warn("Unable to match session and operation call frames");
+    public void addStatement(String sql, FrameStack completeOperationFramesStack) {
+        if (sessionCallFrameStack == null) {
+            sessionCallFrameStack = initialCallFrameStack.intersection(completeOperationFramesStack);
         }
-    }
 
-    private Consumer<OperationNode> addStatementToLastOperation(String sql) {
-        return operationNode -> operationNode.addStatement(sql);
-    }
+        FrameStack operationSubFramesStack = completeOperationFramesStack.substract(sessionCallFrameStack);
 
-    private Runnable addStatementToNewOperation(String sql, List<FrameExtract> callFrames) {
-        return () -> {
-            OperationNode operationNode = new OperationNode(new ArrayList<>(callFrames));
-            operations.add(operationNode);
-            operationNode.addStatement(sql);
-        };
+        getLastOperationNode()
+                .filter(operationNode -> operationNode.hasCallFramesStack(operationSubFramesStack))
+                .ifPresentOrElse(
+                        addStatementToLastOperation(sql),
+                        addStatementToNewOperation(sql, operationSubFramesStack));
+
     }
 
     private Optional<OperationNode> getLastOperationNode() {
@@ -53,17 +41,16 @@ public class SessionNode {
                 : Optional.of(operations.get(operations.size() - 1));
     }
 
-    private boolean startsWith(List<FrameExtract> operationCallFrames) {
-        if (operationCallFrames.size() < callFrames.size()) {
-            return false;
-        }
-
-        for (int i = 0; i < callFrames.size(); i++) {
-            if (!callFrames.get(i).equals(operationCallFrames.get(i))) {
-                return false;
-            }
-        }
-
-        return true;
+    private Consumer<OperationNode> addStatementToLastOperation(String sql) {
+        return operationNode -> operationNode.addStatement(sql);
     }
+
+    private Runnable addStatementToNewOperation(String sql, FrameStack operationSubFrameStack) {
+        return () -> {
+            OperationNode operationNode = new OperationNode(operationSubFrameStack);
+            operations.add(operationNode);
+            operationNode.addStatement(sql);
+        };
+    }
+
 }

@@ -26,6 +26,10 @@ public class FrameExtract {
         this.lineNumber = frameClass.getStackFrame().getLineNumber();
     }
 
+    public boolean isNotThirdPartyClass() {
+        return type != FrameClassKind.THIRD_PARTY_CLASS;
+    }
+
     @Override
     public String toString() {
         return fileName != null

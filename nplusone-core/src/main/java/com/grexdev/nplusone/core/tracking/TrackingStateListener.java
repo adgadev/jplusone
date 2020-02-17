@@ -1,17 +1,13 @@
 package com.grexdev.nplusone.core.tracking;
 
-import com.grexdev.nplusone.core.frame.FrameExtract;
+import com.grexdev.nplusone.core.frame.FramesProvider;
 import com.grexdev.nplusone.core.proxy.StateListener;
 import com.grexdev.nplusone.core.registry.RootNode;
 import com.grexdev.nplusone.core.registry.SessionNode;
 import com.grexdev.nplusone.core.registry.SessionToString;
-import com.grexdev.nplusone.core.registry.StatementNode;
-import com.grexdev.nplusone.core.stacktrace.StackTraceAnalyzer;
-import com.grexdev.nplusone.core.frame.FramesProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
 import java.util.function.Supplier;
 
 @Slf4j
@@ -33,8 +29,7 @@ public class TrackingStateListener implements StateListener {
     public void sessionCreated() {
         log.info("########## SESSION CREATED ##########");
 
-        List<FrameExtract> callFrames = framesProvider.captureCallFrames();
-        SessionNode session = SessionNode.of(callFrames);
+        SessionNode session = SessionNode.of(framesProvider.captureCallFrames());
         root.addSession(session);
         currentSession.set(session);
     }
@@ -45,8 +40,8 @@ public class TrackingStateListener implements StateListener {
 
         if (currentSession.get() != null) {
             log.info(SessionToString.toString(currentSession.get()));
-
             currentSession.remove();
+
         } else {
             log.warn("Session has been closed already");
         }
@@ -59,8 +54,7 @@ public class TrackingStateListener implements StateListener {
         SessionNode session = currentSession.get();
 
         if (session != null) {
-            List<FrameExtract> callFrames = framesProvider.captureCallFrames();
-            session.addStatement(sql, callFrames);
+            session.addStatement(sql, framesProvider.captureCallFrames());
         } else {
             log.warn("Session has been closed already");
         }

@@ -8,17 +8,21 @@ public class SessionToString {
         StringBuilder builder = new StringBuilder();
         builder.append("\n\tSESSION");
 
-        for (FrameExtract frame : session.getCallFrames()) {
-            builder.append("\n\t\t");
-            builder.append(frame);
+        for (FrameExtract frame : session.getSessionCallFrameStack().getCallFrames()) {
+            if (frame.isNotThirdPartyClass()) {
+                builder.append("\n\t\t");
+                builder.append(frame);
+            }
         }
 
         for (OperationNode operation : session.getOperations()) {
             builder.append("\n\t\t\tOPERATION [" + operation.getOperationType() + "]");
 
-            for (FrameExtract frame : operation.getCallFrames()) {
-                builder.append("\n\t\t\t\t");
-                builder.append(frame);
+            for (FrameExtract frame : operation.getCallFramesStack().getCallFrames()) {
+                if (frame.isNotThirdPartyClass()) {
+                    builder.append("\n\t\t\t\t");
+                    builder.append(frame);
+                }
             }
 
             for (StatementNode statement : operation.getStatements()) {
