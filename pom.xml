@@ -7,6 +7,7 @@
     <groupId>com.grexdev</groupId>
     <artifactId>nplusone-modules</artifactId>
     <version>0.0.1</version>
+    <packaging>pom</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -17,6 +18,4 @@
         <module>nplusone-assert</module>
         <module>nplusone-tests</module>
     </modules>
-    <packaging>pom</packaging>
-
 </project>
