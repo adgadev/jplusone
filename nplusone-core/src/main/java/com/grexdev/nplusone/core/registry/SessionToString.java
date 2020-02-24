@@ -6,7 +6,7 @@ public class SessionToString {
 
     public static String toString(SessionNode session) {
         StringBuilder builder = new StringBuilder();
-        builder.append("\n\tSESSION");
+        builder.append("\n\tROOT");
 
         for (FrameExtract frame : session.getSessionCallFrameStack().getCallFrames()) {
             if (frame.isNotThirdPartyClass()) {
@@ -15,18 +15,21 @@ public class SessionToString {
             }
         }
 
+        builder.append("\n\t\t\tSESSION BOUNDARY");
+
         for (OperationNode operation : session.getOperations()) {
-            builder.append("\n\t\t\tOPERATION [" + operation.getOperationType() + "]");
+            builder.append("\n\t\t\t\tOPERATION [" + operation.getOperationType() + "]");
 
             for (FrameExtract frame : operation.getCallFramesStack().getCallFrames()) {
                 if (frame.isNotThirdPartyClass()) {
-                    builder.append("\n\t\t\t\t");
+                    builder.append("\n\t\t\t\t\t");
                     builder.append(frame);
                 }
             }
 
+
             for (StatementNode statement : operation.getStatements()) {
-                builder.append("\n\t\t\t\t\tSTATEMENT [" + statement.getStatementType() + "] " + statement.getSql());
+                builder.append("\n\t\t\t\t\t\tSTATEMENT [" + statement.getStatementType() + "] " + statement.getSql());
             }
         }
 
