@@ -11,6 +11,12 @@ import static com.grexdev.nplusone.core.registry.StatementNode.StatementType.WRI
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class StatementNode {
 
+    private static final String SELECT_CLAUSE = "select ";
+
+    private static final String FROM_CLAUSE = " from ";
+
+    private static final String COLUMN_LIST_SUBSTITUTE = "...";
+
     enum StatementType { READ, WRITE }
 
     private final String sql;
@@ -18,13 +24,26 @@ public class StatementNode {
     private final StatementType statementType;
 
     public static StatementNode fromSql(String sql) {
-        StatementType type = sql.startsWith("SELECT") || sql.startsWith("select") ? READ : WRITE;
-        return new StatementNode(formatSql(sql), type);
+        StatementType type = sql.startsWith(SELECT_CLAUSE) ? READ : WRITE;
+        return new StatementNode(formatSql(sql, type), type);
     }
 
-    private static String formatSql(String sql) {
-        // TODO: implement
+    private static String formatSql(String sql, StatementType type) {
+        if (type == READ) {
+            int index = sql.indexOf(FROM_CLAUSE);
+
+            if (index >= 0) {
+                return new StringBuilder()
+                        .append(SELECT_CLAUSE)
+                        .append(COLUMN_LIST_SUBSTITUTE)
+                        .append(sql.substring(index))
+                        .toString();
+            }
+        }
+
         return sql;
     }
+
+    // TODO: format JOIN statements
 
 }
