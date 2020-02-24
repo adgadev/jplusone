@@ -6,7 +6,7 @@
 
     <groupId>com.grexdev</groupId>
     <artifactId>nplusone-modules</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <properties>
