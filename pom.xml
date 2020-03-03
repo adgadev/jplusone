@@ -18,4 +18,21 @@
         <module>nplusone-assert</module>
         <module>nplusone-tests</module>
     </modules>
+
+    <distributionManagement>
+        <repository>
+            <id>grexdev-ssh-repository</id>
+            <url>sftp://grexdev.com/home/mavenrepo</url>
+        </repository>
+    </distributionManagement>
+
+    <build>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ssh</artifactId>
+                <version>3.3.4</version>
+            </extension>
+        </extensions>
+    </build>
 </project>
