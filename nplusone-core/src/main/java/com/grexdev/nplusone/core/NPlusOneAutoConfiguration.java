@@ -6,12 +6,16 @@ import com.grexdev.nplusone.core.registry.RootNode;
 import com.grexdev.nplusone.core.tracking.ActivationStateListener;
 import com.grexdev.nplusone.core.tracking.TrackingContext;
 import com.grexdev.nplusone.core.tracking.TrackingStateListener;
+import com.grexdev.nplusone.core.utils.ApplicationScanner;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.Optional;
 
 @Configuration
 @RequiredArgsConstructor
@@ -21,9 +25,18 @@ public class NPlusOneAutoConfiguration {
 
     private final NPlusOneProperties nPlusOneProperties;
 
+    private final ApplicationContext applicationContext;
+
     @Bean
-    public TrackingContext proxyContext() {
-        return new TrackingContext(nPlusOneProperties.getApplicationRootPackage(), nPlusOneProperties.isDebugMode());
+    public ApplicationScanner applicationScanner() {
+        return new ApplicationScanner(applicationContext);
+    }
+
+    @Bean
+    public TrackingContext proxyContext(ApplicationScanner applicationScanner) {
+        String applicationRootPackage = Optional.ofNullable(nPlusOneProperties.getApplicationRootPackage())
+                .orElseGet(applicationScanner::resolveRootApplicationPackage);
+        return new TrackingContext(applicationRootPackage, nPlusOneProperties.isDebugMode());
     }
 
     @Bean
