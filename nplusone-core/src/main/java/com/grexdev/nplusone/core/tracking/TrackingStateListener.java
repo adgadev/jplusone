@@ -17,18 +17,23 @@ public class TrackingStateListener implements StateListener {
 
     private final RootNode root;
 
+    private final boolean debugMode;
+
     private final FramesProvider framesProvider;
 
     private final ThreadLocal<SessionStack> currentSessionStack = new ThreadLocal<>();
 
     public TrackingStateListener(TrackingContext context, RootNode root) {
         this.root = root;
-        this.framesProvider = new FramesProvider(context.getApplicationRootPackage());
+        this.debugMode = context.isDebugMode();
+        this.framesProvider = new FramesProvider(context.getApplicationRootPackage(), context.isDebugMode());
     }
 
     @Override
     public void sessionCreated() {
-        log.info("########## SESSION CREATED ##########");
+        if (debugMode) {
+            log.debug("########## SESSION CREATED ##########");
+        }
 
         SessionNode session = SessionNode.of(framesProvider.captureCallFrames());
         SessionStack sessionStack = currentSessionStack.get();
@@ -43,11 +48,14 @@ public class TrackingStateListener implements StateListener {
 
     @Override
     public void sessionClosed() {
-        log.info("########## SESSION CLOSED ##########");
+        if (debugMode) {
+            log.debug("########## SESSION CLOSED ##########");
+        }
+
         SessionStack sessionStack = currentSessionStack.get();
 
         if (sessionStack != null) {
-            log.info(SessionToString.toString(sessionStack.outerSessionNode));
+            handleRecordedSession(sessionStack.outerSessionNode);
             sessionStack.decreaseSessionAmount();
 
             if (sessionStack.allSessionsClosed()) {
@@ -61,7 +69,9 @@ public class TrackingStateListener implements StateListener {
 
     @Override
     public void statementExecuted(String sql) {
-        log.info("########## STATEMENT EXECUTED: {} ##########", sql);
+        if (debugMode) {
+            log.info("########## STATEMENT EXECUTED: {} ##########", sql);
+        }
 
         SessionStack sessionStack = currentSessionStack.get();
 
@@ -76,6 +86,10 @@ public class TrackingStateListener implements StateListener {
     @Override
     public void statementExecuted(Supplier<String> sqlSupplier) {
         statementExecuted(sqlSupplier.get());
+    }
+
+    private void handleRecordedSession(SessionNode session) {
+        log.info(SessionToString.toString(session));
     }
 
     @AllArgsConstructor

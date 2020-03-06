@@ -1,10 +1,13 @@
 package com.grexdev.nplusone.core.frame;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.lang.StackWalker.StackFrame;
 import java.util.Arrays;
 
 import static com.grexdev.nplusone.core.frame.FrameClassKind.*;
 
+@Slf4j
 class FrameClassFactory {
 
     private static final String PACKAGE_SEPARATOR = ".";
@@ -14,6 +17,7 @@ class FrameClassFactory {
     private final String[] proxyClassNameMarkers;
 
     public FrameClassFactory(String applicationRootPackage, String[] proxyClassNameMarkers) {
+        log.debug("Using package '{}' as a root application package", applicationRootPackage);
         this.applicationRootPackage = applicationRootPackage.endsWith(PACKAGE_SEPARATOR)
                 ? applicationRootPackage : applicationRootPackage + PACKAGE_SEPARATOR;
         this.proxyClassNameMarkers = proxyClassNameMarkers;

@@ -1,0 +1,16 @@
+# TODO: schema for yaml, validation, default root-package
+
+# com.grexdev.nplusone.core.properties.NPlusOneProperties
+nplusone:
+  enabled: true
+  application-root-package: "com.grexdev.nplusone.test"
+  debug-mode: false
+  report:
+    enabled: true
+    operation-filtering-mode: ALL_OPERATIONS
+    statement-filtering-mode: ALL_STATEMENTS
+
+spring:
+  cloud:
+    refresh:
+      enabled: false

@@ -9,6 +9,7 @@ import java.lang.StackWalker.StackFrame;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import static com.grexdev.nplusone.core.utils.StreamUtils.toListReversed;
@@ -22,10 +23,17 @@ public class FramesProvider {
 
     private static final String[] PROXY_CLASS_NAME_MARKERS = { "$Proxy", "$HibernateProxy", "$$EnhancerBySpringCGLIB", "$$FastClassBySpringCGLIB" };
 
+    private static final Consumer<FrameExtract> LOG_FRAME_EXTRACT_CLOSURE = frame -> log.info(frame.toString());
+
+    private static final Consumer<FrameExtract> NOOP_CLOSURE = frame -> {};
+
     private final FrameClassFactory frameClassFactory;
 
-    public FramesProvider(String applicationRootPackage) {
+    private final Consumer<FrameExtract> frameProcessingAdditionalAction;
+
+    public FramesProvider(String applicationRootPackage, boolean debugMode) {
         this.frameClassFactory = new FrameClassFactory(applicationRootPackage, PROXY_CLASS_NAME_MARKERS);
+        this.frameProcessingAdditionalAction = debugMode ? LOG_FRAME_EXTRACT_CLOSURE : NOOP_CLOSURE;
     }
 
     public FrameStack captureCallFrames() {
@@ -39,10 +47,7 @@ public class FramesProvider {
         return stream
                 .map(frameClassFactory::createFrameClass)
                 .map(FrameExtract::new)
-                //.peek(appFrame -> log.info(appFrame.toString()))
-                //.map(StreamUtils.currentAndPreviousElements())
-                //.filter(StreamUtils.anyElementMatches())
-                //.map(Tupple::getMainElement)
+                .peek(frameProcessingAdditionalAction)
                 .collect(toListReversed());
     }
 

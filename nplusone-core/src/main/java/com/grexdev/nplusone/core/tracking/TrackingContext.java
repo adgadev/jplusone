@@ -9,9 +9,11 @@ import org.springframework.context.event.ContextRefreshedEvent;
 @RequiredArgsConstructor
 public class TrackingContext implements ApplicationListener<ContextRefreshedEvent> {
 
-    private boolean recording = false;
+    private final String applicationRootPackage;
 
-    private String applicationRootPackage = "com.grexdev.nplusone.test";
+    private final boolean debugMode;
+
+    private boolean recording = false;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
