@@ -1,6 +1,6 @@
 1. flyway (liquidbase) migrate / clean - exclude from statements
 XX 2. application root package - customize
-2a. configure report vs configure assert
+XX 2a. configure report vs configure assert
 XX 2b. debug mode to log all stacktraces
 XX 3. @Transactional - nested transactions
 XX 4. remove columns details from select
