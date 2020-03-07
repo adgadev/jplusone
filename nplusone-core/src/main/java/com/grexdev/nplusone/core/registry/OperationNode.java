@@ -12,7 +12,7 @@ import static java.lang.Boolean.FALSE;
 @Getter
 public class OperationNode {
 
-    enum OperationType { IMPLICIT, EXPLICIT}
+    public enum OperationType { IMPLICIT, EXPLICIT}
 
     private final List<StatementNode> statements = new ArrayList<>();
 

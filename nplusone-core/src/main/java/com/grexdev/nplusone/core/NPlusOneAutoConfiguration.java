@@ -3,6 +3,7 @@ package com.grexdev.nplusone.core;
 import com.grexdev.nplusone.core.properties.NPlusOneProperties;
 import com.grexdev.nplusone.core.proxy.ProxiedRootsBeanPostProcessor;
 import com.grexdev.nplusone.core.registry.RootNode;
+import com.grexdev.nplusone.core.report.ReportGenerator;
 import com.grexdev.nplusone.core.tracking.ActivationStateListener;
 import com.grexdev.nplusone.core.tracking.TrackingContext;
 import com.grexdev.nplusone.core.tracking.TrackingStateListener;
@@ -45,8 +46,13 @@ public class NPlusOneAutoConfiguration {
     }
 
     @Bean
-    public TrackingStateListener trackingStateListener(TrackingContext context, RootNode rootNode) {
-        return new TrackingStateListener(context, rootNode);
+    public ReportGenerator reportGenerator() {
+        return new ReportGenerator(nPlusOneProperties.getReport());
+    }
+
+    @Bean
+    public TrackingStateListener trackingStateListener(TrackingContext context, ReportGenerator reportGenerator, RootNode rootNode) {
+        return new TrackingStateListener(context, reportGenerator, rootNode);
     }
 
     @Bean

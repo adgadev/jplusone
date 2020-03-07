@@ -17,7 +17,7 @@ public class StatementNode {
 
     private static final String COLUMN_LIST_SUBSTITUTE = "...";
 
-    enum StatementType { READ, WRITE }
+    public enum StatementType { READ, WRITE }
 
     private final String sql;
 

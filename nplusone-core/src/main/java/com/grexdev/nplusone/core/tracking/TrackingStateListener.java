@@ -4,7 +4,7 @@ import com.grexdev.nplusone.core.frame.FramesProvider;
 import com.grexdev.nplusone.core.proxy.StateListener;
 import com.grexdev.nplusone.core.registry.RootNode;
 import com.grexdev.nplusone.core.registry.SessionNode;
-import com.grexdev.nplusone.core.registry.SessionToString;
+import com.grexdev.nplusone.core.report.ReportGenerator;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,11 +21,14 @@ public class TrackingStateListener implements StateListener {
 
     private final FramesProvider framesProvider;
 
+    private final ReportGenerator reportGenerator;
+
     private final ThreadLocal<SessionStack> currentSessionStack = new ThreadLocal<>();
 
-    public TrackingStateListener(TrackingContext context, RootNode root) {
+    public TrackingStateListener(TrackingContext context, ReportGenerator reportGenerator, RootNode root) {
         this.root = root;
         this.debugMode = context.isDebugMode();
+        this.reportGenerator = reportGenerator;
         this.framesProvider = new FramesProvider(context.getApplicationRootPackage(), context.isDebugMode());
     }
 
@@ -55,7 +58,7 @@ public class TrackingStateListener implements StateListener {
         SessionStack sessionStack = currentSessionStack.get();
 
         if (sessionStack != null) {
-            handleRecordedSession(sessionStack.outerSessionNode);
+            reportGenerator.handleRecordedSession(sessionStack.outerSessionNode);
             sessionStack.decreaseSessionAmount();
 
             if (sessionStack.allSessionsClosed()) {
@@ -86,10 +89,6 @@ public class TrackingStateListener implements StateListener {
     @Override
     public void statementExecuted(Supplier<String> sqlSupplier) {
         statementExecuted(sqlSupplier.get());
-    }
-
-    private void handleRecordedSession(SessionNode session) {
-        log.info(SessionToString.toString(session));
     }
 
     @AllArgsConstructor
