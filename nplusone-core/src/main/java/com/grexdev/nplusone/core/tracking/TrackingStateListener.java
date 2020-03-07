@@ -43,6 +43,7 @@ public class TrackingStateListener implements StateListener {
 
         if (sessionStack != null) {
             sessionStack.increaseSessionAmount();
+
         } else {
             root.addSession(session);
             currentSessionStack.set(SessionStack.of(session));

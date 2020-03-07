@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
+import static java.lang.Boolean.TRUE;
+
 @Getter
 @RequiredArgsConstructor
 public class TrackingContext implements ApplicationListener<ContextRefreshedEvent> {
@@ -13,11 +15,24 @@ public class TrackingContext implements ApplicationListener<ContextRefreshedEven
 
     private final boolean debugMode;
 
-    private boolean recording = false;
+    private final ThreadLocal<Boolean> recordingEnabledInCurrentThread = ThreadLocal.withInitial(() -> TRUE);
+
+    private boolean recordingEnabledGlobally = false;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        this.recording = true;
+        this.recordingEnabledGlobally = true;
     }
 
+    public void enableRecording() {
+        recordingEnabledInCurrentThread.set(true);
+    }
+
+    public void disableRecording() {
+        recordingEnabledInCurrentThread.set(false);
+    }
+
+    public boolean isRecordingEnabled() {
+        return recordingEnabledGlobally && recordingEnabledInCurrentThread.get();
+    }
 }

@@ -1,5 +1,6 @@
 package com.grexdev.nplusone.core;
 
+import com.grexdev.nplusone.core.flyway.FlywayAspect;
 import com.grexdev.nplusone.core.properties.NPlusOneProperties;
 import com.grexdev.nplusone.core.proxy.ProxiedRootsBeanPostProcessor;
 import com.grexdev.nplusone.core.registry.RootNode;
@@ -63,6 +64,12 @@ public class NPlusOneAutoConfiguration {
     @Bean
     public BeanPostProcessor proxiedRootsBeanPostProcessor(ActivationStateListener stateListener) {
         return new ProxiedRootsBeanPostProcessor(stateListener);
+    }
+
+    // TODO: check what happens if flyway dependency not added
+    @Bean
+    public FlywayAspect flywayAspect(TrackingContext trackingContext) {
+        return new FlywayAspect(trackingContext);
     }
 
 }

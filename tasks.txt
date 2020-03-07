@@ -1,4 +1,4 @@
-1. flyway (liquidbase) migrate / clean - exclude from statements
+XX 1. flyway (liquidbase) migrate / clean - exclude from statements
 XX 2. application root package - customize
 XX 2a. configure report vs configure assert
 XX 2b. debug mode to log all stacktraces
@@ -8,6 +8,6 @@ XX 5. filterToSet (..., isActive) - explicit instead of implicit
 
 6. format SQL
 7. assertion util
-8. manual flyway / liquidbase
+XX 8. manual flyway / liquidbase
 9. NPE on session closed
 10. spring cloud enabled
