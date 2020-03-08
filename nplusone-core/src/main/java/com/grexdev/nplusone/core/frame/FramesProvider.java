@@ -14,6 +14,7 @@ import java.util.stream.Stream;
 
 import static com.grexdev.nplusone.core.utils.StreamUtils.toListReversed;
 import static java.lang.StackWalker.Option.SHOW_HIDDEN_FRAMES;
+import static java.util.Objects.nonNull;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -45,6 +46,7 @@ public class FramesProvider {
 
     private List<FrameExtract> collectFrames(Stream<StackFrame> stream) {
         return stream
+                .filter(stackFrame -> nonNull(stackFrame.getDeclaringClass().getCanonicalName()))
                 .map(frameClassFactory::createFrameClass)
                 .map(FrameExtract::new)
                 .peek(frameProcessingAdditionalAction)

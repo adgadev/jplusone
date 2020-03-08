@@ -9,5 +9,6 @@ XX 5. filterToSet (..., isActive) - explicit instead of implicit
 6. format SQL
 7. assertion util
 XX 8. manual flyway / liquidbase
-9. NPE on session closed
+XX 9. NPE on session closed
 10. spring cloud enabled
+11. duplicated report - wrong session boundary???
