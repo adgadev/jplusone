@@ -1,4 +1,4 @@
-package com.grexdev.nplusone.test.domain.domain1;
+package com.grexdev.nplusone.test;
 
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.Test;
