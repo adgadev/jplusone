@@ -16,7 +16,7 @@
 
     <modules>
         <module>nplusone-tests-main</module>
-        <module>nplusone-tests-springboot21</module>
+        <module>nplusone-tests-compat-springboot21</module>
     </modules>
 
     <build>

@@ -6,7 +6,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("integration-test")
 @SpringBootTest
-class NPlusOneTestApplicationTest {
+class BookshopApplicationTest {
 
     @Test
     void contextLoads() {

@@ -1,24 +1,26 @@
-package com.grexdev.nplusone.test.domain1;
+package com.grexdev.nplusone.test.domain.domain1;
 
+import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.ActiveProfiles;
 
-import static java.util.Arrays.asList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import javax.transaction.Transactional;
 
+@Transactional
 @ActiveProfiles("integration-test")
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
-class Domain1ServiceIntegrationTest {
+public class FlywayMigrationIntegrationTest {
 
     @Autowired
-    private Domain1Service service;
+    private Flyway flyway;
 
     @Test
-    void shouldTest() {
-        assertEquals(asList("first-object-a", "first-object-b"), service.getDataFromAAndFetchDataFromB());
+    public void shouldRunFlywayMigrationAgain() {
+        flyway.clean();
+        flyway.migrate();
     }
 
 }
