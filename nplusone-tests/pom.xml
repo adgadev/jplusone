@@ -17,10 +17,20 @@
     <modules>
         <module>nplusone-tests-main</module>
         <module>nplusone-tests-compat-springboot21</module>
+        <module>nplusone-tests-compat-springcloud</module>
     </modules>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <target>9</target>
+                    <source>9</source>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-install-plugin</artifactId>

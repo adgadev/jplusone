@@ -9,3 +9,8 @@ nplusone:
     enabled: true
     operation-filtering-mode: ALL_OPERATIONS
     statement-filtering-mode: ALL_STATEMENTS
+
+spring:
+  cloud:
+    refresh:
+      enabled: true
