@@ -3,6 +3,7 @@ package com.grexdev.nplusone.core;
 import com.grexdev.nplusone.core.flyway.FlywayAspect;
 import com.grexdev.nplusone.core.properties.NPlusOneProperties;
 import com.grexdev.nplusone.core.proxy.ProxiedRootsBeanPostProcessor;
+import com.grexdev.nplusone.core.proxy.datasource.HikariDataSourceAspect;
 import com.grexdev.nplusone.core.registry.RootNode;
 import com.grexdev.nplusone.core.report.ReportGenerator;
 import com.grexdev.nplusone.core.tracking.ActivationStateListener;
@@ -11,6 +12,9 @@ import com.grexdev.nplusone.core.tracking.TrackingStateListener;
 import com.grexdev.nplusone.core.utils.ApplicationScanner;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
@@ -23,6 +27,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @EnableConfigurationProperties(NPlusOneProperties.class)
 @ConditionalOnProperty(prefix = "nplusone", name = "enabled", matchIfMissing = true)
+@AutoConfigureAfter(name = "org.springframework.cloud.autoconfigure.RefreshAutoConfiguration")
 public class NPlusOneAutoConfiguration {
 
     private final NPlusOneProperties nPlusOneProperties;
@@ -63,7 +68,15 @@ public class NPlusOneAutoConfiguration {
 
     @Bean
     public BeanPostProcessor proxiedRootsBeanPostProcessor(ActivationStateListener stateListener) {
-        return new ProxiedRootsBeanPostProcessor(stateListener);
+        boolean useHikariDataSourceAspect = applicationContext.containsBean("org.springframework.cloud.autoconfigure.RefreshAutoConfiguration");
+        return new ProxiedRootsBeanPostProcessor(stateListener, useHikariDataSourceAspect);
+    }
+
+    @Bean
+    @ConditionalOnClass(name = "com.zaxxer.hikari.HikariDataSource")
+    @ConditionalOnBean(type = { "org.springframework.cloud.autoconfigure.RefreshAutoConfiguration"})
+    public HikariDataSourceAspect hikariDataSourceAspect(ActivationStateListener stateListener) {
+        return new HikariDataSourceAspect(stateListener);
     }
 
     // TODO: check what happens if flyway dependency not added
