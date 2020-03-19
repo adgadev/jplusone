@@ -15,7 +15,7 @@ public class StatementNode {
 
     private static final String FROM_CLAUSE = " from ";
 
-    private static final String COLUMN_LIST_SUBSTITUTE = "...";
+    private static final String COLUMN_LIST_SUBSTITUTE = "[...]";
 
     public enum StatementType { READ, WRITE }
 

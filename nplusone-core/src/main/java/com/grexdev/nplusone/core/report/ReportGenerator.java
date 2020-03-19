@@ -1,5 +1,6 @@
 package com.grexdev.nplusone.core.report;
 
+import com.github.vertical_blank.sqlformatter.SqlFormatter;
 import com.grexdev.nplusone.core.frame.FrameExtract;
 import com.grexdev.nplusone.core.properties.NPlusOneProperties.NPlusOneReportProperties;
 import com.grexdev.nplusone.core.registry.OperationNode;
@@ -63,10 +64,32 @@ public class ReportGenerator {
 
                 for (StatementNode statement : operation.getStatements()) {
                     if (visibleStatementsType.contains(statement.getStatementType())) {
-                        builder.append("\n\t\t\t\t\t\tSTATEMENT [" + statement.getStatementType() + "] " + statement.getSql());
+                        builder.append("\n\t\t\t\t\t\tSTATEMENT [" + statement.getStatementType() + "]");
+                        builder.append(formatSql("\t\t\t\t\t\t\t", statement.getSql()));
                     }
                 }
             }
+        }
+
+        return builder.toString();
+    }
+
+    private String formatSql(String intend, String sql) {
+        String sqlFormatterIntend = " ";
+        String formattedSql = SqlFormatter.format(sql, sqlFormatterIntend);
+        String[] lines = formattedSql.split("\n");
+        StringBuilder builder = new StringBuilder();
+
+        for (String line : lines) {
+            if (line.startsWith("from")) {
+                builder.append(' ');
+            } else if (!line.startsWith(" ")) {
+                builder.append('\n');
+                builder.append(intend);
+                builder.append(sqlFormatterIntend);
+            }
+
+            builder.append(line, 0, line.length());
         }
 
         return builder.toString();
