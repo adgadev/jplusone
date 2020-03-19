@@ -45,7 +45,7 @@ public class ReportGenerator {
         for (FrameExtract frame : session.getSessionCallFrameStack().getCallFrames()) {
             if (frame.isNotThirdPartyClass()) {
                 builder.append("\n\t\t");
-                builder.append(frame);
+                builder.append(frame.format());
             }
         }
 
@@ -58,7 +58,7 @@ public class ReportGenerator {
                 for (FrameExtract frame : operation.getCallFramesStack().getCallFrames()) {
                     if (frame.isNotThirdPartyClass()) {
                         builder.append("\n\t\t\t\t\t");
-                        builder.append(frame);
+                        builder.append(frame.format());
                     }
                 }
 
