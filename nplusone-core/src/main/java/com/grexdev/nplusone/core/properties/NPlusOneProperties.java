@@ -33,9 +33,9 @@ public class NPlusOneProperties {
         @Getter
         @RequiredArgsConstructor
         public enum OperationFilteringMode {
-            IMPLICIT_OPERATIONS_ONLY(EnumSet.of(OperationType.IMPLICIT)),
-            EXPLICIT_OPERATIONS_ONLY(EnumSet.of(OperationType.EXPLICIT)),
-            ALL_OPERATIONS(EnumSet.of(OperationType.IMPLICIT, OperationType.EXPLICIT));
+            IMPLICIT_FETCH_OPERATIONS_ONLY(EnumSet.of(OperationType.IMPLICIT_FETCH)),
+            EXPLICIT_FETCH_OPERATIONS_ONLY(EnumSet.of(OperationType.EXPLICIT_FETCH)),
+            ALL_OPERATIONS(EnumSet.of(OperationType.IMPLICIT_FETCH, OperationType.EXPLICIT_FETCH));
 
             private final Set<OperationType> operationTypes;
         }

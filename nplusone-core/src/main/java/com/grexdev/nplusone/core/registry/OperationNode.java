@@ -12,7 +12,7 @@ import static java.lang.Boolean.FALSE;
 @Getter
 public class OperationNode {
 
-    public enum OperationType { IMPLICIT, EXPLICIT}
+    public enum OperationType {IMPLICIT_FETCH, EXPLICIT_FETCH}
 
     private final List<StatementNode> statements = new ArrayList<>();
 
@@ -40,7 +40,7 @@ public class OperationNode {
                 .map(clazz -> clazz.isAnnotationPresent(Entity.class))
                 .orElse(FALSE);
 
-        return isLastAppCallOnEntityClass ? OperationType.IMPLICIT : OperationType.EXPLICIT;
+        return isLastAppCallOnEntityClass ? OperationType.IMPLICIT_FETCH : OperationType.EXPLICIT_FETCH;
     }
 
 
