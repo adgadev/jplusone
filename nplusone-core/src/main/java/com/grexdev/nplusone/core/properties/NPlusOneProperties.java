@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.util.EnumSet;
 import java.util.Set;
 
-import static com.grexdev.nplusone.core.properties.NPlusOneProperties.NPlusOneReportProperties.OperationFilteringMode.ALL_OPERATIONS;
+import static com.grexdev.nplusone.core.properties.NPlusOneProperties.NPlusOneReportProperties.OperationFilteringMode.IMPLICIT_FETCH_OPERATIONS_ONLY;
 import static com.grexdev.nplusone.core.properties.NPlusOneProperties.NPlusOneReportProperties.StatementFilteringMode.READ_STATEMENTS_ONLY;
 
 @Getter
@@ -52,7 +52,7 @@ public class NPlusOneProperties {
 
         private boolean enabled = true;
 
-        private OperationFilteringMode operationFilteringMode = ALL_OPERATIONS;
+        private OperationFilteringMode operationFilteringMode = IMPLICIT_FETCH_OPERATIONS_ONLY;
 
         private StatementFilteringMode statementFilteringMode = READ_STATEMENTS_ONLY;
 

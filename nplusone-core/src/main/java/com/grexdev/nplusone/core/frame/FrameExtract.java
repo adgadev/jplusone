@@ -41,10 +41,9 @@ public class FrameExtract {
     }
 
     public String format() {
-        boolean proxy = type != FrameClassKind.APPLICATION_CLASS;
-        return fileName != null
-                ? className + '.' + methodName + "(" + fileName + ":" + lineNumber + ")" + (proxy ? " [PROXY]" : "")
-                : className + '.' + methodName + (proxy ? " [PROXY]" : "");
+        return type == FrameClassKind.APPLICATION_CLASS
+                ? className + '.' + methodName + "(" + fileName + ":" + lineNumber + ")"
+                : className + '.' + methodName + " [PROXY]";
     }
 
     // TODO: implement cached hashcode
