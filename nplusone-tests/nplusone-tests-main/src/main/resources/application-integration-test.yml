@@ -1,0 +1,12 @@
+# TODO: schema for yaml, validation
+# following nplusone properties are optional, if missin default values will be used
+
+# com.grexdev.nplusone.core.properties.NPlusOneProperties
+nplusone:
+#  enabled: true
+#  application-root-package: "com.grexdev.nplusone.test"
+#  debug-mode: false
+  report:
+#    enabled: true
+    operation-filtering-mode: ALL_OPERATIONS
+#    statement-filtering-mode: ALL_STATEMENTS
