@@ -41,8 +41,12 @@ public class FrameExtract {
     }
 
     public String format() {
+        String lineNumberDesc = fileName != null
+                ? "(" + fileName + ":" + lineNumber + ")"
+                : "";
+
         return type == FrameClassKind.APPLICATION_CLASS
-                ? className + '.' + methodName + "(" + fileName + ":" + lineNumber + ")"
+                ? className + '.' + methodName + lineNumberDesc
                 : className + '.' + methodName + " [PROXY]";
     }
 
