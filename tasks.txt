@@ -14,3 +14,6 @@ XX 10. spring cloud enabled
 11. duplicated report - wrong session boundary???
 
 XX 12. implicit/explicit -> eager / lazy
+13. '' instead of "" in SQL strings
+14. don't show [PROXY] in operation section except for the deepest call
+15. fetching set
