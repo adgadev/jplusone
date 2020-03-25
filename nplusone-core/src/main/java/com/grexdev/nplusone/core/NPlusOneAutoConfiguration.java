@@ -4,6 +4,7 @@ import com.grexdev.nplusone.core.flyway.FlywayAspect;
 import com.grexdev.nplusone.core.properties.NPlusOneProperties;
 import com.grexdev.nplusone.core.proxy.ProxiedRootsBeanPostProcessor;
 import com.grexdev.nplusone.core.proxy.datasource.HikariDataSourceAspect;
+import com.grexdev.nplusone.core.proxy.hibernate.HibernateCollectionInitialisationEventListener;
 import com.grexdev.nplusone.core.registry.RootNode;
 import com.grexdev.nplusone.core.report.ReportGenerator;
 import com.grexdev.nplusone.core.tracking.ActivationStateListener;
@@ -21,6 +22,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.persistence.EntityManagerFactory;
 import java.util.Optional;
 
 @Configuration
@@ -73,6 +75,11 @@ public class NPlusOneAutoConfiguration {
     }
 
     @Bean
+    public HibernateCollectionInitialisationEventListener hibernateCollectionInitialisationEventListener(EntityManagerFactory entityManagerFactory) {
+        return new HibernateCollectionInitialisationEventListener(entityManagerFactory);
+    }
+
+    @Bean
     @ConditionalOnClass(name = "com.zaxxer.hikari.HikariDataSource")
     @ConditionalOnBean(type = { "org.springframework.cloud.autoconfigure.RefreshAutoConfiguration"})
     public HikariDataSourceAspect hikariDataSourceAspect(ActivationStateListener stateListener) {
@@ -84,5 +91,4 @@ public class NPlusOneAutoConfiguration {
     public FlywayAspect flywayAspect(TrackingContext trackingContext) {
         return new FlywayAspect(trackingContext);
     }
-
 }
