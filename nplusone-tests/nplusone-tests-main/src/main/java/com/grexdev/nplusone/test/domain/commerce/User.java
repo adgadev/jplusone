@@ -7,21 +7,21 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Getter
 @Entity
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Product {
+public class User {
 
     @Id
     private Long id;
 
     @EqualsAndHashCode.Include
-    private String name;
+    private String username;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "manufacturer_id")
-    private Manufacturer manufacturer;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "client_id")
+    private Client client;
 
 }

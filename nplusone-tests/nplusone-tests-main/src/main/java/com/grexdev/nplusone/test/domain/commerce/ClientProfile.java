@@ -6,22 +6,20 @@ import lombok.Getter;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Getter
 @Entity
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Product {
+public class ClientProfile {
 
     @Id
+    @EqualsAndHashCode.Include
     private Long id;
 
-    @EqualsAndHashCode.Include
-    private String name;
+    private String photoLink;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "manufacturer_id")
-    private Manufacturer manufacturer;
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "clientProfile")
+    private Client client;
 
 }
