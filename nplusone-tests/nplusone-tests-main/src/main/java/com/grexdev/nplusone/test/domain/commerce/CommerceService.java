@@ -19,11 +19,17 @@ class CommerceService {
     public void getClient() {
         Client client = entityManager.find(Client.class, 1L);
         User user = client.getUser();
+
         ClientProfile clientProfile = client.getClientProfile();
+        clientProfile.getPhotoLink();
+        clientProfile.getClient();
+
         Set<Order> orders = client.getOrders();
         Order order = orders.iterator().next();
+
         Set<Product> products = order.getProducts();
         Product product = products.iterator().next();
+
         product.getManufacturer().getName();
         log.info("client: {}", client);
     }

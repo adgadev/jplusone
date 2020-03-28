@@ -25,7 +25,7 @@ public class Client {
 
     private String lastName;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "client")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "client", optional = false) // still eager loading, why??? TwoPhaseLoad
     private User user;
 
     @OneToOne(fetch = FetchType.LAZY)
