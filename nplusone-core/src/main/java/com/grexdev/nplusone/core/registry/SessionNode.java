@@ -32,7 +32,11 @@ public class SessionNode {
                 .ifPresentOrElse(
                         addStatementToLastOperation(sql),
                         addStatementToNewOperation(sql, operationSubFramesStack));
+    }
 
+    public void addLazyCollectionInitialisation(LazyInitialisation lazyInitialisation) {
+        getLastOperationNode()
+                .ifPresent(operationNode -> operationNode.addLazyInitialisation(lazyInitialisation));
     }
 
     private Optional<OperationNode> getLastOperationNode() {

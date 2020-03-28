@@ -11,4 +11,6 @@ public interface StateListener {
     void statementExecuted(String sql);
 
     void statementExecuted(Supplier<String> sqlSupplier);
+
+    void lazyCollectionInitialized(String entityClassName, String fieldName);
 }

@@ -75,8 +75,9 @@ public class NPlusOneAutoConfiguration {
     }
 
     @Bean
-    public HibernateCollectionInitialisationEventListener hibernateCollectionInitialisationEventListener(EntityManagerFactory entityManagerFactory) {
-        return new HibernateCollectionInitialisationEventListener(entityManagerFactory);
+    public HibernateCollectionInitialisationEventListener hibernateCollectionInitialisationEventListener(
+            EntityManagerFactory entityManagerFactory, ActivationStateListener stateListener) {
+        return new HibernateCollectionInitialisationEventListener(entityManagerFactory, stateListener);
     }
 
     @Bean

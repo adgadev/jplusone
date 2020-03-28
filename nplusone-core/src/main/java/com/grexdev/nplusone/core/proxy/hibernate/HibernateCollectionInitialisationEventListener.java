@@ -1,5 +1,6 @@
 package com.grexdev.nplusone.core.proxy.hibernate;
 
+import com.grexdev.nplusone.core.tracking.ActivationStateListener;
 import com.grexdev.nplusone.core.utils.ReflectionUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.HibernateException;
@@ -16,7 +17,11 @@ import java.util.Optional;
 @Slf4j
 public class HibernateCollectionInitialisationEventListener implements InitializeCollectionEventListener {
 
-    public HibernateCollectionInitialisationEventListener(EntityManagerFactory entityManagerFactory) {
+    private final ActivationStateListener stateListener;
+
+    public HibernateCollectionInitialisationEventListener(EntityManagerFactory entityManagerFactory, ActivationStateListener stateListener) {
+        this.stateListener = stateListener;
+
         SessionFactoryImpl sessionFactory = entityManagerFactory.unwrap(SessionFactoryImpl.class);
         EventListenerRegistry registry = sessionFactory.getServiceRegistry().getService(EventListenerRegistry.class);
         registry.getEventListenerGroup(EventType.INIT_COLLECTION).appendListener(this);
@@ -35,5 +40,6 @@ public class HibernateCollectionInitialisationEventListener implements Initializ
 
     private void handleCollectionInitialisation(String entityClassName, String fieldName) {
         log.debug("Hibernate association {}.{} initialized", entityClassName, fieldName);
+        stateListener.lazyCollectionInitialized(entityClassName, fieldName);
     }
 }

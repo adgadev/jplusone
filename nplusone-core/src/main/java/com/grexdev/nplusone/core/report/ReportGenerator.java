@@ -63,6 +63,10 @@ public class ReportGenerator {
                     }
                 }
 
+                if (operation.getLazyInitialisation() != null) {
+                    builder.append("\n\t\t\t\t\t" + operation.getLazyInitialisation());
+                }
+
                 for (StatementNode statement : operation.getStatements()) {
                     if (visibleStatementsType.contains(statement.getStatementType())) {
                         builder.append("\n\t\t\t\t\t\tSTATEMENT [" + statement.getStatementType() + "]");

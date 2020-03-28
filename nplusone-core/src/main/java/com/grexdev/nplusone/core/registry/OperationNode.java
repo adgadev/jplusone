@@ -18,7 +18,9 @@ public class OperationNode {
 
     private final FrameStack callFramesStack;
 
-    private final OperationType operationType;
+    private OperationType operationType;
+
+    private LazyInitialisation lazyInitialisation;
 
     public OperationNode(FrameStack callFramesStack) {
         this.callFramesStack = callFramesStack;
@@ -28,6 +30,12 @@ public class OperationNode {
     void addStatement(String sql) {
         StatementNode statement = StatementNode.fromSql(sql);
         statements.add(statement);
+    }
+
+    void addLazyInitialisation(LazyInitialisation lazyInitialisation) {
+        // TODO: handle case when lazyInitialisation is initialized already
+        this.lazyInitialisation = lazyInitialisation;
+        this.operationType = OperationType.IMPLICIT_FETCH;
     }
 
     boolean hasCallFramesStack(FrameStack callFramesStack) {
@@ -42,6 +50,5 @@ public class OperationNode {
 
         return isLastAppCallOnEntityClass ? OperationType.IMPLICIT_FETCH : OperationType.EXPLICIT_FETCH;
     }
-
 
 }

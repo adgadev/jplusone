@@ -39,4 +39,11 @@ public class ActivationStateListener implements StateListener {
             delegate.statementExecuted(sqlSupplier);
         }
     }
+
+    @Override
+    public void lazyCollectionInitialized(String entityClassName, String fieldName) {
+        if (context.isRecordingEnabled()) {
+            delegate.lazyCollectionInitialized(entityClassName, fieldName);
+        }
+    }
 }
