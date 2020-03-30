@@ -2,7 +2,6 @@ package com.grexdev.nplusone.core.tracking;
 
 import com.grexdev.nplusone.core.frame.FramesProvider;
 import com.grexdev.nplusone.core.proxy.StateListener;
-import com.grexdev.nplusone.core.registry.LazyInitialisation;
 import com.grexdev.nplusone.core.registry.RootNode;
 import com.grexdev.nplusone.core.registry.SessionNode;
 import com.grexdev.nplusone.core.report.ReportGenerator;
@@ -11,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.function.Supplier;
+
+import static com.grexdev.nplusone.core.registry.LazyInitialisation.collectionLazyInitialisation;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -103,8 +104,7 @@ public class TrackingStateListener implements StateListener {
 
         if (sessionStack != null) {
             SessionNode session = sessionStack.outerSessionNode;
-            LazyInitialisation lazyInitialisation = new LazyInitialisation(entityClassName, fieldName); // TODO: consider moving it somewhere
-            session.addLazyCollectionInitialisation(lazyInitialisation);
+            session.addLazyCollectionInitialisation(collectionLazyInitialisation(entityClassName, fieldName));
 
         } else {
             log.warn("Session has been closed already");
