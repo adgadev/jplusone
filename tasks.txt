@@ -15,5 +15,7 @@ XX 10. spring cloud enabled
 
 XX 12. implicit/explicit -> eager / lazy
 13. '' instead of "" in SQL strings
-14. don't show [PROXY] in operation section except for the deepest call
-15. fetching set
+14. don't show [PROXY] in operation section except for the deepest call - i.e. when multiple proxied services present
+XX 15. fetching set
+16. levels of debug verbosity
+17. enable / disable tracking on application level i.e. in test to ignre given / then section
