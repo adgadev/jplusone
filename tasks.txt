@@ -19,3 +19,5 @@ XX 12. implicit/explicit -> eager / lazy
 XX 15. fetching set
 16. levels of debug verbosity
 17. enable / disable tracking on application level i.e. in test to ignre given / then section
+18. references to other nplusone project in pom.xml / groupId
+19. measuring time of SQL queries execution

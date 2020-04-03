@@ -16,4 +16,19 @@
         <maven.compiler.release>9</maven.compiler.release>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.grexdev</groupId>
+            <artifactId>nplusone-core</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.10</version>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
 </project>
