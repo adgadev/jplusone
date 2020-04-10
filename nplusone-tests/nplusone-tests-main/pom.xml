@@ -2,15 +2,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>nplusone-tests-main</artifactId>
+    <name>NPlusOne Main Test Project</name>
+    <description>NPlusOne Main Test Project (latest Spring Boot version)</description>
 
     <parent>
         <artifactId>nplusone-tests</artifactId>
-        <groupId>com.grexdev</groupId>
-        <version>0.0.2-SNAPSHOT</version>
+        <groupId>com.grexdev.nplusone</groupId>
+        <version>${revision}</version>
     </parent>
-
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId>nplusone-tests-main</artifactId>
 
     <properties>
         <spring-boot.version>2.2.2.RELEASE</spring-boot.version>
@@ -70,9 +72,9 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>com.grexdev.nplusone</groupId>
             <artifactId>nplusone-core</artifactId>
-            <groupId>com.grexdev</groupId>
-            <version>${parent.version}</version>
+            <version>${revision}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -82,6 +84,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
             </plugin>
         </plugins>
     </build>

@@ -2,15 +2,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>nplusone-tests-compat-springcloud</artifactId>
+    <name>NPlusOne Compatibility Test - Spring Cloud</name>
+    <description>NNPlusOne Test Project for compatibility with Spring Cloud</description>
 
     <parent>
         <artifactId>nplusone-tests</artifactId>
-        <groupId>com.grexdev</groupId>
-        <version>0.0.2-SNAPSHOT</version>
+        <groupId>com.grexdev.nplusone</groupId>
+        <version>${revision}</version>
     </parent>
-
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId>nplusone-tests-compat-springcloud</artifactId>
 
     <properties>
         <spring-boot.version>2.1.5.RELEASE</spring-boot.version>
@@ -88,9 +90,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>com.grexdev.nplusone</groupId>
             <artifactId>nplusone-core</artifactId>
-            <groupId>com.grexdev</groupId>
-            <version>${parent.version}</version>
+            <version>${revision}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -100,6 +102,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
             </plugin>
         </plugins>
     </build>

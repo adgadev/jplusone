@@ -4,12 +4,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.grexdev</groupId>
+    <groupId>com.grexdev.nplusone</groupId>
     <artifactId>nplusone-modules</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>${revision}</version>
     <packaging>pom</packaging>
+    <name>NPlusOne Modules</name>
+    <description>NPlusOne Modules</description>
 
     <properties>
+        <revision>0.0.4-SNAPSHOT</revision>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <deployAtEnd>true</deployAtEnd>
