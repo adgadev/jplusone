@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.grexdev.jplusone</groupId>
+    <artifactId>jplusone-tests</artifactId>
+    <packaging>pom</packaging>
+    <name>JPlusOne Test Projects</name>
+    <description>JPlusOne Test Projects</description>
+
+    <parent>
+        <artifactId>jplusone-modules</artifactId>
+        <groupId>com.grexdev.jplusone</groupId>
+        <version>${revision}</version>
+    </parent>
+
+    <properties>
+        <maven.compiler.release>11</maven.compiler.release>
+        <maven.deploy.skip>true</maven.deploy.skip>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <modules>
+        <module>jplusone-tests-main</module>
+        <module>jplusone-tests-compat-springboot21</module>
+        <module>jplusone-tests-compat-springcloud</module>
+    </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>2.5.2</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

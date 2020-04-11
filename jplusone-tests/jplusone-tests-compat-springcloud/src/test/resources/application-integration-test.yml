@@ -1,0 +1,14 @@
+# com.grexdev.jplusone.core.properties.JPlusOneProperties
+jplusone:
+  enabled: true
+  application-root-package: "com.grexdev.jplusone.test"
+  debug-mode: false
+  report:
+    enabled: true
+    operation-filtering-mode: ALL_OPERATIONS
+    statement-filtering-mode: ALL_STATEMENTS
+
+spring:
+  cloud:
+    refresh:
+      enabled: true

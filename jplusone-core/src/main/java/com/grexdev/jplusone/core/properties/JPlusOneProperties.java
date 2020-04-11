@@ -1,0 +1,61 @@
+package com.grexdev.jplusone.core.properties;
+
+import com.grexdev.jplusone.core.registry.OperationNode.OperationType;
+import com.grexdev.jplusone.core.registry.StatementNode.StatementType;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import java.util.EnumSet;
+import java.util.Set;
+
+import static com.grexdev.jplusone.core.properties.JPlusOneProperties.JPlusOneReportProperties.OperationFilteringMode.IMPLICIT_FETCH_OPERATIONS_ONLY;
+import static com.grexdev.jplusone.core.properties.JPlusOneProperties.JPlusOneReportProperties.StatementFilteringMode.READ_STATEMENTS_ONLY;
+
+@Getter
+@Setter
+@ConfigurationProperties("jplusone")
+public class JPlusOneProperties {
+
+    private String applicationRootPackage;
+
+    private boolean enabled = true;
+
+    private boolean debugMode = false;
+
+    private JPlusOneReportProperties report = new JPlusOneReportProperties();
+
+    @Getter
+    @Setter
+    public static class JPlusOneReportProperties {
+
+        @Getter
+        @RequiredArgsConstructor
+        public enum OperationFilteringMode {
+            IMPLICIT_FETCH_OPERATIONS_ONLY(EnumSet.of(OperationType.IMPLICIT_FETCH)),
+            EXPLICIT_FETCH_OPERATIONS_ONLY(EnumSet.of(OperationType.EXPLICIT_FETCH)),
+            ALL_OPERATIONS(EnumSet.of(OperationType.IMPLICIT_FETCH, OperationType.EXPLICIT_FETCH));
+
+            private final Set<OperationType> operationTypes;
+        }
+
+        @Getter
+        @RequiredArgsConstructor
+        public enum StatementFilteringMode {
+            READ_STATEMENTS_ONLY(EnumSet.of(StatementType.READ)),
+            WRITE_STATEMENTS_ONLY(EnumSet.of(StatementType.WRITE)),
+            ALL_STATEMENTS(EnumSet.of(StatementType.READ, StatementType.WRITE));
+
+            private final Set<StatementType> statementTypes;
+        }
+
+        private boolean enabled = true;
+
+        private OperationFilteringMode operationFilteringMode = IMPLICIT_FETCH_OPERATIONS_ONLY;
+
+        private StatementFilteringMode statementFilteringMode = READ_STATEMENTS_ONLY;
+
+    }
+
+}
