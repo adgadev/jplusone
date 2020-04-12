@@ -1,0 +1,129 @@
+:release_version: 0.1.0
+
+= JPlusOne: Reporting N+1 SELECT problem occurrences in Java applications
+
+*JPlusOne* is a Java library designed primarily to detect and report situations where N+1 SELECT problem occurs, i.e. initialization of lazy collection of entities
+or initialization of entity proxy, resulting in additional SQL statement(s).
+
+== Features
+The tool is not limited only to detecting lazy loading / N+1 problems:
+
+* Shows full tree of application method calls and SQL statements (discarding all non-relevant data) associated with some business operation (i.e. REST controller endpoint call)
+* Allows to easily correlate JPA operations with resulting SQL statements
+* Shows SQL statements with their parameters in simplified and pretty-printed form
+* Uses Spring Boot Auto Configuration to seamlessly integrate with your application.
+* Provides Assertion API which can be used to write tests checking various aspects of JPA operations / SQL statements, i.e.
+if lazy loading has not started occurring in given test scenario or amount of SELECT queries is not larger than some amount  [*This feature is still in development*]
+
+More about N+1 SELECT problem you can find in link:https://stackoverflow.com/questions/97197/what-is-the-n1-selects-problem-in-orm-object-relational-mapping/39696775[this] thread at StackOverflow.
+
+== Dependencies
+* Java 9 or later
+* Spring Boot 2.x
+* JPA 2.x (Hibernate as implementation provider required)
+* Slf4j
+
+== Installation
+Add the following dependency to your project:
+[source,xml,subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>com.grexdev.jplusone</groupId>
+    <artifactId>jplusone-core</artifactId>
+    <version>{release_version}</version>
+    <scope>test</scope>
+</dependency>
+----
+
+The jplusone logger must be configured to debug level in order to log JPA operations / SQL statements reports.
+It can be accomplised by adding following lines to your `application.yml`
+[source,yaml]
+----
+logging.level:
+    com.grexdev.jplusone: DEBUG
+----
+
+== Usage
+=== How it works
+One report is generated per each JPA EntityManager instance (Hibernate session). A report is written to log just after EntityManager is closed.
+
+=== Types of operations
+JPlusOne uses following terms to categorize operations:
+
+* *Explicit operation* - explicit invocation of some API utilizing Java Persistence API (JPA) which in result triggers some kind of SQL statement,
+i.e. SpringDataJPA repository or EntityManager or QueryDsl
+* *Implicit operation* - All kind of situations where SQL statements were triggered without some explicit call on JPA based API,
+i.e. as a result of traversing domain entities graph which was not fully loaded or invoking method on proxy entity, or by flushing dirty entity / collection
+
+
+=== Sample report:
+----
+2020-04-12 14:25:47.139 DEBUG 14026 --- [           main] c.g.j.core.report.ReportGenerator        :
+    ROOT
+        com.grexdev.jplusone.test.domain.bookshop.BookshopControllerTest.shouldGetBookDetailsLazily(BookshopControllerTest.java:44)
+        com.grexdev.jplusone.test.domain.bookshop.BookshopController.getSampleBookUsingLazyLoading(BookshopController.java:31)
+        com.grexdev.jplusone.test.domain.bookshop.BookshopService.getSampleBookDetailsUsingLazyLoading [PROXY]
+            SESSION BOUNDARY
+                OPERATION [EXPLICIT_FETCH]
+                    com.grexdev.jplusone.test.domain.bookshop.BookshopService.getSampleBookDetailsUsingLazyLoading(BookshopService.java:34)
+                    com.grexdev.jplusone.test.domain.bookshop.BookRepository.findById [PROXY]
+                        STATEMENT [READ]
+                            select [...] from
+                                 book book0_
+                            where
+                                 book0_.id = 1
+                OPERATION [IMPLICIT_FETCH]
+                    com.grexdev.jplusone.test.domain.bookshop.BookshopService.getSampleBookDetailsUsingLazyLoading(BookshopService.java:35)
+                    com.grexdev.jplusone.test.domain.bookshop.Author.getName [PROXY]
+                    com.grexdev.jplusone.test.domain.bookshop.Author [FETCHING ENTITY]
+                        STATEMENT [READ]
+                            select [...] from
+                                 author author0_
+                                 left outer join genre genre1_ on author0_.genre_id = genre1_.id
+                            where
+                                 author0_.id = 1
+----
+
+== Configuration
+==== Default configuration
+When no configuration is provided JPlusOne assumes following settings:
+
+* The root package where application classes is located is the same as the package where the class annotated with `@SpringBootApplication` is located
+* Only implicit operations are reported
+* All kind of SQL statements are reported
+* Operations / SQL statements triggered by Flyway are ignored
+
+==== Custom configuration
+You can overwrite default configuration by adding some of the following properties to your `application.yml`:
+
+[source,yaml]
+----
+# com.grexdev.jplusone.core.properties.JPlusOneProperties
+jplusone:
+  enabled: true
+  application-root-package: "com.sampleorganisation.sampleproject"
+  debug-mode: false
+  report:
+    enabled: true
+    operation-filtering-mode: ALL_OPERATIONS
+    statement-filtering-mode: ALL_STATEMENTS
+----
+
+==== Configuration properties:
+[cols=2*]
+|===
+|`jplusone.enabled`
+|Flag determining JPlusOne autoconfiguration is enabled, all SQL statements intercepted
+
+|`jplusone.application-root-package`
+|Root package of your project. Calls made to methods of classes outside the root package won't be analysed and visible in the report
+
+|`jplusone.report.enabled`
+|Flag determining if report should be written to logs
+
+|`jplusone.report.operation-filtering-mode`
+|Defines what kind of operations should be visible in the report. Possible values: `IMPLICIT_OPERATIONS_ONLY`, `EXPLICIT_OPERATIONS_ONLY`, `ALL_OPERATIONS`
+
+|`jplusone.report.statement-filtering-mode`
+|Defines what kind of SQL statements should be visible in the report. Possible values: `READ_STATEMENTS_ONLY`, `WRITE_STATEMENTS_ONLY`, `ALL_STATEMENTS`
+|===
