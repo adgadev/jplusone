@@ -59,7 +59,7 @@ public class EntityManagerFactoryProxy implements EntityManagerFactory {
     @Override
     public EntityManager createEntityManager(SynchronizationType synchronizationType, Map map) {
         EntityManager entityManager = delegate.createEntityManager(synchronizationType, map);
-        stateListener.sessionCreated();;
+        stateListener.sessionCreated();
         return new EntityManagerProxy(entityManager, stateListener);
     }
 

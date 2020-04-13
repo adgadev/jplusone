@@ -20,12 +20,15 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import static com.grexdev.jplusone.core.registry.StatementNode.StatementType.READ;
-import static com.grexdev.jplusone.core.registry.StatementNode.StatementType.WRITE;
+import static com.grexdev.jplusone.core.registry.StatementType.*;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class StatementNode {
+
+    private static final String COMMENT_START_TOKEN = "/* ";
+
+    private static final String COMMENT_END_TOKEN = " */ ";
 
     private static final String SELECT_CLAUSE = "select ";
 
@@ -33,19 +36,30 @@ public class StatementNode {
 
     private static final String COLUMN_LIST_SUBSTITUTE = "[...]";
 
-    public enum StatementType { READ, WRITE }
-
     private final String sql;
 
     private final StatementType statementType;
 
     public static StatementNode fromSql(String sql) {
-        StatementType type = sql.startsWith(SELECT_CLAUSE) ? READ : WRITE;
-        return new StatementNode(formatSql(sql, type), type);
+        String sqlWithoutComments = stripComments(sql);
+        StatementType type = StatementType.resolveStatementType(sqlWithoutComments);
+        return new StatementNode(formatSql(sqlWithoutComments, type), type);
+    }
+
+    private static String stripComments(String sql) {
+        if (sql.startsWith(COMMENT_START_TOKEN)) {
+            int commentEndIndex = sql.indexOf(COMMENT_END_TOKEN);
+
+            if (commentEndIndex > 0 && commentEndIndex + COMMENT_END_TOKEN.length() < sql.length()) {
+                return sql.substring(commentEndIndex + COMMENT_END_TOKEN.length());
+            }
+        }
+
+        return sql;
     }
 
     private static String formatSql(String sql, StatementType type) {
-        if (type == READ) {
+        if (type == SELECT) {
             int index = sql.indexOf(FROM_CLAUSE);
 
             if (index >= 0) {
@@ -59,7 +73,4 @@ public class StatementNode {
 
         return sql;
     }
-
-    // TODO: format JOIN statements
-
 }

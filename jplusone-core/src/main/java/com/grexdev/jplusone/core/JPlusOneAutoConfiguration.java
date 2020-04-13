@@ -103,8 +103,8 @@ public class JPlusOneAutoConfiguration {
         return new HikariDataSourceAspect(stateListener);
     }
 
-    // TODO: check what happens if flyway dependency not added
     @Bean
+    @ConditionalOnClass(name = "org.flywaydb.core.Flyway")
     public FlywayAspect flywayAspect(TrackingContext trackingContext) {
         return new FlywayAspect(trackingContext);
     }

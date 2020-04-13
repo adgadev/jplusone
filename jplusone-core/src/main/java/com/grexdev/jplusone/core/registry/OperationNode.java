@@ -30,7 +30,7 @@ import static java.util.Objects.nonNull;
 @Getter
 public class OperationNode {
 
-    public enum OperationType {IMPLICIT_FETCH, EXPLICIT_FETCH}
+    public enum OperationType {IMPLICIT, EXPLICIT}
 
     private final List<StatementNode> statements = new ArrayList<>();
 
@@ -43,7 +43,7 @@ public class OperationNode {
     public OperationNode(FrameStack callFramesStack) {
         this.callFramesStack = callFramesStack;
         this.lazyInitialisation = resolveLazyInitialisationDetails(callFramesStack);
-        this.operationType = nonNull(lazyInitialisation) ? OperationType.IMPLICIT_FETCH : OperationType.EXPLICIT_FETCH;
+        this.operationType = nonNull(lazyInitialisation) ? OperationType.IMPLICIT : OperationType.EXPLICIT;
     }
 
     void addStatement(String sql) {
@@ -54,7 +54,7 @@ public class OperationNode {
     void addLazyInitialisation(LazyInitialisation lazyInitialisation) {
         if (this.lazyInitialisation == null) {
             this.lazyInitialisation = lazyInitialisation;
-            this.operationType = OperationType.IMPLICIT_FETCH;
+            this.operationType = OperationType.IMPLICIT;
         } else {
             log.warn("Details of operation lazy initialisation already captured, bug?");
         }

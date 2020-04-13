@@ -17,7 +17,7 @@
 package com.grexdev.jplusone.core.properties;
 
 import com.grexdev.jplusone.core.registry.OperationNode.OperationType;
-import com.grexdev.jplusone.core.registry.StatementNode.StatementType;
+import com.grexdev.jplusone.core.registry.StatementType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -26,7 +26,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.util.EnumSet;
 import java.util.Set;
 
-import static com.grexdev.jplusone.core.properties.JPlusOneProperties.JPlusOneReportProperties.OperationFilteringMode.IMPLICIT_FETCH_OPERATIONS_ONLY;
+import static com.grexdev.jplusone.core.properties.JPlusOneProperties.JPlusOneReportProperties.OperationFilteringMode.IMPLICIT_OPERATIONS_ONLY;
 import static com.grexdev.jplusone.core.properties.JPlusOneProperties.JPlusOneReportProperties.StatementFilteringMode.READ_STATEMENTS_ONLY;
 
 @Getter
@@ -49,9 +49,9 @@ public class JPlusOneProperties {
         @Getter
         @RequiredArgsConstructor
         public enum OperationFilteringMode {
-            IMPLICIT_FETCH_OPERATIONS_ONLY(EnumSet.of(OperationType.IMPLICIT_FETCH)),
-            EXPLICIT_FETCH_OPERATIONS_ONLY(EnumSet.of(OperationType.EXPLICIT_FETCH)),
-            ALL_OPERATIONS(EnumSet.of(OperationType.IMPLICIT_FETCH, OperationType.EXPLICIT_FETCH));
+            IMPLICIT_OPERATIONS_ONLY(EnumSet.of(OperationType.IMPLICIT)),
+            EXPLICIT_OPERATIONS_ONLY(EnumSet.of(OperationType.EXPLICIT)),
+            ALL_OPERATIONS(EnumSet.of(OperationType.IMPLICIT, OperationType.EXPLICIT));
 
             private final Set<OperationType> operationTypes;
         }
@@ -59,16 +59,17 @@ public class JPlusOneProperties {
         @Getter
         @RequiredArgsConstructor
         public enum StatementFilteringMode {
-            READ_STATEMENTS_ONLY(EnumSet.of(StatementType.READ)),
-            WRITE_STATEMENTS_ONLY(EnumSet.of(StatementType.WRITE)),
-            ALL_STATEMENTS(EnumSet.of(StatementType.READ, StatementType.WRITE));
+            READ_STATEMENTS_ONLY(EnumSet.of(StatementType.SELECT)),
+            WRITE_STATEMENTS_ONLY(EnumSet.of(StatementType.INSERT, StatementType.UPDATE, StatementType.DELETE)),
+            OTHER_STATEMENTS_ONLY(EnumSet.of(StatementType.OTHER)),
+            ALL_STATEMENTS(EnumSet.of(StatementType.SELECT, StatementType.INSERT, StatementType.UPDATE, StatementType.DELETE, StatementType.OTHER));
 
             private final Set<StatementType> statementTypes;
         }
 
         private boolean enabled = true;
 
-        private OperationFilteringMode operationFilteringMode = IMPLICIT_FETCH_OPERATIONS_ONLY;
+        private OperationFilteringMode operationFilteringMode = IMPLICIT_OPERATIONS_ONLY;
 
         private StatementFilteringMode statementFilteringMode = READ_STATEMENTS_ONLY;
 

@@ -1,16 +1,17 @@
 :release_version: 0.1.0
 
-= JPlusOne: Reporting N+1 SELECT problem occurrences in Java applications
+= JPlusOne: Detecting N+1 SELECT problem occurrences in Java applications
 
 *JPlusOne* is a Java library designed primarily to detect and report situations where N+1 SELECT problem occurs, i.e. initialization of lazy collection of entities
 or initialization of entity proxy, resulting in additional SQL statement(s).
 
 == Features
-The tool is not limited only to detecting lazy loading / N+1 problems:
+The tool is not limited only to detecting lazy loading / N+1 problems. Apart from that it:
 
-* Shows full tree of application method calls and SQL statements (discarding all non-relevant data) associated with some business operation (i.e. REST controller endpoint call)
-* Allows to easily correlate JPA operations with resulting SQL statements
-* Shows SQL statements with their parameters in simplified and pretty-printed form
+* Shows general activity at JPA and SQL level related with some business scenarios, not necessarily related with lazy loading.
+* Shows tree of application method calls and SQL statements (discarding all non-relevant data) associated with some business operation (i.e. REST controller endpoint call) in a handy way.
+* Allows to easily correlate JPA operations with resulting SQL statements.
+* Shows SQL statements with their parameters in simplified and pretty-printed form.
 * Uses Spring Boot Auto Configuration to seamlessly integrate with your application.
 * Provides Assertion API which can be used to write tests checking various aspects of JPA operations / SQL statements, i.e.
 if lazy loading has not started occurring in given test scenario or amount of SELECT queries is not larger than some amount  [*This feature is still in development*]
@@ -44,8 +45,22 @@ logging.level:
 ----
 
 == Usage
+JPlusOne tool is able to generate report showing all kind of JPA operations / SQL statements, but in order to generate such report you need
+to have Spring Boot based integration tests of your application (`@SpringBootTest`), which covers scenarios you are interested in
+(i.e. integration test of some endpoint of your application).
+
+It's possible to use JPlusOne not in test but in production code, but this approach may add some additional overhead and may not be stable in some cases.
+
 === How it works
+In order to collect data JPlusOne intercepts all operations invoked on EntityManager / EntityManagerFactory and all SQL statements invoked on DataSource and, by wrapping those beans in proxies
+
 One report is generated per each JPA EntityManager instance (Hibernate session). A report is written to log just after EntityManager is closed.
+It's worth to mention that behaviour determining when EntityManager is closed (session is closed) can be altered by:
+
+* using `@Transactional` on integration test class or test case method - whole test cases is executed inside one session and transaction
+* enabling property `spring.jpa.open-in-view` - session closes not when a method of a service annotated with `@Transactional` is finished, but when controller which invoked such service method is finished
+Usually Spring uses separate session per transaction strategy, but
+
 
 === Types of operations
 JPlusOne uses following terms to categorize operations:
@@ -64,7 +79,7 @@ i.e. as a result of traversing domain entities graph which was not fully loaded 
         com.grexdev.jplusone.test.domain.bookshop.BookshopController.getSampleBookUsingLazyLoading(BookshopController.java:31)
         com.grexdev.jplusone.test.domain.bookshop.BookshopService.getSampleBookDetailsUsingLazyLoading [PROXY]
             SESSION BOUNDARY
-                OPERATION [EXPLICIT_FETCH]
+                OPERATION [EXPLICIT]
                     com.grexdev.jplusone.test.domain.bookshop.BookshopService.getSampleBookDetailsUsingLazyLoading(BookshopService.java:34)
                     com.grexdev.jplusone.test.domain.bookshop.BookRepository.findById [PROXY]
                         STATEMENT [READ]
@@ -72,7 +87,7 @@ i.e. as a result of traversing domain entities graph which was not fully loaded 
                                  book book0_
                             where
                                  book0_.id = 1
-                OPERATION [IMPLICIT_FETCH]
+                OPERATION [IMPLICIT]
                     com.grexdev.jplusone.test.domain.bookshop.BookshopService.getSampleBookDetailsUsingLazyLoading(BookshopService.java:35)
                     com.grexdev.jplusone.test.domain.bookshop.Author.getName [PROXY]
                     com.grexdev.jplusone.test.domain.bookshop.Author [FETCHING ENTITY]
@@ -90,7 +105,7 @@ When no configuration is provided JPlusOne assumes following settings:
 
 * The root package where application classes is located is the same as the package where the class annotated with `@SpringBootApplication` is located
 * Only implicit operations are reported
-* All kind of SQL statements are reported
+* Only SQL SELECT statements are reported
 * Operations / SQL statements triggered by Flyway are ignored
 
 ==== Custom configuration
@@ -113,10 +128,13 @@ jplusone:
 [cols=2*]
 |===
 |`jplusone.enabled`
-|Flag determining JPlusOne autoconfiguration is enabled, all SQL statements intercepted
+|Flag determining if JPlusOne autoconfiguration is enabled, all SQL statements intercepted
 
 |`jplusone.application-root-package`
 |Root package of your project. Calls made to methods of classes outside the root package won't be analysed and visible in the report
+
+|`jplusone.debug-mode`
+|Flag determining if JPlusOne debug mode is enabled
 
 |`jplusone.report.enabled`
 |Flag determining if report should be written to logs

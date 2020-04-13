@@ -45,11 +45,13 @@ public class ProxiedRootsBeanPostProcessor implements BeanPostProcessor {
             if (useHikariDataSourceAspect) {
                 log.debug("Using HikariDataSource aspect to intercept datasource connection creation");
             } else {
+                log.debug("DataSource wrapped in the proxy");
                 return new DataSourceProxy((DataSource) bean, stateListener);
             }
         }
 
         if (bean instanceof EntityManagerFactory) {
+            log.debug("EntityManagerFactory wrapped in the proxy");
             return new EntityManagerFactoryProxy((EntityManagerFactory) bean, stateListener);
         }
 

@@ -22,7 +22,7 @@ import com.grexdev.jplusone.core.registry.OperationNode;
 import com.grexdev.jplusone.core.registry.OperationNode.OperationType;
 import com.grexdev.jplusone.core.registry.SessionNode;
 import com.grexdev.jplusone.core.registry.StatementNode;
-import com.grexdev.jplusone.core.registry.StatementNode.StatementType;
+import com.grexdev.jplusone.core.registry.StatementType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -83,7 +83,7 @@ public class ReportGenerator {
 
                 for (StatementNode statement : operation.getStatements()) {
                     if (visibleStatementsType.contains(statement.getStatementType())) {
-                        builder.append("\n\t\t\t\t\t\tSTATEMENT [" + statement.getStatementType() + "]");
+                        builder.append("\n\t\t\t\t\t\tSTATEMENT [" + statement.getStatementType().getStatementGroupType() + "]");
                         builder.append(ReportSqlFormatter.formatSql("\t\t\t\t\t\t\t", statement.getSql()));
                     }
                 }
