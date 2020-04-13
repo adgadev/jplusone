@@ -1,6 +1,20 @@
+:jdk-icon: https://img.shields.io/badge/java-9+-4c7e9f.svg
+:jdk-link: https://www.oracle.com/technetwork/java/javase/downloads
+
+:maven-central-icon: https://img.shields.io/maven-central/v/com.grexdev/jplusone
+:maven-central-link: https://search.maven.org/artifact/com.grexdev/jplusone
+
+:apache-license-icon: https://img.shields.io/badge/License-Apache%202.0-blue.svg
+:apache-license-link: http://www.apache.org/licenses/LICENSE-2.0.txt
+
 :release_version: 0.1.0
 
-= JPlusOne: Detecting N+1 SELECT problem occurrences in Java applications
+= JPlusOne
+
+image:{jdk-icon}[JDK, link={jdk-link}]
+image:{apache-license-icon}[Apache License 2, link={apache-license-link}]
+image:{maven-central-icon}[Maven Central Repository, link={maven-central-link}]
+
 
 *JPlusOne* is a Java library designed primarily to detect and report situations where N+1 SELECT problem occurs, i.e. initialization of lazy collection of entities
 or initialization of entity proxy, resulting in additional SQL statement(s).
