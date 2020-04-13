@@ -21,9 +21,9 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>jplusone-tests-compat-springboot21</artifactId>
-    <name>JPlusOne Compatibility Test - Spring Boot 2.1.x</name>
-    <description>JPlusOne Test Project for compatibility with Spring Boot 2.1.x</description>
+    <artifactId>jplusone-tests-compat-springboot20</artifactId>
+    <name>JPlusOne Compatibility Test - Spring Boot 2.0.x</name>
+    <description>JPlusOne Test Project for compatibility with Spring Boot 2.0.x</description>
 
     <parent>
         <artifactId>jplusone-tests</artifactId>
@@ -32,7 +32,7 @@
     </parent>
 
     <properties>
-        <spring-boot.version>2.1.13.RELEASE</spring-boot.version>
+        <spring-boot.version>2.0.9.RELEASE</spring-boot.version>
     </properties>
 
     <dependencyManagement>
@@ -71,18 +71,24 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- https://stackoverflow.com/questions/48986999/classnotfoundexception-for-javax-xml-bind-jaxbexception-with-spring-boot-when-sw-->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+        <!-- https://github.com/spring-projects/spring-boot/issues/14610-->
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.23.1-GA</version>
+        </dependency>
+
         <!-- test dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-            <!-- exclude junit 4 -->
-            <exclusions>
-                <exclusion>
-                    <groupId>junit</groupId>
-                    <artifactId>junit</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency> <!-- junit 5 -->
             <groupId>org.junit.jupiter</groupId>

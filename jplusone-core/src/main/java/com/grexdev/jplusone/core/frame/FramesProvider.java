@@ -38,12 +38,18 @@ public class FramesProvider {
 
     private static final Set<Option> WALKER_OPTIONS = EnumSet.of(Option.RETAIN_CLASS_REFERENCE, SHOW_HIDDEN_FRAMES);
 
-    private static final String[] PROXY_CLASS_NAME_MARKERS = { "$Proxy", "$HibernateProxy", "$$EnhancerBySpringCGLIB", "$$FastClassBySpringCGLIB" };
-
     private static final Consumer<FrameExtract> LOG_FRAME_EXTRACT_CLOSURE = frame -> log.info(frame.toString());
 
     private static final Consumer<FrameExtract> NOOP_CLOSURE = frame -> {};
 
+    private static final String[] PROXY_CLASS_NAME_MARKERS = {
+            "$Proxy",
+            "$HibernateProxy",
+            "$$EnhancerBySpringCGLIB",
+            "$$FastClassBySpringCGLIB",
+            "$$_javassist",
+            "$$_jvst"
+    };
     private final FrameClassFactory frameClassFactory;
 
     private final Consumer<FrameExtract> frameProcessingAdditionalAction;
