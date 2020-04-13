@@ -26,9 +26,11 @@
     <packaging>pom</packaging>
     <name>JPlusOne Modules</name>
     <description>Tool for automatic detection and asserting N+1 problem occurrences in Spring Boot Java applications</description>
+    <url>https://github.com/adgadev/jplusone</url>
 
     <properties>
         <revision>0.0.4-SNAPSHOT</revision>
+        <spring-boot.version>2.2.2.RELEASE</spring-boot.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <deployAtEnd>true</deployAtEnd>
@@ -39,6 +41,37 @@
         <module>jplusone-assert</module>
         <module>jplusone-tests</module>
     </modules>
+
+    <licenses>
+        <license>
+            <name>Apache Software Licenese</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>adgadev</id>
+            <name>Adam Gaj</name>
+            <email>adga@grexdev.com</email>
+            <roles>
+                <role>maintainer</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <issueManagement>
+        <system>github</system>
+        <url>https://github.com/adgadev/jplusone/issues</url>
+    </issueManagement>
+
+    <scm>
+        <url>https://github.com/adgadev/jplusone</url>
+        <connection>scm:git:git@github.com:adgadev/jplusone.git</connection>
+        <developerConnection>scm:git:git@github.com:adgadev/jplusone.git</developerConnection>
+    </scm>
 
     <distributionManagement>
         <repository>
@@ -73,5 +106,34 @@
                 <version>2.22.2</version>
             </plugin>
         </plugins>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>flatten-maven-plugin</artifactId>
+                    <version>1.2.2</version>
+                    <configuration>
+                        <flattenMode>oss</flattenMode>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>flatten</id>
+                            <phase>process-resources</phase>
+                            <goals>
+                                <goal>flatten</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>flatten.clean</id>
+                            <phase>clean</phase>
+                            <goals>
+                                <goal>clean</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 </project>
