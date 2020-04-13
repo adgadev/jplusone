@@ -29,7 +29,7 @@ class ParametrizedSqlTest {
         parametrizedSql.setInt(1, 100);
         parametrizedSql.setString(2, "abc");
 
-        assertEquals("SELECT id FROM table t WHERE t.int_column = 100 AND t.str_column = \"abc\"", parametrizedSql.getSqlWithParameters());
+        assertEquals("SELECT id FROM table t WHERE t.int_column = 100 AND t.str_column = 'abc'", parametrizedSql.getSqlWithParameters());
     }
 
 }

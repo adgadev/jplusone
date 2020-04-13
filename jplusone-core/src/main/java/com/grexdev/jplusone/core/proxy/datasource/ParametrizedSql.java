@@ -53,7 +53,7 @@ class ParametrizedSql {
     }
 
     void setString(int parameterIndex, String value) {
-        parameters[parameterIndex - 1] = "\"" + value + "\"";
+        parameters[parameterIndex - 1] = "'" + value + "'";
     }
 
     String getSqlWithParameters() {
