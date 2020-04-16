@@ -49,6 +49,10 @@ public class FrameExtract {
         return type != FrameClassKind.THIRD_PARTY_CLASS;
     }
 
+    public boolean isApplicationClass() {
+        return type == FrameClassKind.APPLICATION_CLASS;
+    }
+
     @Override
     public String toString() {
         return fileName != null

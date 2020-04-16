@@ -69,6 +69,8 @@ public class JPlusOneProperties {
 
         private boolean enabled = true;
 
+        private boolean proxyCallFramesHidden = true;
+
         private OperationFilteringMode operationFilteringMode = IMPLICIT_OPERATIONS_ONLY;
 
         private StatementFilteringMode statementFilteringMode = READ_STATEMENTS_ONLY;

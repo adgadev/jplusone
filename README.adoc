@@ -134,6 +134,7 @@ jplusone:
   debug-mode: false
   report:
     enabled: true
+    proxy-call-frames-hidden: false
     operation-filtering-mode: ALL_OPERATIONS
     statement-filtering-mode: ALL_STATEMENTS
 ----
@@ -158,4 +159,7 @@ jplusone:
 
 |`jplusone.report.statement-filtering-mode`
 |Defines what kind of SQL statements should be visible in the report. Possible values: `READ_STATEMENTS_ONLY`, `WRITE_STATEMENTS_ONLY`, `ALL_STATEMENTS`
+
+|`jplusone.report.proxy-call-frames-hidden`
+|Flag determining if proxy call frames are hidden. It does not affect last frame of the call stack.
 |===

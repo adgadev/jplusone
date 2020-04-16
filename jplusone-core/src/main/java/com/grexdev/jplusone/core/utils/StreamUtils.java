@@ -20,6 +20,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
@@ -56,6 +57,12 @@ public class StreamUtils {
     public static <T> Predicate<Tupple<T>> everyElementMatches(Predicate<T> predicate) {
         return window -> window.previousElement != null && predicate.test(window.previousElement)
                 && window.currentElement != null && predicate.test(window.currentElement);
+    }
+
+    public static <T> List<T> filterToList(Collection<T> list, Predicate<T> predicate) {
+        return list.stream()
+                .filter(predicate::test)
+                .collect(toList());
     }
 
     @Getter

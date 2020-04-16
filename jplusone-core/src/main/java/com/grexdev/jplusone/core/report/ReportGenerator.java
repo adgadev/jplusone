@@ -26,7 +26,12 @@ import com.grexdev.jplusone.core.registry.StatementType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+
+import static com.grexdev.jplusone.core.utils.CollectionUtils.getLastItemOfList;
+import static com.grexdev.jplusone.core.utils.StreamUtils.filterToList;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -57,7 +62,9 @@ public class ReportGenerator {
         StringBuilder builder = new StringBuilder();
         builder.append("\n\tROOT");
 
-        for (FrameExtract frame : session.getSessionCallFrameStack().getCallFrames()) {
+        List<FrameExtract> sessionCallFrames = session.getSessionCallFrameStack().getCallFrames();
+
+        for (FrameExtract frame : filterApplicationCallFrames(sessionCallFrames, reportProperties.isProxyCallFramesHidden())) {
             if (frame.isNotThirdPartyClass()) {
                 builder.append("\n\t\t");
                 builder.append(frame.format());
@@ -69,8 +76,9 @@ public class ReportGenerator {
         for (OperationNode operation : session.getOperations()) {
             if (visibleOperationsType.contains(operation.getOperationType())) {
                 builder.append("\n\t\t\t\tOPERATION [" + operation.getOperationType() + "]");
+                List<FrameExtract> operationCallFrames = operation.getCallFramesStack().getCallFrames();
 
-                for (FrameExtract frame : operation.getCallFramesStack().getCallFrames()) {
+                for (FrameExtract frame : filterApplicationCallFrames(operationCallFrames, reportProperties.isProxyCallFramesHidden())) {
                     if (frame.isNotThirdPartyClass()) {
                         builder.append("\n\t\t\t\t\t");
                         builder.append(frame.format());
@@ -91,6 +99,28 @@ public class ReportGenerator {
         }
 
         return builder.toString();
+    }
+
+
+    public List<FrameExtract> filterApplicationCallFrames(List<FrameExtract> callFrames, boolean proxyCallFramesHidden) {
+        List<FrameExtract> applicationAllCallFrames = filterToList(callFrames, FrameExtract::isNotThirdPartyClass);
+
+        if (!proxyCallFramesHidden) {
+            return applicationAllCallFrames;
+        } else {
+            List<FrameExtract> result = filterToList(applicationAllCallFrames, FrameExtract::isApplicationClass);
+
+            if (!applicationAllCallFrames.isEmpty()) {
+                Optional<FrameExtract> lastApplicationCallFrame = getLastItemOfList(applicationAllCallFrames);
+                Optional<FrameExtract> lastApplicationClassCallFrame = getLastItemOfList(result);
+
+                if (lastApplicationCallFrame.isPresent() && !lastApplicationCallFrame.equals(lastApplicationClassCallFrame)) {
+                    result.add(lastApplicationCallFrame.get());
+                }
+            }
+
+            return result;
+        }
     }
 
 }
