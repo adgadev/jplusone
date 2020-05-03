@@ -26,6 +26,8 @@ import static com.grexdev.jplusone.core.registry.StatementType.*;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class StatementNode {
 
+    public static final String COLUMN_LIST_SUBSTITUTE = "#SELECT_COLUMNS_LIST";
+
     private static final String COMMENT_START_TOKEN = "/* ";
 
     private static final String COMMENT_END_TOKEN = " */ ";
@@ -33,8 +35,6 @@ public class StatementNode {
     private static final String SELECT_CLAUSE = "select ";
 
     private static final String FROM_CLAUSE = " from ";
-
-    private static final String COLUMN_LIST_SUBSTITUTE = "[...]";
 
     private final String sql;
 

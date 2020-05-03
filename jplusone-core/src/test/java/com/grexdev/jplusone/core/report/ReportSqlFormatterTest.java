@@ -29,45 +29,66 @@ class ReportSqlFormatterTest {
     @ParameterizedTest
     @MethodSource("sqlDataProvider")
     void shouldFormatSql(String inputSql, String expectedSql) {
-        String formattedSql = ReportSqlFormatter.formatSql("\t", inputSql);
+        String formattedSql = ReportSqlFormatter.formatSql("    ", inputSql);
         assertEquals(expectedSql, formattedSql);
     }
 
     private static Stream<Arguments> sqlDataProvider() {
         return Stream.of(
                 Arguments.of(
-                        "select [...] from book book0_ " +
+                        "select #SELECT_COLUMNS_LIST from book book0_ " +
                                 "where book0_.id = 1",
                         "\n" +
-                                "\tselect [...] from\n" +
-                                "\t\t book book0_\n" +
-                                "\twhere\n" +
-                                "\t\t book0_.id = 1"
+                                "    select [...] from\n" +
+                                "        book book0_ \n" +
+                                "    where\n" +
+                                "        book0_.id = 1"
                 ),
                 Arguments.of(
-                        "select [...] from author author0_ " +
+                        "select #SELECT_COLUMNS_LIST from author author0_ " +
                                 "left outer join genre genre1_ on author0_.genre_id = genre1_.id " +
                                 "where author0_.id = 1",
                         "\n" +
-                                "\tselect [...] from\n" +
-                                "\t\t author author0_\n" +
-                                "\t\t left outer join genre genre1_ on author0_.genre_id = genre1_.id\n" +
-                                "\twhere\n" +
-                                "\t\t author0_.id = 1"
+                                "    select [...] from\n" +
+                                "        author author0_ \n" +
+                                "        left outer join genre genre1_ on author0_.genre_id = genre1_.id\n" +
+                                "    where\n" +
+                                "        author0_.id = 1"
                 ),
                 Arguments.of(
-                        "select [...] from book book0_ " +
+                        "select #SELECT_COLUMNS_LIST from book book0_ " +
                                 "left outer join author author0_ on book0_.author_id = author0_.id " +
                                 "left outer join genre genre1_ on author0_.genre_id = genre1_.id " +
                                 "where book0_.id = 1 and author0_.name = \"Puzo\"",
                         "\n" +
-                                "\tselect [...] from\n" +
-                                "\t\t book book0_\n" +
-                                "\t\t left outer join author author0_ on book0_.author_id = author0_.id\n" +
-                                "\t\t left outer join genre genre1_ on author0_.genre_id = genre1_.id\n" +
-                                "\twhere\n" +
-                                "\t\t book0_.id = 1\n" +
-                                "\t\t and author0_.name = \"Puzo\""
+                                "    select [...] from\n" +
+                                "        book book0_ \n" +
+                                "        left outer join author author0_ on book0_.author_id = author0_.id\n" +
+                                "        left outer join genre genre1_ on author0_.genre_id = genre1_.id\n" +
+                                "    where\n" +
+                                "        book0_.id = 1 \n" +
+                                "        and author0_.name = \"Puzo\""
+                ),
+
+                Arguments.of(
+                        "update T1 " +
+                                "set A1 = 2 " +
+                                "where B1 = 'ABC' and C2 in (select C3 from T2 where C4 = 0)",
+                        "\n" +
+                                "    update\n" +
+                                "        T1 \n" +
+                                "    set\n" +
+                                "        A1 = 2 \n" +
+                                "    where\n" +
+                                "        B1 = 'ABC' \n" +
+                                "        and C2 in (\n" +
+                                "            select\n" +
+                                "                C3 \n" +
+                                "            from\n" +
+                                "                T2 \n" +
+                                "            where\n" +
+                                "                C4 = 0\n" +
+                                "        )"
                 )
         );
     }

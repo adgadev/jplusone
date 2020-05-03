@@ -27,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -36,6 +37,20 @@ import static com.grexdev.jplusone.core.utils.StreamUtils.filterToList;
 @Slf4j
 @RequiredArgsConstructor
 public class ReportGenerator {
+
+    private final String NEWLINE = "\n";
+
+    private static String INDENT = "    ";
+
+    private final Map<Integer, String> INDENTS = Map.of(
+            1, INDENT,
+            2, INDENT + INDENT,
+            3, INDENT + INDENT + INDENT,
+            4, INDENT + INDENT + INDENT + INDENT,
+            5, INDENT + INDENT + INDENT + INDENT + INDENT,
+            6, INDENT + INDENT + INDENT + INDENT + INDENT + INDENT,
+            7, INDENT + INDENT + INDENT + INDENT + INDENT + INDENT + INDENT
+    );
 
     private final JPlusOneReportProperties reportProperties;
 
@@ -60,39 +75,39 @@ public class ReportGenerator {
 
     private String sessionToString(SessionNode session, Set<OperationType> visibleOperationsType, Set<StatementType> visibleStatementsType) {
         StringBuilder builder = new StringBuilder();
-        builder.append("\n\tROOT");
+        builder.append(NEWLINE + INDENTS.get(1) + "ROOT");
 
         List<FrameExtract> sessionCallFrames = session.getSessionCallFrameStack().getCallFrames();
 
         for (FrameExtract frame : filterApplicationCallFrames(sessionCallFrames, reportProperties.isProxyCallFramesHidden())) {
             if (frame.isNotThirdPartyClass()) {
-                builder.append("\n\t\t");
+                builder.append(NEWLINE + INDENTS.get(2));
                 builder.append(frame.format());
             }
         }
 
-        builder.append("\n\t\t\tSESSION BOUNDARY");
+        builder.append(NEWLINE + INDENTS.get(3) + "SESSION BOUNDARY");
 
         for (OperationNode operation : session.getOperations()) {
             if (visibleOperationsType.contains(operation.getOperationType())) {
-                builder.append("\n\t\t\t\tOPERATION [" + operation.getOperationType() + "]");
+                builder.append(NEWLINE + INDENTS.get(4) + "OPERATION [" + operation.getOperationType() + "]");
                 List<FrameExtract> operationCallFrames = operation.getCallFramesStack().getCallFrames();
 
                 for (FrameExtract frame : filterApplicationCallFrames(operationCallFrames, reportProperties.isProxyCallFramesHidden())) {
                     if (frame.isNotThirdPartyClass()) {
-                        builder.append("\n\t\t\t\t\t");
+                        builder.append(NEWLINE + INDENTS.get(5));
                         builder.append(frame.format());
                     }
                 }
 
                 if (operation.getLazyInitialisation() != null) {
-                    builder.append("\n\t\t\t\t\t" + operation.getLazyInitialisation());
+                    builder.append(NEWLINE + INDENTS.get(5) + operation.getLazyInitialisation());
                 }
 
                 for (StatementNode statement : operation.getStatements()) {
                     if (visibleStatementsType.contains(statement.getStatementType())) {
-                        builder.append("\n\t\t\t\t\t\tSTATEMENT [" + statement.getStatementType().getStatementGroupType() + "]");
-                        builder.append(ReportSqlFormatter.formatSql("\t\t\t\t\t\t\t", statement.getSql()));
+                        builder.append(NEWLINE + INDENTS.get(6) + "STATEMENT [" + statement.getStatementType().getStatementGroupType() + "]");
+                        builder.append(ReportSqlFormatter.formatSql(INDENTS.get(7), statement.getSql()));
                     }
                 }
             }

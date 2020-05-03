@@ -16,38 +16,95 @@
 
 package com.grexdev.jplusone.core.report;
 
-import com.github.vertical_blank.sqlformatter.SqlFormatter;
+import com.grexdev.jplusone.core.registry.StatementNode;
+
+import static org.hibernate.engine.jdbc.internal.FormatStyle.BASIC;
 
 class ReportSqlFormatter {
 
-    private static final String SQL_FORMATTER_INTEND = " ";
+    private static final String SELECT_CLAUSE_CAPTURED = "select " + StatementNode.COLUMN_LIST_SUBSTITUTE + " from";
 
-    private static final String SELECT_CLAUSE = "select [...] from";
+    private static final String SELECT_CLAUSE_FORMATTED = "select [...] from";
 
-    // TODO: refactor
+    private static final String WHERE_CLAUSE_LINE = "    where";
+
+    private static String INTEND = "    ";
+
+    private static int SPACES_PER_INDENT = 4;
+
+    private static int BASIC_FORMATTER_LEADING_SPACES = 4;
+
     static String formatSql(String generalIntend, String sql) {
-        boolean selectStatement = sql.startsWith(SELECT_CLAUSE);
-        String formattedSql = SqlFormatter.format(sql, SQL_FORMATTER_INTEND);
+        String formattedSql = BASIC.getFormatter().format(sql);
         String[] lines = formattedSql.split("\n");
+
+        return sql.startsWith(SELECT_CLAUSE_CAPTURED)
+                ? formatSelectSqlStatement(generalIntend, lines)
+                : formatGenericSqlStatement(generalIntend, lines);
+    }
+
+    private static String formatGenericSqlStatement(String generalIntend, String[] lines) {
         StringBuilder builder = new StringBuilder();
-        int startIndex = 0;
 
-        if (selectStatement) {
-            builder.append('\n');
-            builder.append(generalIntend);
-            builder.append(SELECT_CLAUSE);
-            startIndex = 3;
-        }
-
-        for (int i = startIndex; i < lines.length; i++) {
+        for (int i = 1; i < lines.length; i++) {
             String line = lines[i];
             builder.append('\n');
             builder.append(generalIntend);
-            builder.append(line.startsWith(SQL_FORMATTER_INTEND) ? "\t" : "");
-            builder.append(line);
+            builder.append(line.substring(BASIC_FORMATTER_LEADING_SPACES));
         }
 
         return builder.toString();
     }
 
+    static String formatSelectSqlStatement(String generalIntend, String[] lines) {
+        StringBuilder builder = new StringBuilder();
+        boolean whereClauseProcessed = false;
+
+        builder.append('\n');
+        builder.append(generalIntend);
+        builder.append(SELECT_CLAUSE_FORMATTED);
+
+        String fromTableName = lines[4].substring(BASIC_FORMATTER_LEADING_SPACES);
+        builder.append('\n');
+        builder.append(generalIntend);
+        builder.append(fromTableName);
+
+        for (int i = 5; i < lines.length; i++) {
+            String line = lines[i];
+            int leadingSpaces = countLeadingSpaces(line);
+            int indentationDepth = leadingSpaces / SPACES_PER_INDENT - 1;
+
+            if (line.equals(WHERE_CLAUSE_LINE)) {
+                whereClauseProcessed = true;
+            }
+
+            if (!whereClauseProcessed) {
+                if (indentationDepth >= 1) {
+                    builder.append(" ");
+                    builder.append(line.trim());
+                } else {
+                    builder.append('\n');
+                    builder.append(generalIntend);
+                    builder.append(INTEND);
+                    builder.append(line.substring(BASIC_FORMATTER_LEADING_SPACES));
+                }
+            } else {
+                builder.append('\n');
+                builder.append(generalIntend);
+                builder.append(line.substring(BASIC_FORMATTER_LEADING_SPACES));
+            }
+        }
+
+        return builder.toString();
+    }
+
+    private static int countLeadingSpaces(String line) {
+        int index = 0;
+
+        while (index < line.length() && line.charAt(index) == ' ') {
+            index++;
+        }
+
+        return index;
+    }
 }
