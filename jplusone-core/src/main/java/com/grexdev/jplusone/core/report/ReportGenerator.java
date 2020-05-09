@@ -23,7 +23,6 @@ import com.grexdev.jplusone.core.registry.OperationNode.OperationType;
 import com.grexdev.jplusone.core.registry.SessionNode;
 import com.grexdev.jplusone.core.registry.StatementNode;
 import com.grexdev.jplusone.core.registry.StatementType;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -35,7 +34,6 @@ import static com.grexdev.jplusone.core.utils.CollectionUtils.getLastItemOfList;
 import static com.grexdev.jplusone.core.utils.StreamUtils.filterToList;
 
 @Slf4j
-@RequiredArgsConstructor
 public class ReportGenerator {
 
     private final String NEWLINE = "\n";
@@ -53,6 +51,14 @@ public class ReportGenerator {
     );
 
     private final JPlusOneReportProperties reportProperties;
+
+    public ReportGenerator(JPlusOneReportProperties reportProperties) {
+        this.reportProperties = reportProperties;
+
+        if (!reportProperties.isEnabled()) {
+            log.debug("JPlusOne report generation is disabled");
+        }
+    }
 
     public void handleRecordedSession(SessionNode session) {
         if (reportProperties.isEnabled()) {
