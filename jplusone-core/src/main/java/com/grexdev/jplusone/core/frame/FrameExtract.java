@@ -56,8 +56,8 @@ public class FrameExtract {
     @Override
     public String toString() {
         return fileName != null
-                ? "[" + type + "] " + className + '.' + methodName + "(" + fileName + ":" + lineNumber + ")"
-                : "[" + type + "] " + className + '.' + methodName + "(N/A)";
+                ? "[" + type.getLabel() + "]  " + type.getFilling() + className + '.' + methodName + "(" + fileName + ":" + lineNumber + ")"
+                : "[" + type.getLabel() + "]  " + type.getFilling() + className + '.' + methodName + "(N/A)";
     }
 
     public String format() {

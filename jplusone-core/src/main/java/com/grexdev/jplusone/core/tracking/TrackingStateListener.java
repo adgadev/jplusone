@@ -16,15 +16,17 @@
 
 package com.grexdev.jplusone.core.tracking;
 
-import com.grexdev.jplusone.core.report.ReportGenerator;
 import com.grexdev.jplusone.core.frame.FramesProvider;
 import com.grexdev.jplusone.core.proxy.StateListener;
+import com.grexdev.jplusone.core.registry.FrameStack;
 import com.grexdev.jplusone.core.registry.RootNode;
 import com.grexdev.jplusone.core.registry.SessionNode;
+import com.grexdev.jplusone.core.report.ReportGenerator;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.persistence.EntityManager;
 import java.util.function.Supplier;
 
 import static com.grexdev.jplusone.core.registry.LazyInitialisation.collectionLazyInitialisation;
@@ -35,8 +37,6 @@ public class TrackingStateListener implements StateListener {
 
     private final RootNode root;
 
-    private final boolean debugMode;
-
     private final FramesProvider framesProvider;
 
     private final ReportGenerator reportGenerator;
@@ -45,43 +45,40 @@ public class TrackingStateListener implements StateListener {
 
     public TrackingStateListener(TrackingContext context, ReportGenerator reportGenerator, RootNode root) {
         this.root = root;
-        this.debugMode = context.isDebugMode();
         this.reportGenerator = reportGenerator;
-        this.framesProvider = new FramesProvider(context.getApplicationRootPackage(), context.isDebugMode());
+        this.framesProvider = new FramesProvider(context.getApplicationRootPackage());
     }
 
     @Override
     public void sessionCreated() {
-        if (debugMode) {
-            log.debug("########## SESSION CREATED ##########");
-        }
-
         SessionNode session = SessionNode.of(framesProvider.captureCallFrames());
         SessionStack sessionStack = currentSessionStack.get();
 
         if (sessionStack != null) {
+            log.debug("SESSION STACK CREATED - NESTED, {}", sessionStack);
             sessionStack.increaseSessionAmount();
 
         } else {
+            SessionStack newSessionStack = SessionStack.of(session);
             root.addSession(session);
-            currentSessionStack.set(SessionStack.of(session));
+            currentSessionStack.set(newSessionStack);
+            log.debug("SESSION STACK CREATED - OUTER, {}", newSessionStack);
         }
     }
 
     @Override
     public void sessionClosed() {
-        if (debugMode) {
-            log.debug("########## SESSION CLOSED ##########");
-        }
-
         SessionStack sessionStack = currentSessionStack.get();
 
         if (sessionStack != null) {
-            reportGenerator.handleRecordedSession(sessionStack.outerSessionNode);
+            reportGenerator.handleRecordedSession(sessionStack.outerSessionNode); // TODO: what about nested session?
             sessionStack.decreaseSessionAmount();
 
             if (sessionStack.allSessionsClosed()) {
                 currentSessionStack.remove();
+                log.debug("SESSION STACK DELETED - OUTER, {}", sessionStack);
+            } else {
+                log.debug("SESSION STACK DELETED - NESTED, {}", sessionStack);
             }
 
         } else {
@@ -90,18 +87,28 @@ public class TrackingStateListener implements StateListener {
     }
 
     @Override
+    public void transactionStarted() {
+        // TODO: implement
+    }
+
+    @Override
+    public void transactionFinished() {
+        // TODO: implement
+    }
+
+    @Override
     public void statementExecuted(String sql) {
-        if (debugMode) {
-            log.info("########## STATEMENT EXECUTED: {} ##########", sql);
-        }
-
         SessionStack sessionStack = currentSessionStack.get();
+        FrameStack frameStack = framesProvider.captureCallFrames();
 
-        if (sessionStack != null) {
-            SessionNode session = sessionStack.outerSessionNode;
-            session.addStatement(sql, framesProvider.captureCallFrames());
-        } else {
-            log.warn("Session has been closed already");
+        if (isExecutedByEntityManager(frameStack)) {
+            if (sessionStack != null) {
+                log.debug("SESSION USE, {}", sessionStack);
+                SessionNode session = sessionStack.outerSessionNode;
+                session.addStatement(sql, frameStack);
+            } else {
+                log.warn("Session has been closed already");
+            }
         }
     }
 
@@ -112,10 +119,6 @@ public class TrackingStateListener implements StateListener {
 
     @Override
     public void lazyCollectionInitialized(String entityClassName, String fieldName) {
-        if (debugMode) {
-            log.info("########## COLLECTION INITIALIZED: {}.{} ##########", entityClassName, fieldName);
-        }
-
         SessionStack sessionStack = currentSessionStack.get();
 
         if (sessionStack != null) {
@@ -125,6 +128,12 @@ public class TrackingStateListener implements StateListener {
         } else {
             log.warn("Session has been closed already");
         }
+    }
+
+    private boolean isExecutedByEntityManager(FrameStack frameStack) {
+        return frameStack
+                .findLastMatchingFrame(frameExtract -> EntityManager.class.isAssignableFrom(frameExtract.getClazz()))
+                .isPresent();
     }
 
     @AllArgsConstructor

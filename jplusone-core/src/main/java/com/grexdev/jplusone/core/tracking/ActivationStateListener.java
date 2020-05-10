@@ -18,9 +18,11 @@ package com.grexdev.jplusone.core.tracking;
 
 import com.grexdev.jplusone.core.proxy.StateListener;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.function.Supplier;
 
+@Slf4j
 @RequiredArgsConstructor
 public class ActivationStateListener implements StateListener {
 
@@ -31,35 +33,58 @@ public class ActivationStateListener implements StateListener {
     @Override
     public void sessionCreated() {
         if (context.isRecordingEnabled()) {
-            delegate.sessionCreated();
+            executeSilently(delegate::sessionCreated);
         }
     }
 
     @Override
     public void sessionClosed() {
         if (context.isRecordingEnabled()) {
-            delegate.sessionClosed();
+            executeSilently(delegate::sessionClosed);
+        }
+    }
+
+    @Override
+    public void transactionStarted() {
+        if (context.isRecordingEnabled()) {
+            executeSilently(delegate::transactionStarted);
+        }
+    }
+
+    @Override
+    public void transactionFinished() {
+        if (context.isRecordingEnabled()) {
+            executeSilently(delegate::transactionFinished);
         }
     }
 
     @Override
     public void statementExecuted(String sql) {
         if (context.isRecordingEnabled()) {
-            delegate.statementExecuted(sql);
+            executeSilently(() -> delegate.statementExecuted(sql));
         }
     }
 
     @Override
     public void statementExecuted(Supplier<String> sqlSupplier) {
         if (context.isRecordingEnabled()) {
-            delegate.statementExecuted(sqlSupplier);
+            executeSilently(() -> delegate.statementExecuted(sqlSupplier));
         }
     }
 
     @Override
     public void lazyCollectionInitialized(String entityClassName, String fieldName) {
         if (context.isRecordingEnabled()) {
-            delegate.lazyCollectionInitialized(entityClassName, fieldName);
+            executeSilently(() -> delegate.lazyCollectionInitialized(entityClassName, fieldName));
         }
     }
+
+    private void executeSilently(Runnable eventHandlerAction) {
+        try {
+            eventHandlerAction.run();
+        } catch (Exception e) {
+            log.warn("JPlusOne failed to handle JPA/hibernate event", e);
+        }
+    }
+
 }

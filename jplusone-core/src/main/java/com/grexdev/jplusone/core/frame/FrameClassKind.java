@@ -16,9 +16,23 @@
 
 package com.grexdev.jplusone.core.frame;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
 public enum FrameClassKind {
-    APPLICATION_CLASS,
-    APPLICATION_SUPERCLASS,
-    APPLICATION_INTERFACE,
-    THIRD_PARTY_CLASS
+    APPLICATION_CLASS(
+            "APP-CLASS", "        "),
+    APPLICATION_SUPERCLASS(
+            "APP-SUPERCLASS", "   "),
+    APPLICATION_INTERFACE(
+            "APP-INTERFACE", "    "),
+    THIRD_PARTY_CLASS(
+            "THIRD-PARTY-CLASS", "");
+
+    private final String label;
+
+    private final String filling;
+
 }

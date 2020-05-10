@@ -21,33 +21,41 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Delegate;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
 @Slf4j
 @RequiredArgsConstructor
-class EntityManagerProxy implements EntityManager {
+public class EntityTransactionProxy implements EntityTransaction {
 
-    @Delegate(excludes = EntityManagerOverwrite.class)
-    private final EntityManager delegate;
+    @Delegate(excludes = EntityTransactionOverwrite.class)
+    private final EntityTransaction delegate;
 
     private final StateListener stateListener;
 
     @Override
-    public EntityTransaction getTransaction() {
-        EntityTransaction transaction = delegate.getTransaction();
-        return new EntityTransactionProxy(transaction, stateListener);
+    public void begin() {
+        delegate.begin();
+        stateListener.transactionStarted();
     }
 
     @Override
-    public void close() {
-        delegate.close();
-        stateListener.sessionClosed();
+    public void commit() {
+        delegate.commit();
+        stateListener.transactionFinished();
     }
 
-    private interface EntityManagerOverwrite {
-        EntityTransaction getTransaction();
+    @Override
+    public void rollback() {
+        delegate.rollback();
+        stateListener.transactionFinished();
+    }
 
-        void close();
+    private interface EntityTransactionOverwrite {
+
+        void begin();
+
+        void commit();
+
+        void rollback();
     }
 }

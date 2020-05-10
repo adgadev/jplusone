@@ -22,6 +22,7 @@ import com.grexdev.jplusone.core.proxy.ProxiedRootsBeanPostProcessor;
 import com.grexdev.jplusone.core.proxy.hibernate.HibernateCollectionInitialisationEventListener;
 import com.grexdev.jplusone.core.report.ReportGenerator;
 import com.grexdev.jplusone.core.tracking.ActivationStateListener;
+import com.grexdev.jplusone.core.tracking.LoggingStateListener;
 import com.grexdev.jplusone.core.tracking.TrackingContext;
 import com.grexdev.jplusone.core.tracking.TrackingStateListener;
 import com.grexdev.jplusone.core.utils.ApplicationScanner;
@@ -80,7 +81,12 @@ public class JPlusOneAutoConfiguration {
     }
 
     @Bean
-    public ActivationStateListener activationStateListener(TrackingContext trackingContext, TrackingStateListener stateListener) {
+    public LoggingStateListener loggingStateListener(TrackingContext context, TrackingStateListener stateListener) {
+        return new LoggingStateListener(context, stateListener);
+    }
+
+    @Bean
+    public ActivationStateListener activationStateListener(TrackingContext trackingContext, LoggingStateListener stateListener) {
         return new ActivationStateListener(stateListener, trackingContext);
     }
 

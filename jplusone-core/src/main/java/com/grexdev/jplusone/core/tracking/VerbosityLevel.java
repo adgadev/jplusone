@@ -14,23 +14,27 @@
  * limitations under the License.
  */
 
-package com.grexdev.jplusone.core.proxy;
+package com.grexdev.jplusone.core.tracking;
 
-import java.util.function.Supplier;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-public interface StateListener {
+@Getter
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+public enum VerbosityLevel {
+    V0(false, false, false, false),
+    V1(true, false, false, false),
+    V2(true, true, false, false),
+    V3(true, true, true, false),
+    V4(true, true, true, true);
 
-    void sessionCreated();
+    private final boolean debugModeEnabled;
 
-    void sessionClosed();
+    private final boolean sessionStackVisible;
 
-    void transactionStarted();
+    private final boolean transactionStackVisible;
 
-    void transactionFinished();
+    private final boolean sqlStatementVisible;
 
-    void statementExecuted(String sql);
-
-    void statementExecuted(Supplier<String> sqlSupplier);
-
-    void lazyCollectionInitialized(String entityClassName, String fieldName);
 }
