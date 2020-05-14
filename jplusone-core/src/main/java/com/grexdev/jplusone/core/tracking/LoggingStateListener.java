@@ -32,7 +32,7 @@ public class LoggingStateListener implements StateListener {
     private final FramesProvider framesProvider;
 
     public LoggingStateListener(TrackingContext context, StateListener stateListener) {
-        this.verbosityLevel = context.isDebugMode() ? VerbosityLevel.V4 : VerbosityLevel.V0; // TODO: externalse verbosity level
+        this.verbosityLevel = context.isDebugMode() ? VerbosityLevel.V5 : VerbosityLevel.V0; // TODO: externalse verbosity level
         this.stateListener = stateListener;
         this.framesProvider = new FramesProvider(context.getApplicationRootPackage());
     }
@@ -92,8 +92,13 @@ public class LoggingStateListener implements StateListener {
     @Override
     public void statementExecuted(String sql) {
         if (verbosityLevel.isDebugModeEnabled()) {
-            if (verbosityLevel.isSqlStatementVisible()) {
-                log.debug("SQL Statement executed: {}", sql);
+            if (verbosityLevel.isSqlStatementStackVisible()) {
+                String label = verbosityLevel.isSqlStatementVisible()
+                    ? "SQL Statement executed, SQL: " + sql
+                    : "SQL Statement executed";
+                framesProvider.captureCallFrames().printStackTrace(label);
+            } else if (verbosityLevel.isSqlStatementVisible()){
+                log.debug("SQL Statement executed, SQL: {}", sql);
             } else {
                 log.debug("SQL Statement executed");
             }

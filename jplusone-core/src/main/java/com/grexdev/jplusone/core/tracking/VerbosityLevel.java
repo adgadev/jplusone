@@ -22,18 +22,21 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public enum VerbosityLevel {
-    V0(false, false, false, false),
-    V1(true, false, false, false),
-    V2(true, true, false, false),
-    V3(true, true, true, false),
-    V4(true, true, true, true);
+public enum VerbosityLevel { // TODO: enum extending interface
+    V0(false, false, false, false, false),
+    V1(true, false, false, false, false),
+    V2(true, true, false, false, false),
+    V3(true, true, true, false, false),
+    V4(true, true, true, true, false),
+    V5(true, true, true, true, true);
 
     private final boolean debugModeEnabled;
 
     private final boolean sessionStackVisible;
 
     private final boolean transactionStackVisible;
+
+    private final boolean sqlStatementStackVisible;
 
     private final boolean sqlStatementVisible;
 
