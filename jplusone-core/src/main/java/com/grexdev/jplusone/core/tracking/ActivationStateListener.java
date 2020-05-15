@@ -16,6 +16,7 @@
 
 package com.grexdev.jplusone.core.tracking;
 
+import com.grexdev.jplusone.core.proxy.Identifier;
 import com.grexdev.jplusone.core.proxy.StateListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,30 +32,30 @@ public class ActivationStateListener implements StateListener {
     private final TrackingContext context;
 
     @Override
-    public void sessionCreated() {
+    public void entityManagerCreated(Identifier entityManagerId) {
         if (context.isRecordingEnabled()) {
-            executeSilently(delegate::sessionCreated);
+            executeSilently(() -> delegate.entityManagerCreated(entityManagerId));
         }
     }
 
     @Override
-    public void sessionClosed() {
+    public void entityManagerClosed(Identifier entityManagerId) {
         if (context.isRecordingEnabled()) {
-            executeSilently(delegate::sessionClosed);
+            executeSilently(() -> delegate.entityManagerClosed(entityManagerId));
         }
     }
 
     @Override
-    public void transactionStarted() {
+    public void transactionStarted(Identifier transactionId) {
         if (context.isRecordingEnabled()) {
-            executeSilently(delegate::transactionStarted);
+            executeSilently(() -> delegate.transactionStarted(transactionId));
         }
     }
 
     @Override
-    public void transactionFinished() {
+    public void transactionFinished(Identifier transactionId) {
         if (context.isRecordingEnabled()) {
-            executeSilently(delegate::transactionFinished);
+            executeSilently(() -> delegate.transactionFinished(transactionId));
         }
     }
 

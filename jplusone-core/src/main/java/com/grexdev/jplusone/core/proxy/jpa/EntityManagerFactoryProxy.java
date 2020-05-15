@@ -38,29 +38,31 @@ public class EntityManagerFactoryProxy implements EntityManagerFactory {
     @Override
     public EntityManager createEntityManager() {
         EntityManager entityManager = delegate.createEntityManager();
-        stateListener.sessionCreated();
-        return new EntityManagerProxy(entityManager, stateListener);
-    }
-
-    @Override
-    public EntityManager createEntityManager(Map map) {
-        EntityManager entityManager = delegate.createEntityManager(map);
-        stateListener.sessionCreated();
-        return new EntityManagerProxy(entityManager, stateListener);
+        return wrapEntityManager(entityManager);
     }
 
     @Override
     public EntityManager createEntityManager(SynchronizationType synchronizationType) {
         EntityManager entityManager = delegate.createEntityManager(synchronizationType);
-        stateListener.sessionCreated();
-        return new EntityManagerProxy(entityManager, stateListener);
+        return wrapEntityManager(entityManager);
+    }
+
+    @Override
+    public EntityManager createEntityManager(Map map) {
+        EntityManager entityManager = delegate.createEntityManager(map);
+        return wrapEntityManager(entityManager);
     }
 
     @Override
     public EntityManager createEntityManager(SynchronizationType synchronizationType, Map map) {
         EntityManager entityManager = delegate.createEntityManager(synchronizationType, map);
-        stateListener.sessionCreated();
-        return new EntityManagerProxy(entityManager, stateListener);
+        return wrapEntityManager(entityManager);
+    }
+
+    private EntityManager wrapEntityManager(EntityManager entityManager) {
+        EntityManagerProxy entityManagerProxy = new EntityManagerProxy(entityManager, stateListener);
+        stateListener.entityManagerCreated(entityManagerProxy.getIdentifier());
+        return entityManagerProxy;
     }
 
     private interface EntityManagerFactoryOverwrite {

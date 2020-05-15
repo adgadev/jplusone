@@ -16,7 +16,9 @@
 
 package com.grexdev.jplusone.core.proxy.jpa;
 
+import com.grexdev.jplusone.core.proxy.Identifier;
 import com.grexdev.jplusone.core.proxy.StateListener;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Delegate;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +29,9 @@ import javax.persistence.EntityTransaction;
 @Slf4j
 @RequiredArgsConstructor
 class EntityManagerProxy implements EntityManager {
+
+    @Getter
+    private final Identifier identifier = Identifier.nextEntityManagerIdentifier();
 
     @Delegate(excludes = EntityManagerOverwrite.class)
     private final EntityManager delegate;
@@ -42,7 +47,7 @@ class EntityManagerProxy implements EntityManager {
     @Override
     public void close() {
         delegate.close();
-        stateListener.sessionClosed();
+        stateListener.entityManagerClosed(identifier);
     }
 
     private interface EntityManagerOverwrite {

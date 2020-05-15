@@ -17,6 +17,7 @@
 package com.grexdev.jplusone.core.tracking;
 
 import com.grexdev.jplusone.core.frame.FramesProvider;
+import com.grexdev.jplusone.core.proxy.Identifier;
 import com.grexdev.jplusone.core.proxy.StateListener;
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,55 +39,55 @@ public class LoggingStateListener implements StateListener {
     }
 
     @Override
-    public void sessionCreated() {
+    public void entityManagerCreated(Identifier entityManagerId) {
         if (verbosityLevel.isDebugModeEnabled()) {
             if (verbosityLevel.isSessionStackVisible()) {
-                framesProvider.captureCallFrames().printStackTrace("JPA EntityManager created");
+                framesProvider.captureCallFrames().printStackTrace("JPA EntityManager created, ID: " + entityManagerId);
             } else {
-                log.debug("JPA Entity manager created");
+                log.debug("JPA Entity manager created, ID: {}", entityManagerId);
             }
         }
 
-        stateListener.sessionCreated();
+        stateListener.entityManagerCreated(entityManagerId);
     }
 
     @Override
-    public void sessionClosed() {
+    public void entityManagerClosed(Identifier entityManagerId) {
         if (verbosityLevel.isDebugModeEnabled()) {
             if (verbosityLevel.isSessionStackVisible()) {
-                framesProvider.captureCallFrames().printStackTrace("JPA Session closed");
+                framesProvider.captureCallFrames().printStackTrace("JPA Session closed, ID: " + entityManagerId);
             } else {
-                log.debug("JPA Session closed");
+                log.debug("JPA Session closed, ID: {}", entityManagerId);
             }
         }
 
-        stateListener.sessionClosed();
+        stateListener.entityManagerClosed(entityManagerId);
     }
 
     @Override
-    public void transactionStarted() {
+    public void transactionStarted(Identifier transactionId) {
         if (verbosityLevel.isDebugModeEnabled()) {
             if (verbosityLevel.isTransactionStackVisible()) {
-                framesProvider.captureCallFrames().printStackTrace("JPA Transaction started");
+                framesProvider.captureCallFrames().printStackTrace("JPA Transaction started, ID: " + transactionId);
             } else {
-                log.debug("JPA Transaction started");
+                log.debug("JPA Transaction started, ID: {}", transactionId);
             }
         }
 
-        stateListener.transactionStarted();
+        stateListener.transactionStarted(transactionId);
     }
 
     @Override
-    public void transactionFinished() {
+    public void transactionFinished(Identifier transactionId) {
         if (verbosityLevel.isDebugModeEnabled()) {
             if (verbosityLevel.isTransactionStackVisible()) {
-                framesProvider.captureCallFrames().printStackTrace("JPA Transaction finished");
+                framesProvider.captureCallFrames().printStackTrace("JPA Transaction finished, ID: " + transactionId);
             } else {
-                log.debug("JPA Transaction finished");
+                log.debug("JPA Transaction finished, ID: {}", transactionId);
             }
         }
 
-        stateListener.transactionFinished();
+        stateListener.transactionFinished(transactionId);
     }
 
     @Override

@@ -16,6 +16,7 @@
 
 package com.grexdev.jplusone.core.proxy.jpa;
 
+import com.grexdev.jplusone.core.proxy.Identifier;
 import com.grexdev.jplusone.core.proxy.StateListener;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Delegate;
@@ -25,7 +26,9 @@ import javax.persistence.EntityTransaction;
 
 @Slf4j
 @RequiredArgsConstructor
-public class EntityTransactionProxy implements EntityTransaction {
+class EntityTransactionProxy implements EntityTransaction {
+
+    private final Identifier identifier = Identifier.nextTransactionIdentifier();
 
     @Delegate(excludes = EntityTransactionOverwrite.class)
     private final EntityTransaction delegate;
@@ -35,19 +38,19 @@ public class EntityTransactionProxy implements EntityTransaction {
     @Override
     public void begin() {
         delegate.begin();
-        stateListener.transactionStarted();
+        stateListener.transactionStarted(identifier);
     }
 
     @Override
     public void commit() {
         delegate.commit();
-        stateListener.transactionFinished();
+        stateListener.transactionFinished(identifier);
     }
 
     @Override
     public void rollback() {
         delegate.rollback();
-        stateListener.transactionFinished();
+        stateListener.transactionFinished(identifier);
     }
 
     private interface EntityTransactionOverwrite {

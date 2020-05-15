@@ -20,13 +20,13 @@ import java.util.function.Supplier;
 
 public interface StateListener {
 
-    void sessionCreated();
+    void entityManagerCreated(Identifier entityManagerId);
 
-    void sessionClosed();
+    void entityManagerClosed(Identifier entityManagerId);
 
-    void transactionStarted();
+    void transactionStarted(Identifier transactionId);
 
-    void transactionFinished();
+    void transactionFinished(Identifier transactionId);
 
     void statementExecuted(String sql);
 

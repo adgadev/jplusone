@@ -17,6 +17,7 @@
 package com.grexdev.jplusone.core.tracking;
 
 import com.grexdev.jplusone.core.frame.FramesProvider;
+import com.grexdev.jplusone.core.proxy.Identifier;
 import com.grexdev.jplusone.core.proxy.StateListener;
 import com.grexdev.jplusone.core.registry.FrameStack;
 import com.grexdev.jplusone.core.registry.RootNode;
@@ -50,7 +51,7 @@ public class TrackingStateListener implements StateListener {
     }
 
     @Override
-    public void sessionCreated() {
+    public void entityManagerCreated(Identifier entityManagerId) {
         SessionNode session = SessionNode.of(framesProvider.captureCallFrames());
         SessionStack sessionStack = currentSessionStack.get();
 
@@ -67,7 +68,7 @@ public class TrackingStateListener implements StateListener {
     }
 
     @Override
-    public void sessionClosed() {
+    public void entityManagerClosed(Identifier entityManagerId) {
         SessionStack sessionStack = currentSessionStack.get();
 
         if (sessionStack != null) {
@@ -87,12 +88,12 @@ public class TrackingStateListener implements StateListener {
     }
 
     @Override
-    public void transactionStarted() {
+    public void transactionStarted(Identifier transactionId) {
         // TODO: implement
     }
 
     @Override
-    public void transactionFinished() {
+    public void transactionFinished(Identifier transactionId) {
         // TODO: implement
     }
 
