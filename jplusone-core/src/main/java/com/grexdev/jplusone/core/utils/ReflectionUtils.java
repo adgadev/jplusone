@@ -31,7 +31,7 @@ public class ReflectionUtils {
 
     public static Optional<Field> findObjectFieldByFieldValue(Object object, Object searchedFieldValue) {
         return Stream.iterate((Class) object.getClass(), Class::getSuperclass)
-                .filter(not(Object.class::equals))
+                .takeWhile(not(Object.class::equals))
                 .map(Class::getDeclaredFields)
                 .flatMap(Arrays::stream)
                 .filter(field -> field.getType().isAssignableFrom(searchedFieldValue.getClass())) // heuristic

@@ -45,17 +45,21 @@ public class HibernateCollectionInitialisationEventListener implements Initializ
 
     @Override
     public void onInitializeCollection(InitializeCollectionEvent event) throws HibernateException {
-        String entityClassName = event.getAffectedOwnerEntityName();
-        Object association = event.getCollection();
+        try {
+            String entityClassName = event.getAffectedOwnerEntityName();
+            Object association = event.getCollection();
 
-        Optional.ofNullable(event.getAffectedOwnerOrNull())
-                .flatMap(owner -> ReflectionUtils.findObjectFieldByFieldValue(owner, association))
-                .map(Field::getName)
-                .ifPresent(fieldName -> handleCollectionInitialisation(entityClassName, fieldName));
+            Optional.ofNullable(event.getAffectedOwnerOrNull())
+                    .flatMap(owner -> ReflectionUtils.findObjectFieldByFieldValue(owner, association))
+                    .map(Field::getName)
+                    .ifPresent(fieldName -> handleCollectionInitialisation(entityClassName, fieldName));
+
+        } catch (Exception e) {
+            log.warn("JPlusOne failed to handle hibernate collection intialisation event", e);
+        }
     }
 
     private void handleCollectionInitialisation(String entityClassName, String fieldName) {
-        log.debug("Hibernate association {}.{} initialized", entityClassName, fieldName);
         stateListener.lazyCollectionInitialized(entityClassName, fieldName);
     }
 }
