@@ -83,7 +83,7 @@ public class ReportGenerator {
         StringBuilder builder = new StringBuilder();
         builder.append(NEWLINE + INDENTS.get(1) + "ROOT");
 
-        List<FrameExtract> sessionCallFrames = session.getSessionCallFrameStack().getCallFrames();
+        List<FrameExtract> sessionCallFrames = session.getSessionFrameStack().getCallFrames();
 
         for (FrameExtract frame : filterApplicationCallFrames(sessionCallFrames, reportProperties.isProxyCallFramesHidden())) {
             if (frame.isNotThirdPartyClass()) {

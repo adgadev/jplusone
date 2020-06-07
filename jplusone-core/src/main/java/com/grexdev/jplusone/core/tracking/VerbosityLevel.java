@@ -28,7 +28,7 @@ public enum VerbosityLevel { // TODO: enum extending interface
     V2(true, true, false, false, false),
     V3(true, true, true, false, false),
     V4(true, true, true, true, false),
-    V5(true, true, true, true, true);
+    VMAX(true, true, true, true, true);
 
     private final boolean debugModeEnabled;
 

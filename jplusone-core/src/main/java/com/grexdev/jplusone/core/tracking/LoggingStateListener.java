@@ -33,7 +33,7 @@ public class LoggingStateListener implements StateListener {
     private final FramesProvider framesProvider;
 
     public LoggingStateListener(TrackingContext context, StateListener stateListener) {
-        this.verbosityLevel = context.isDebugMode() ? VerbosityLevel.V5 : VerbosityLevel.V0; // TODO: externalse verbosity level
+        this.verbosityLevel = context.isDebugMode() ? context.getVerbosityLevel() : VerbosityLevel.V0;
         this.stateListener = stateListener;
         this.framesProvider = new FramesProvider(context.getApplicationRootPackage());
     }
@@ -44,7 +44,7 @@ public class LoggingStateListener implements StateListener {
             if (verbosityLevel.isSessionStackVisible()) {
                 framesProvider.captureCallFrames().printStackTrace("JPA EntityManager created, ID: " + entityManagerId);
             } else {
-                log.debug("JPA Entity manager created, ID: {}", entityManagerId);
+                log.debug("JPA EntityManager created, ID: {}", entityManagerId);
             }
         }
 
@@ -57,7 +57,7 @@ public class LoggingStateListener implements StateListener {
             if (verbosityLevel.isSessionStackVisible()) {
                 framesProvider.captureCallFrames().printStackTrace("JPA Session closed, ID: " + entityManagerId);
             } else {
-                log.debug("JPA Session closed, ID: {}", entityManagerId);
+                log.debug("JPA EntityManager closed, ID: {}", entityManagerId);
             }
         }
 

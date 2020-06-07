@@ -16,6 +16,7 @@
 
 package com.grexdev.jplusone.core.registry;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,29 +26,28 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
+
 @Slf4j
 @Getter
-@RequiredArgsConstructor(staticName = "of")
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class SessionNode {
 
-    private final List<OperationNode> operations = new ArrayList<>();
+    private final List<OperationNode> operations;
 
-    private final FrameStack initialCallFrameStack;
+    private final FrameStack sessionFrameStack;
 
-    private FrameStack sessionCallFrameStack;
+    public static SessionNode create() {
+        return new SessionNode(new ArrayList<>(), null);
+    }
 
-    public void addStatement(String sql, FrameStack completeOperationFramesStack) {
-        if (sessionCallFrameStack == null) {
-            sessionCallFrameStack = initialCallFrameStack.intersection(completeOperationFramesStack);
-        }
-
-        FrameStack operationSubFramesStack = completeOperationFramesStack.substract(sessionCallFrameStack);
-
+    public void addStatement(String sql, FrameStack operationFramesStack) {
         getLastOperationNode()
-                .filter(operationNode -> operationNode.hasCallFramesStack(operationSubFramesStack))
+                .filter(operationNode -> operationNode.hasCallFramesStack(operationFramesStack))
                 .ifPresentOrElse(
                         addStatementToLastOperation(sql),
-                        addStatementToNewOperation(sql, operationSubFramesStack));
+                        addStatementToNewOperation(sql, operationFramesStack));
     }
 
     public void addLazyCollectionInitialisation(LazyInitialisation lazyInitialisation) {
@@ -65,12 +65,29 @@ public class SessionNode {
         return operationNode -> operationNode.addStatement(sql);
     }
 
-    private Runnable addStatementToNewOperation(String sql, FrameStack operationSubFrameStack) {
+    private Runnable addStatementToNewOperation(String sql, FrameStack operationFrameStack) {
         return () -> {
-            OperationNode operationNode = new OperationNode(operationSubFrameStack);
+            OperationNode operationNode = new OperationNode(operationFrameStack);
             operations.add(operationNode);
             operationNode.addStatement(sql);
         };
     }
 
+    public SessionNode close(FrameStack completeSessionFrameStack) {
+        if (operations.isEmpty()) {
+            log.warn("Closing empty SessionNode");
+            return new SessionNode(emptyList(), sessionFrameStack);
+
+        } else {
+            OperationNode firstOperationNode = operations.iterator().next();
+            FrameStack completeOperationFramesStack = firstOperationNode.getCallFramesStack();
+            FrameStack sessionFrameStack = completeSessionFrameStack.intersect(completeOperationFramesStack);
+
+            List<OperationNode> closedOperations = operations.stream()
+                    .map(operationNode -> operationNode.close(sessionFrameStack))
+                    .collect(toList());
+
+            return new SessionNode(closedOperations, sessionFrameStack);
+        }
+    }
 }

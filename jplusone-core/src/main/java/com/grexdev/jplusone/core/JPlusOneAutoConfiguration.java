@@ -19,15 +19,15 @@ package com.grexdev.jplusone.core;
 import com.grexdev.jplusone.core.flyway.FlywayAspect;
 import com.grexdev.jplusone.core.properties.JPlusOneProperties;
 import com.grexdev.jplusone.core.proxy.ProxiedRootsBeanPostProcessor;
+import com.grexdev.jplusone.core.proxy.datasource.HikariDataSourceAspect;
 import com.grexdev.jplusone.core.proxy.hibernate.HibernateCollectionInitialisationEventListener;
+import com.grexdev.jplusone.core.registry.RootNode;
 import com.grexdev.jplusone.core.report.ReportGenerator;
 import com.grexdev.jplusone.core.tracking.ActivationStateListener;
 import com.grexdev.jplusone.core.tracking.LoggingStateListener;
 import com.grexdev.jplusone.core.tracking.TrackingContext;
 import com.grexdev.jplusone.core.tracking.TrackingStateListener;
 import com.grexdev.jplusone.core.utils.ApplicationScanner;
-import com.grexdev.jplusone.core.proxy.datasource.HikariDataSourceAspect;
-import com.grexdev.jplusone.core.registry.RootNode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -62,7 +62,7 @@ public class JPlusOneAutoConfiguration {
     public TrackingContext proxyContext(ApplicationScanner applicationScanner) {
         String applicationRootPackage = Optional.ofNullable(jPlusOneProperties.getApplicationRootPackage())
                 .orElseGet(applicationScanner::resolveRootApplicationPackage);
-        return new TrackingContext(applicationRootPackage, jPlusOneProperties.isDebugMode());
+        return new TrackingContext(applicationRootPackage, jPlusOneProperties.isDebugMode(), jPlusOneProperties.getVerbosityLevel());
     }
 
     @Bean

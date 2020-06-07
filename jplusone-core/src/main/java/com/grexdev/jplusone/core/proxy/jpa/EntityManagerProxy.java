@@ -40,6 +40,8 @@ class EntityManagerProxy implements EntityManager {
 
     @Override
     public EntityTransaction getTransaction() {
+        // TODO: proxy is created multiple times for the same tx, causing tx identifiers inside proxy to not match
+        // TODO: the other problem with TX interception is that it results in different exception thrown in some situations, why?
         EntityTransaction transaction = delegate.getTransaction();
         return new EntityTransactionProxy(transaction, stateListener);
     }

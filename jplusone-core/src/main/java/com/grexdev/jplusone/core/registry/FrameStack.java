@@ -30,8 +30,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import static java.util.Collections.emptyList;
-
 @Slf4j
 @Getter
 @EqualsAndHashCode
@@ -40,7 +38,7 @@ public class FrameStack {
 
     private final List<FrameExtract> callFrames;
 
-    public FrameStack intersection(FrameStack otherFramesStack) {
+    public FrameStack intersect(FrameStack otherFramesStack) {
         int endIndex = 0;
         Iterator<FrameExtract> framesIterator = callFrames.iterator();
         Iterator<FrameExtract> otherFramesIterator = otherFramesStack.callFrames.iterator();
@@ -53,10 +51,9 @@ public class FrameStack {
         return new FrameStack(callFrames.subList(0, endIndex));
     }
 
-    public FrameStack substract(FrameStack otherFramesStack) {
+    public FrameStack subtract(FrameStack otherFramesStack) {
         if (otherFramesStack.callFrames.size() > callFrames.size()) {
-            log.warn("=================== Fail to substract frame stack =================");
-            return new FrameStack(emptyList());
+            return handleInvalidSubtraction(otherFramesStack);
         }
 
         Iterator<FrameExtract> framesIterator = callFrames.iterator();
@@ -67,8 +64,7 @@ public class FrameStack {
             FrameExtract otherFrameExtract = otherFramesIterator.next();
 
             if (!frameExtract.equals(otherFrameExtract)) {
-                log.warn("=================== Fail to substract frame stack =================");
-                return new FrameStack(emptyList());
+                return handleInvalidSubtraction(otherFramesStack);
             }
         }
 
@@ -78,7 +74,7 @@ public class FrameStack {
         return new FrameStack(remainingFrames);
     }
 
-    Optional<FrameExtract> findLastMatchingFrame(Predicate<FrameExtract> predicate) {
+    public Optional<FrameExtract> findLastMatchingFrame(Predicate<FrameExtract> predicate) {
         ListIterator<FrameExtract> iterator = callFrames.listIterator(callFrames.size());
 
         while (iterator.hasPrevious()) {
@@ -90,6 +86,30 @@ public class FrameStack {
         }
 
         return Optional.empty();
+    }
+
+    private FrameStack handleInvalidSubtraction(FrameStack otherFramesStack) {
+        log.warn("Fail to subtract frame call stack from other frame call stack");
+        printStackTrace(callFrames, "Minuend");
+        printStackTrace(otherFramesStack.callFrames, "Subtrahend");
+
+        return this;
+    }
+
+    public void printStackTrace(String description) {
+        printStackTrace(callFrames, description);
+    }
+
+    private void printStackTrace(List<FrameExtract> callFrames, String label) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(label);
+
+        for (FrameExtract frame : callFrames) {
+            builder.append("\n        ");
+            builder.append(frame.toString());
+        }
+
+        log.debug(builder.toString());
     }
 
 }

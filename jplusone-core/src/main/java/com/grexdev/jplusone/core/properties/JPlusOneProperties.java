@@ -18,6 +18,7 @@ package com.grexdev.jplusone.core.properties;
 
 import com.grexdev.jplusone.core.registry.OperationNode.OperationType;
 import com.grexdev.jplusone.core.registry.StatementType;
+import com.grexdev.jplusone.core.tracking.VerbosityLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -39,6 +40,8 @@ public class JPlusOneProperties {
     private boolean enabled = true;
 
     private boolean debugMode = false;
+
+    private VerbosityLevel verbosityLevel = VerbosityLevel.V4;
 
     private JPlusOneReportProperties report = new JPlusOneReportProperties();
 

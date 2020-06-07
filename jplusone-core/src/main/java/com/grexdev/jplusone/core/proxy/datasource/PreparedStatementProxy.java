@@ -66,6 +66,12 @@ class PreparedStatementProxy implements PreparedStatement {
     }
 
     @Override
+    public boolean execute() throws SQLException {
+        trackStatementExecution();
+        return delegate.execute();
+    }
+
+    @Override
     public ResultSet executeQuery() throws SQLException {
         trackStatementExecution();
         return delegate.executeQuery();
@@ -78,10 +84,24 @@ class PreparedStatementProxy implements PreparedStatement {
     }
 
     @Override
-    public boolean execute() throws SQLException {
+    public long executeLargeUpdate() throws SQLException {
         trackStatementExecution();
-        return delegate.execute();
+        return delegate.executeLargeUpdate();
     }
+
+    @Override
+    public int[] executeBatch() throws SQLException {
+        trackStatementExecution();
+        return delegate.executeBatch();
+    }
+
+    @Override
+    public long[] executeLargeBatch() throws SQLException {
+        trackStatementExecution();
+        return delegate.executeLargeBatch();
+    }
+
+    // TODO: what with other execute* methods inherited from Statement, not PreparedStatement?
 
     private void trackStatementExecution() {
         stateListener.statementExecuted(parametrizedSql::getSqlWithParameters);
@@ -89,11 +109,17 @@ class PreparedStatementProxy implements PreparedStatement {
 
     private interface PreparedStatementOverwrite {
 
+        boolean execute() throws SQLException;
+
         ResultSet executeQuery() throws SQLException;
 
         int executeUpdate() throws SQLException;
 
-        boolean execute() throws SQLException;
+        long executeLargeUpdate() throws SQLException;
+
+        int[] executeBatch() throws SQLException;
+
+        long[] executeLargeBatch() throws SQLException;
 
         void setString(int parameterIndex, String x) throws SQLException;
 
@@ -101,7 +127,7 @@ class PreparedStatementProxy implements PreparedStatement {
 
         void setLong(int parameterIndex, long x) throws SQLException;
 
-        // TODO: implement otrher setXXX
+        // TODO: implement other setXXX
 
         void clearParameters() throws SQLException;
 

@@ -31,6 +31,8 @@ public class TrackingContext implements ApplicationListener<ContextRefreshedEven
 
     private final boolean debugMode;
 
+    private final VerbosityLevel verbosityLevel;
+
     private final ThreadLocal<Boolean> recordingEnabledInCurrentThread = ThreadLocal.withInitial(() -> TRUE);
 
     private boolean recordingEnabledGlobally = false;
