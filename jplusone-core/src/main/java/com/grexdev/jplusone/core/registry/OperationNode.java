@@ -32,9 +32,7 @@ import static java.util.Objects.nonNull;
 @Slf4j
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class OperationNode {
-
-    public enum OperationType {IMPLICIT, EXPLICIT;}
+public class OperationNode implements OperationNodeView {
 
     private final List<StatementNode> statements;
 

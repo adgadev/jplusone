@@ -32,7 +32,7 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class SessionNode {
+public class SessionNode implements SessionNodeView {
 
     private final List<OperationNode> operations;
 

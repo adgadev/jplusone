@@ -16,7 +16,7 @@
 
 package com.grexdev.jplusone.core.properties;
 
-import com.grexdev.jplusone.core.registry.OperationNode.OperationType;
+import com.grexdev.jplusone.core.registry.OperationType;
 import com.grexdev.jplusone.core.registry.StatementType;
 import com.grexdev.jplusone.core.tracking.VerbosityLevel;
 import lombok.Getter;

@@ -18,7 +18,7 @@ package com.grexdev.jplusone.asserts.impl;
 
 import com.grexdev.jplusone.asserts.api.JPlusOneAssertions;
 import com.grexdev.jplusone.core.JPlusOneAutoConfiguration;
-import com.grexdev.jplusone.core.registry.RootNode;
+import com.grexdev.jplusone.core.registry.RootNodeView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -27,11 +27,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RequiredArgsConstructor
-@ConditionalOnBean(RootNode.class)
+@ConditionalOnBean(RootNodeView.class)
 @AutoConfigureAfter(JPlusOneAutoConfiguration.class)
 class JPlusOneAssertAutoConfiguration {
 
-    private final RootNode rootNode;
+    private final RootNodeView rootNode;
 
     @Bean
     public JPlusOneAssertions jPlusOneAssertions() {

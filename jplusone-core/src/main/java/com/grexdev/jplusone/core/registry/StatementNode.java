@@ -24,7 +24,7 @@ import static com.grexdev.jplusone.core.registry.StatementType.*;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class StatementNode {
+public class StatementNode implements StatementNodeView {
 
     public static final String COLUMN_LIST_SUBSTITUTE = "#SELECT_COLUMNS_LIST";
 

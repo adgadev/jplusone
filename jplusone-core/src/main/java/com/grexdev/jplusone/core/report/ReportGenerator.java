@@ -18,10 +18,10 @@ package com.grexdev.jplusone.core.report;
 
 import com.grexdev.jplusone.core.frame.FrameExtract;
 import com.grexdev.jplusone.core.properties.JPlusOneProperties.JPlusOneReportProperties;
-import com.grexdev.jplusone.core.registry.OperationNode;
-import com.grexdev.jplusone.core.registry.OperationNode.OperationType;
-import com.grexdev.jplusone.core.registry.SessionNode;
-import com.grexdev.jplusone.core.registry.StatementNode;
+import com.grexdev.jplusone.core.registry.OperationNodeView;
+import com.grexdev.jplusone.core.registry.OperationType;
+import com.grexdev.jplusone.core.registry.SessionNodeView;
+import com.grexdev.jplusone.core.registry.StatementNodeView;
 import com.grexdev.jplusone.core.registry.StatementType;
 import lombok.extern.slf4j.Slf4j;
 
@@ -60,7 +60,7 @@ public class ReportGenerator {
         }
     }
 
-    public void handleRecordedSession(SessionNode session) {
+    public void handleRecordedSession(SessionNodeView session) {
         if (reportProperties.isEnabled()) {
             Set<OperationType> visibleOperationsType = reportProperties.getOperationFilteringMode().getOperationTypes();
             Set<StatementType> visibleStatementsType = reportProperties.getStatementFilteringMode().getStatementTypes();
@@ -79,7 +79,7 @@ public class ReportGenerator {
         }
     }
 
-    private String sessionToString(SessionNode session, Set<OperationType> visibleOperationsType, Set<StatementType> visibleStatementsType) {
+    private String sessionToString(SessionNodeView session, Set<OperationType> visibleOperationsType, Set<StatementType> visibleStatementsType) {
         StringBuilder builder = new StringBuilder();
         builder.append(NEWLINE + INDENTS.get(1) + "ROOT");
 
@@ -94,7 +94,7 @@ public class ReportGenerator {
 
         builder.append(NEWLINE + INDENTS.get(3) + "SESSION BOUNDARY");
 
-        for (OperationNode operation : session.getOperations()) {
+        for (OperationNodeView operation : session.getOperations()) {
             if (visibleOperationsType.contains(operation.getOperationType())) {
                 builder.append(NEWLINE + INDENTS.get(4) + "OPERATION [" + operation.getOperationType() + "]");
                 List<FrameExtract> operationCallFrames = operation.getCallFramesStack().getCallFrames();
@@ -110,7 +110,7 @@ public class ReportGenerator {
                     builder.append(NEWLINE + INDENTS.get(5) + operation.getLazyInitialisation());
                 }
 
-                for (StatementNode statement : operation.getStatements()) {
+                for (StatementNodeView statement : operation.getStatements()) {
                     if (visibleStatementsType.contains(statement.getStatementType())) {
                         builder.append(NEWLINE + INDENTS.get(6) + "STATEMENT [" + statement.getStatementType().getStatementGroupType() + "]");
                         builder.append(ReportSqlFormatter.formatSql(INDENTS.get(7), statement.getSql()));

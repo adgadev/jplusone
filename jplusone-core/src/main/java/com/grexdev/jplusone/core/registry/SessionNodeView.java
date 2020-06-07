@@ -16,18 +16,11 @@
 
 package com.grexdev.jplusone.core.registry;
 
-import lombok.Getter;
-
-import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-public class RootNode implements RootNodeView {
+public interface SessionNodeView {
 
-    private final List<SessionNode> sessions = new ArrayList<>();
+    List<? extends OperationNodeView> getOperations();
 
-    public void addSession(SessionNode session) {
-        sessions.add(session);
-    }
-
+    FrameStack getSessionFrameStack();
 }
