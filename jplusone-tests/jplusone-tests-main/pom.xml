@@ -32,6 +32,7 @@
 
     <properties>
         <spring-boot.version>2.2.6.RELEASE</spring-boot.version>
+        <hamcrest.version>2.2</hamcrest.version>
     </properties>
 
     <dependencyManagement>
@@ -93,7 +94,15 @@
             <version>${revision}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+            <version>${hamcrest.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
+
+    <!-- TODO: add hamcrest-compose? -->
 
     <build>
         <plugins>

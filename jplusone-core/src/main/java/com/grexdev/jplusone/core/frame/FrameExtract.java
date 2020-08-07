@@ -19,13 +19,12 @@ package com.grexdev.jplusone.core.frame;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-
+@Getter
 @EqualsAndHashCode
 public class FrameExtract {
 
     private final FrameClassKind type;
 
-    @Getter
     private final Class<?> clazz;
 
     private final String className;
