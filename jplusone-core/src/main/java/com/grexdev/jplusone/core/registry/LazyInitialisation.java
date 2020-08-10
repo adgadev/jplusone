@@ -24,7 +24,7 @@ import lombok.Value;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class LazyInitialisation {
 
-    enum LazyInitialisationType {ENTITY, COLLECTION}
+    public enum LazyInitialisationType {ENTITY, COLLECTION}
 
     private final String entityClassName;
 

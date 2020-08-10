@@ -16,8 +16,10 @@
 
 package com.grexdev.jplusone.test.domain.commerce;
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -28,16 +30,26 @@ import javax.persistence.ManyToOne;
 @Getter
 @Entity
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Product {
 
     @Id
+    @EqualsAndHashCode.Include
     private Long id;
 
-    @EqualsAndHashCode.Include
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manufacturer_id")
     private Manufacturer manufacturer;
+
+    public static Product of(Long id, String name, Manufacturer manufacturer) {
+        return new Product(id, name, manufacturer);
+    }
+
+    public void updateName(String newName) {
+        this.name = newName;
+    }
 
 }

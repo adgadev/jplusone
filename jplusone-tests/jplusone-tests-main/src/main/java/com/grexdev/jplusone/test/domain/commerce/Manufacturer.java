@@ -16,28 +16,61 @@
 
 package com.grexdev.jplusone.test.domain.commerce;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 @Getter
 @Entity
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor(access = AccessLevel.PACKAGE) // hibernate requires package access
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Manufacturer {
 
     @Id
+    @EqualsAndHashCode.Include
     private Long id;
 
-    @EqualsAndHashCode.Include
     private String name;
 
-    @OneToMany(mappedBy = "manufacturer", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "manufacturer", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Product> products = new HashSet<>();
 
+    public static Manufacturer of(Long id, String name) {
+        return new Manufacturer(id, name, new HashSet<>());
+    }
+
+    public void updateName(String newName) {
+        this.name = newName;
+    }
+
+    public Product addProduct(String productName) {
+        Product product = Product.of(new Random().nextLong() % 1000000, productName, this);
+        products.add(product);
+        return product;
+    }
+
+    public Product deleteProduct(String productName) {
+        Product product = findProductByName(productName);
+        products.remove(product);
+        return product;
+    }
+
+    public Product findProductByName(String productName) {
+        return products.stream()
+                .filter(product -> product.getName().equals(productName))
+                .findFirst()
+                .get();
+    }
 }

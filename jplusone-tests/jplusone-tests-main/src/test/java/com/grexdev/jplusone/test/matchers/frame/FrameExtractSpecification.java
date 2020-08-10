@@ -18,6 +18,7 @@ package com.grexdev.jplusone.test.matchers.frame;
 
 import com.grexdev.jplusone.core.frame.FrameExtract;
 import com.grexdev.jplusone.test.matchers.common.AndCondition;
+import com.grexdev.jplusone.test.matchers.common.NotCondition;
 import com.grexdev.jplusone.test.matchers.common.SimpleCondition;
 import com.grexdev.jplusone.test.matchers.common.Specification;
 
@@ -54,4 +55,26 @@ public class FrameExtractSpecification extends AndCondition<FrameExtract> {
                 SimpleCondition.of(FrameExtract::getMethodName, methodName::equals, String.format("methodName = %s", methodName))
         ));
     }
+
+    public static FrameExtractSpecification anyThirdPartyMethodCallFrameOnClassAssignableFrom(Class<?> clazz, String methodName) {
+        return new FrameExtractSpecification(List.of(
+                SimpleCondition.of(FrameExtract::getClazz, clazz::isAssignableFrom, String.format("class = %s", clazz.getSimpleName())),
+                SimpleCondition.of(FrameExtract::getMethodName, methodName::equals, String.format("methodName = %s", methodName))
+        ));
+    }
+
+    public static FrameExtractSpecification notAppMethodCallFrame() {
+        return not(anyAppMethodCallFrame());
+    }
+
+    public static FrameExtractSpecification anyAppMethodCallFrame() {
+        return new FrameExtractSpecification(List.of(
+                SimpleCondition.of(FrameExtract::getType, APPLICATION_CLASS::equals, String.format("type = %s", APPLICATION_CLASS))
+        ));
+    }
+
+    private static FrameExtractSpecification not(FrameExtractSpecification specification) {
+        return new FrameExtractSpecification(List.of(NotCondition.of(specification)));
+    }
+
 }

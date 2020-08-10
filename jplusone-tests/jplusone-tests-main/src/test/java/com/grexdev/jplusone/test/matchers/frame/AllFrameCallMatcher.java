@@ -20,8 +20,10 @@ import com.grexdev.jplusone.core.registry.FrameStack;
 import lombok.RequiredArgsConstructor;
 import org.hamcrest.Description;
 
+import static java.util.function.Predicate.not;
+
 @RequiredArgsConstructor
-public class SingleFrameCallMatcher extends AbstractFrameCallMatcher {
+public class AllFrameCallMatcher extends AbstractFrameCallMatcher {
 
     private final FrameExtractSpecification specification;
 
@@ -32,12 +34,12 @@ public class SingleFrameCallMatcher extends AbstractFrameCallMatcher {
         }
 
         return frameStack.getCallFrames().stream()
-                .anyMatch(specification::isSatisfiedBy);
+                .allMatch(specification::isSatisfiedBy);
     }
 
     @Override
     public void describeTo(Description description) {
-        description.appendText("Single frame matching following criteria: ");
+        description.appendText("All frames matching following criteria: ");
         description.appendValue(specification.getDescription());
     }
 }

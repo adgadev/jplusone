@@ -18,6 +18,7 @@ package com.grexdev.jplusone.test.matchers;
 
 import com.grexdev.jplusone.test.matchers.frame.FrameCallSequenceMatcher;
 import com.grexdev.jplusone.test.matchers.frame.FrameExtractSpecification;
+import com.grexdev.jplusone.test.matchers.frame.AllFrameCallMatcher;
 import com.grexdev.jplusone.test.matchers.frame.SingleFrameCallMatcher;
 
 import java.util.List;
@@ -30,6 +31,10 @@ public class JPlusOneMatchers {
 
     public static FrameCallSequenceMatcher frameCallSequenceMatcher(List<FrameExtractSpecification> specifications) {
         return new FrameCallSequenceMatcher(specifications);
+    }
+
+    public static AllFrameCallMatcher allFrameCallMatcher(FrameExtractSpecification specification) {
+        return new AllFrameCallMatcher(specification);
     }
 
 }
