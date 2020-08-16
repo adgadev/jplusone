@@ -102,8 +102,6 @@
         </dependency>
     </dependencies>
 
-    <!-- TODO: add hamcrest-compose? -->
-
     <build>
         <plugins>
             <plugin>

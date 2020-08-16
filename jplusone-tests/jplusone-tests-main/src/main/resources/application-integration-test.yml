@@ -1,5 +1,5 @@
 # TODO: schema for yaml, validation
-# following jplusone properties are optional, if missin default values will be used
+# following jplusone properties are optional, if missing default values will be used
 
 # com.grexdev.jplusone.core.properties.JPlusOneProperties
 jplusone:
@@ -10,4 +10,4 @@ jplusone:
 #    enabled: true
 #    proxy-call-frames-hidden: false
     operation-filtering-mode: ALL_OPERATIONS
-#    statement-filtering-mode: ALL_STATEMENTS
+    statement-filtering-mode: ALL_STATEMENTS

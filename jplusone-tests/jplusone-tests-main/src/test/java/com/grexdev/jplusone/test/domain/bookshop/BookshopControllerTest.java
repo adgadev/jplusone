@@ -16,6 +16,13 @@
 
 package com.grexdev.jplusone.test.domain.bookshop;
 
+import com.grexdev.jplusone.core.registry.LazyInitialisation.LazyInitialisationType;
+import com.grexdev.jplusone.core.registry.OperationNodeView;
+import com.grexdev.jplusone.core.registry.OperationType;
+import com.grexdev.jplusone.core.registry.RootNodeView;
+import com.grexdev.jplusone.core.registry.SessionNodeView;
+import com.grexdev.jplusone.core.registry.StatementNodeView;
+import com.grexdev.jplusone.core.registry.StatementType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -25,7 +32,13 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.hamcrest.Matchers.equalTo;
+import javax.persistence.EntityManager;
+import java.util.List;
+
+import static com.grexdev.jplusone.test.matchers.JPlusOneMatchers.frameCallSequenceMatcher;
+import static com.grexdev.jplusone.test.matchers.frame.FrameExtractSpecification.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.MOCK;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -39,8 +52,15 @@ class BookshopControllerTest {
     @Autowired
     private MockMvc mvc;
 
+    @Autowired
+    private RootNodeView rootNode;
+
     @Test
     void shouldGetBookDetailsLazily() throws Exception {
+        // given
+        int sessionAmount = rootNode.getSessions().size();
+
+        // when
         mvc.perform(MockMvcRequestBuilders
                 .get("/book/lazy")
                 .accept(MediaType.APPLICATION_JSON))
@@ -48,10 +68,61 @@ class BookshopControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title", equalTo("Godfather")))
                 .andExpect(jsonPath("$.author", equalTo("Mario Puzo")));
+
+        // then
+        assertThat(rootNode.getSessions(), hasSize(equalTo(sessionAmount + 1)));
+        SessionNodeView sessionNode = rootNode.getSessions().get(rootNode.getSessions().size() - 1);
+        assertThat(sessionNode, notNullValue());
+        assertThat(sessionNode.getOperations(), hasSize(equalTo(2)));
+        assertThat(sessionNode.getSessionFrameStack(), frameCallSequenceMatcher(List.of(
+                anyAppMethodCallFrame(BookshopControllerTest.class, "shouldGetBookDetailsLazily")
+        )));
+
+        OperationNodeView operationNodeView1 = sessionNode.getOperations().get(0);
+        assertThat(operationNodeView1, notNullValue());
+        assertThat(operationNodeView1.getOperationType(), equalTo(OperationType.EXPLICIT));
+        assertThat(operationNodeView1.getStatements(), hasSize(equalTo(1)));
+        assertThat(operationNodeView1.getLazyInitialisation(), nullValue());
+        assertThat(operationNodeView1.getCallFramesStack(), frameCallSequenceMatcher(List.of(
+                anyAppMethodCallFrame(BookshopController.class, "getSampleBookUsingLazyLoading"),
+                anyProxyMethodCallFrame(BookshopService.class, "getSampleBookDetailsUsingLazyLoading"),
+                anyAppMethodCallFrame(BookshopService.class, "getSampleBookDetailsUsingLazyLoading"),
+                anyProxyMethodCallFrame(BookRepository.class, "findById"),
+                anyThirdPartyMethodCallFrameOnClassAssignableFrom(EntityManager.class, "find")
+        )));
+
+        OperationNodeView operationNodeView2 = sessionNode.getOperations().get(1);
+        assertThat(operationNodeView2, notNullValue());
+        assertThat(operationNodeView2.getOperationType(), equalTo(OperationType.IMPLICIT));
+        assertThat(operationNodeView2.getStatements(), hasSize(equalTo(1)));
+        assertThat(operationNodeView2.getLazyInitialisation(), notNullValue());
+        assertThat(operationNodeView2.getLazyInitialisation().getType(), equalTo(LazyInitialisationType.ENTITY));
+        assertThat(operationNodeView2.getLazyInitialisation().getEntityClassName(), equalTo(Author.class.getName()));
+        assertThat(operationNodeView2.getLazyInitialisation().getFieldName(), nullValue());
+        assertThat(operationNodeView2.getCallFramesStack(), frameCallSequenceMatcher(List.of(
+                anyAppMethodCallFrame(BookshopController.class, "getSampleBookUsingLazyLoading"),
+                anyProxyMethodCallFrame(BookshopService.class, "getSampleBookDetailsUsingLazyLoading"),
+                anyAppMethodCallFrame(BookshopService.class, "getSampleBookDetailsUsingLazyLoading"),
+                anyProxyMethodCallFrame(Author.class, "getName")
+        )));
+
+        StatementNodeView statementNodeView1 = operationNodeView1.getStatements().get(0);
+        assertThat(statementNodeView1, notNullValue());
+        assertThat(statementNodeView1.getStatementType(), equalTo(StatementType.SELECT));
+        assertThat(statementNodeView1.getSql(), endsWith("from book book0_ where book0_.id=1"));
+
+        StatementNodeView statementNodeView2 = operationNodeView2.getStatements().get(0);
+        assertThat(statementNodeView2, notNullValue());
+        assertThat(statementNodeView2.getStatementType(), equalTo(StatementType.SELECT));
+        assertThat(statementNodeView2.getSql(), endsWith("from author author0_ left outer join genre genre1_ on author0_.genre_id=genre1_.id where author0_.id=1"));
     }
 
     @Test
     void shouldGetBookDetailsEagerly() throws Exception {
+        // given
+        int sessionAmount = rootNode.getSessions().size();
+
+        // when
         mvc.perform(MockMvcRequestBuilders
                 .get("/book/eager")
                 .accept(MediaType.APPLICATION_JSON))
@@ -59,6 +130,48 @@ class BookshopControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title", equalTo("Godfather")))
                 .andExpect(jsonPath("$.author", equalTo("Mario Puzo")));
-    }
 
+        // then
+        assertThat(rootNode.getSessions(), hasSize(equalTo(sessionAmount + 1)));
+        SessionNodeView sessionNode = rootNode.getSessions().get(rootNode.getSessions().size() - 1);
+        assertThat(sessionNode, notNullValue());
+        assertThat(sessionNode.getOperations(), hasSize(equalTo(2)));
+        assertThat(sessionNode.getSessionFrameStack(), frameCallSequenceMatcher(List.of(
+                anyAppMethodCallFrame(BookshopControllerTest.class, "shouldGetBookDetailsEagerly")
+        )));
+
+        OperationNodeView operationNodeView1 = sessionNode.getOperations().get(0);
+        assertThat(operationNodeView1, notNullValue());
+        assertThat(operationNodeView1.getOperationType(), equalTo(OperationType.EXPLICIT));
+        assertThat(operationNodeView1.getStatements(), hasSize(equalTo(1)));
+        assertThat(operationNodeView1.getLazyInitialisation(), nullValue());
+        assertThat(operationNodeView1.getCallFramesStack(), frameCallSequenceMatcher(List.of(
+                anyAppMethodCallFrame(BookshopController.class, "getSampleBookUsingEagerLoading"),
+                anyProxyMethodCallFrame(BookshopService.class, "getSampleBookDetailsUsingEagerLoading"),
+                anyAppMethodCallFrame(BookshopService.class, "getSampleBookDetailsUsingEagerLoading"),
+                anyProxyMethodCallFrame(BookRepository.class, "findByIdAndFetchAuthor")
+        )));
+
+        OperationNodeView operationNodeView2 = sessionNode.getOperations().get(1);
+        assertThat(operationNodeView2, notNullValue());
+        assertThat(operationNodeView2.getOperationType(), equalTo(OperationType.EXPLICIT));
+        assertThat(operationNodeView2.getStatements(), hasSize(equalTo(1)));
+        assertThat(operationNodeView2.getLazyInitialisation(), nullValue());
+        assertThat(operationNodeView2.getCallFramesStack(), frameCallSequenceMatcher(List.of(
+                anyAppMethodCallFrame(BookshopController.class, "getSampleBookUsingEagerLoading"),
+                anyProxyMethodCallFrame(BookshopService.class, "getSampleBookDetailsUsingEagerLoading"),
+                anyAppMethodCallFrame(BookshopService.class, "getSampleBookDetailsUsingEagerLoading"),
+                anyProxyMethodCallFrame(BookRepository.class, "findByIdAndFetchAuthor")  // TODO: shouldn't it be under one operation?
+        )));
+
+        StatementNodeView statementNodeView1 = operationNodeView1.getStatements().get(0);
+        assertThat(statementNodeView1, notNullValue());
+        assertThat(statementNodeView1.getStatementType(), equalTo(StatementType.SELECT));
+        assertThat(statementNodeView1.getSql(), endsWith("from book book0_ left outer join author author1_ on book0_.author_id=author1_.id where book0_.id=1"));
+
+        StatementNodeView statementNodeView2 = operationNodeView2.getStatements().get(0);
+        assertThat(statementNodeView2, notNullValue());
+        assertThat(statementNodeView2.getStatementType(), equalTo(StatementType.SELECT));
+        assertThat(statementNodeView2.getSql(), endsWith("from genre genre0_ where genre0_.id=1"));
+    }
 }

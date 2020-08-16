@@ -32,7 +32,7 @@ class CommerceService {
 
     private final EntityManager entityManager;
 
-    public void getClient() {
+    public void loadVariousObjects() {
         Client client = entityManager.find(Client.class, 1L);
         User user = client.getUser();
 
