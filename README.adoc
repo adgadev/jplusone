@@ -7,7 +7,7 @@
 :apache-license-icon: https://img.shields.io/badge/License-Apache%202.0-blue.svg
 :apache-license-link: http://www.apache.org/licenses/LICENSE-2.0.txt
 
-:release_version: 0.1.0
+:release_version: 0.7.0
 
 = JPlusOne
 
