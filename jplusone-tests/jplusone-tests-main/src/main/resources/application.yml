@@ -1,4 +1,4 @@
 spring.jpa.open-in-view: true
 logging:
   level:
-    com.grexdev.jplusone: DEBUG
+    com.adgadev.jplusone: DEBUG

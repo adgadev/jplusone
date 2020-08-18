@@ -1,10 +1,10 @@
 # TODO: schema for yaml, validation
 # following jplusone properties are optional, if missing default values will be used
 
-# com.grexdev.jplusone.core.properties.JPlusOneProperties
+# com.adgadev.jplusone.core.properties.JPlusOneProperties
 jplusone:
 #  enabled: true
-#  application-root-package: "com.grexdev.jplusone.test"
+#  application-root-package: "com.adgadev.jplusone.test"
 #  debug-mode: false
   report:
 #    enabled: true

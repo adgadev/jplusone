@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.grexdev.jplusone.core.JPlusOneAutoConfiguration
+    com.adgadev.jplusone.core.JPlusOneAutoConfiguration

@@ -27,7 +27,7 @@
 
     <parent>
         <artifactId>jplusone-tests</artifactId>
-        <groupId>com.grexdev.jplusone</groupId>
+        <groupId>com.adgadev.jplusone</groupId>
         <version>${revision}</version>
     </parent>
 
@@ -101,7 +101,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.grexdev.jplusone</groupId>
+            <groupId>com.adgadev.jplusone</groupId>
             <artifactId>jplusone-core</artifactId>
             <version>${revision}</version>
             <scope>test</scope>

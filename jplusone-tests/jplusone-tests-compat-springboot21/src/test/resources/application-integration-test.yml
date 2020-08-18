@@ -1,7 +1,7 @@
-# com.grexdev.jplusone.core.properties.JPlusOneProperties
+# com.adgadev.jplusone.core.properties.JPlusOneProperties
 jplusone:
   enabled: true
-  application-root-package: "com.grexdev.jplusone.test"
+  application-root-package: "com.adgadev.jplusone.test"
   debug-mode: false
   report:
     enabled: true

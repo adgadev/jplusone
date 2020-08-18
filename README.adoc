@@ -1,8 +1,8 @@
 :jdk-icon: https://img.shields.io/badge/java-9+-4c7e9f.svg
 :jdk-link: https://www.oracle.com/technetwork/java/javase/downloads
 
-:maven-central-icon: https://img.shields.io/maven-central/v/com.grexdev/jplusone
-:maven-central-link: https://search.maven.org/artifact/com.grexdev/jplusone
+:maven-central-icon: https://img.shields.io/maven-central/v/com.adgadev/jplusone
+:maven-central-link: https://search.maven.org/artifact/com.adgadev/jplusone
 
 :apache-license-icon: https://img.shields.io/badge/License-Apache%202.0-blue.svg
 :apache-license-link: http://www.apache.org/licenses/LICENSE-2.0.txt
@@ -43,7 +43,7 @@ Add the following dependency to your project:
 [source,xml,subs="verbatim,attributes"]
 ----
 <dependency>
-    <groupId>com.grexdev.jplusone</groupId>
+    <groupId>com.adgadev.jplusone</groupId>
     <artifactId>jplusone-core</artifactId>
     <version>{release_version}</version>
     <scope>test</scope>
@@ -55,7 +55,7 @@ It can be accomplised by adding following lines to your `application.yml`
 [source,yaml]
 ----
 logging.level:
-    com.grexdev.jplusone: DEBUG
+    com.adgadev.jplusone: DEBUG
 ----
 
 == Usage
@@ -89,22 +89,22 @@ i.e. as a result of traversing domain entities graph which was not fully loaded 
 ----
 2020-04-12 14:25:47.139 DEBUG 14026 --- [           main] c.g.j.core.report.ReportGenerator        :
     ROOT
-        com.grexdev.jplusone.test.domain.bookshop.BookshopControllerTest.shouldGetBookDetailsLazily(BookshopControllerTest.java:44)
-        com.grexdev.jplusone.test.domain.bookshop.BookshopController.getSampleBookUsingLazyLoading(BookshopController.java:31)
-        com.grexdev.jplusone.test.domain.bookshop.BookshopService.getSampleBookDetailsUsingLazyLoading [PROXY]
+        com.adgadev.jplusone.test.domain.bookshop.BookshopControllerTest.shouldGetBookDetailsLazily(BookshopControllerTest.java:44)
+        com.adgadev.jplusone.test.domain.bookshop.BookshopController.getSampleBookUsingLazyLoading(BookshopController.java:31)
+        com.adgadev.jplusone.test.domain.bookshop.BookshopService.getSampleBookDetailsUsingLazyLoading [PROXY]
             SESSION BOUNDARY
                 OPERATION [EXPLICIT]
-                    com.grexdev.jplusone.test.domain.bookshop.BookshopService.getSampleBookDetailsUsingLazyLoading(BookshopService.java:34)
-                    com.grexdev.jplusone.test.domain.bookshop.BookRepository.findById [PROXY]
+                    com.adgadev.jplusone.test.domain.bookshop.BookshopService.getSampleBookDetailsUsingLazyLoading(BookshopService.java:34)
+                    com.adgadev.jplusone.test.domain.bookshop.BookRepository.findById [PROXY]
                         STATEMENT [READ]
                             select [...] from
                                  book book0_
                             where
                                  book0_.id = 1
                 OPERATION [IMPLICIT]
-                    com.grexdev.jplusone.test.domain.bookshop.BookshopService.getSampleBookDetailsUsingLazyLoading(BookshopService.java:35)
-                    com.grexdev.jplusone.test.domain.bookshop.Author.getName [PROXY]
-                    com.grexdev.jplusone.test.domain.bookshop.Author [FETCHING ENTITY]
+                    com.adgadev.jplusone.test.domain.bookshop.BookshopService.getSampleBookDetailsUsingLazyLoading(BookshopService.java:35)
+                    com.adgadev.jplusone.test.domain.bookshop.Author.getName [PROXY]
+                    com.adgadev.jplusone.test.domain.bookshop.Author [FETCHING ENTITY]
                         STATEMENT [READ]
                             select [...] from
                                  author author0_
@@ -127,7 +127,7 @@ You can overwrite default configuration by adding some of the following properti
 
 [source,yaml]
 ----
-# com.grexdev.jplusone.core.properties.JPlusOneProperties
+# com.adgadev.jplusone.core.properties.JPlusOneProperties
 jplusone:
   enabled: true
   application-root-package: "com.sampleorganisation.sampleproject"
