@@ -55,7 +55,7 @@ public class LoggingStateListener implements StateListener {
     public void entityManagerClosed(Identifier entityManagerId) {
         if (verbosityLevel.isDebugModeEnabled()) {
             if (verbosityLevel.isSessionStackVisible()) {
-                framesProvider.captureCallFrames().printStackTrace("JPA Session closed, ID: " + entityManagerId);
+                framesProvider.captureCallFrames().printStackTrace("JPA EntityManager closed, ID: " + entityManagerId);
             } else {
                 log.debug("JPA EntityManager closed, ID: {}", entityManagerId);
             }

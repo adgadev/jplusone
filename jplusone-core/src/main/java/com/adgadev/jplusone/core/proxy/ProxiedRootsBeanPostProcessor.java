@@ -17,7 +17,7 @@
 package com.adgadev.jplusone.core.proxy;
 
 import com.adgadev.jplusone.core.proxy.datasource.DataSourceProxy;
-import com.adgadev.jplusone.core.proxy.jpa.EntityManagerFactoryProxy;
+import com.adgadev.jplusone.core.proxy.jpa.EntityManagerFactoryAopProxyFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -52,7 +52,7 @@ public class ProxiedRootsBeanPostProcessor implements BeanPostProcessor {
 
         if (bean instanceof EntityManagerFactory) {
             log.debug("EntityManagerFactory wrapped in the proxy");
-            return new EntityManagerFactoryProxy((EntityManagerFactory) bean, stateListener);
+            return EntityManagerFactoryAopProxyFactory.createProxy((EntityManagerFactory) bean, stateListener);
         }
 
         return bean;

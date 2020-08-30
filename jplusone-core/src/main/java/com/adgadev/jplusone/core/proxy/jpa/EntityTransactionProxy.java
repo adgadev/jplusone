@@ -25,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.persistence.EntityTransaction;
 
 @Slf4j
+@Deprecated
 @RequiredArgsConstructor
 class EntityTransactionProxy implements EntityTransaction {
 

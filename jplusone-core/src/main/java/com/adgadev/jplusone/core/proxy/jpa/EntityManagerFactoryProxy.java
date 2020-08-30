@@ -27,6 +27,7 @@ import javax.persistence.SynchronizationType;
 import java.util.Map;
 
 @Slf4j
+@Deprecated
 @RequiredArgsConstructor
 public class EntityManagerFactoryProxy implements EntityManagerFactory {
 

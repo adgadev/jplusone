@@ -27,6 +27,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
 @Slf4j
+@Deprecated
 @RequiredArgsConstructor
 class EntityManagerProxy implements EntityManager {
 
