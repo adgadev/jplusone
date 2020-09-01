@@ -18,6 +18,7 @@ package com.adgadev.jplusone.core.report;
 
 import com.adgadev.jplusone.core.frame.FrameExtract;
 import com.adgadev.jplusone.core.properties.JPlusOneProperties.JPlusOneReportProperties;
+import com.adgadev.jplusone.core.properties.JPlusOneProperties.JPlusOneReportProperties.Output;
 import com.adgadev.jplusone.core.registry.OperationNodeView;
 import com.adgadev.jplusone.core.registry.OperationType;
 import com.adgadev.jplusone.core.registry.SessionNodeView;
@@ -72,9 +73,9 @@ public class ReportGenerator {
                     .count() > 0;
 
             if (matchedStatementAndOperationFound) {
-                log.debug(sessionToString(session, visibleOperationsType, visibleStatementsType));
+                printLog(sessionToString(session, visibleOperationsType, visibleStatementsType));
             } else {
-                log.debug("No operations / statements matching report criteria found");
+                printLog("No operations / statements matching report criteria found");
             }
         }
     }
@@ -122,8 +123,7 @@ public class ReportGenerator {
         return builder.toString();
     }
 
-
-    public List<FrameExtract> filterApplicationCallFrames(List<FrameExtract> callFrames, boolean proxyCallFramesHidden) {
+    private List<FrameExtract> filterApplicationCallFrames(List<FrameExtract> callFrames, boolean proxyCallFramesHidden) {
         List<FrameExtract> applicationAllCallFrames = filterToList(callFrames, FrameExtract::isNotThirdPartyClass);
 
         if (!proxyCallFramesHidden) {
@@ -144,4 +144,11 @@ public class ReportGenerator {
         }
     }
 
+    private void printLog(String message) {
+        if (reportProperties.getOutput() == Output.LOGGER) {
+            log.debug(message);
+        } else if (reportProperties.getOutput() == Output.STDOUT) {
+            System.out.println(message);
+        }
+    }
 }

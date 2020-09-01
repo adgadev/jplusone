@@ -5,6 +5,7 @@ jplusone:
   debug-mode: false
   report:
     enabled: true
+    output: LOGGER
     proxy-call-frames-hidden: false
     operation-filtering-mode: ALL_OPERATIONS
     statement-filtering-mode: ALL_STATEMENTS

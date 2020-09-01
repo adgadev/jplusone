@@ -28,6 +28,7 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import static com.adgadev.jplusone.core.properties.JPlusOneProperties.JPlusOneReportProperties.OperationFilteringMode.IMPLICIT_OPERATIONS_ONLY;
+import static com.adgadev.jplusone.core.properties.JPlusOneProperties.JPlusOneReportProperties.Output.LOGGER;
 import static com.adgadev.jplusone.core.properties.JPlusOneProperties.JPlusOneReportProperties.StatementFilteringMode.READ_STATEMENTS_ONLY;
 
 @Getter
@@ -70,6 +71,11 @@ public class JPlusOneProperties {
             private final Set<StatementType> statementTypes;
         }
 
+        public enum Output {
+            LOGGER,
+            STDOUT
+        }
+
         private boolean enabled = true;
 
         private boolean proxyCallFramesHidden = true;
@@ -77,6 +83,8 @@ public class JPlusOneProperties {
         private OperationFilteringMode operationFilteringMode = IMPLICIT_OPERATIONS_ONLY;
 
         private StatementFilteringMode statementFilteringMode = READ_STATEMENTS_ONLY;
+
+        private Output output = LOGGER;
 
     }
 

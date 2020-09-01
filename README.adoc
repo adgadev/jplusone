@@ -71,7 +71,7 @@ In order to collect data JPlusOne intercepts all operations invoked on EntityMan
 One report is generated per each JPA EntityManager instance (Hibernate session). A report is written to log just after EntityManager is closed.
 It's worth to mention that behaviour determining when EntityManager is closed (session is closed) can be altered by:
 
-* using `@Transactional` on integration test class or test case method - whole test cases is executed inside one session and transaction
+* using `@Transactional` on integration test class or test case method - it extends scope of SUT's session / transaction so that it span across testcase method, session is effectively closed when test method finishes
 * enabling property `spring.jpa.open-in-view` - session closes not when a method of a service annotated with `@Transactional` is finished, but when controller which invoked such service method is finished
 Usually Spring uses separate session per transaction strategy, but
 
@@ -134,6 +134,7 @@ jplusone:
   debug-mode: false
   report:
     enabled: true
+    output: LOGGER
     proxy-call-frames-hidden: false
     operation-filtering-mode: ALL_OPERATIONS
     statement-filtering-mode: ALL_STATEMENTS
@@ -143,23 +144,73 @@ jplusone:
 [cols=2*]
 |===
 |`jplusone.enabled`
-|Flag determining if JPlusOne autoconfiguration is enabled, all SQL statements intercepted
+|Flag determining if JPlusOne autoconfiguration is enabled, all SQL statements intercepted.
+
+Default value: `true`
 
 |`jplusone.application-root-package`
-|Root package of your project. Calls made to methods of classes outside the root package won't be analysed and visible in the report
+|Root package of your project. Calls made to methods of classes outside the root package won't be analysed and visible in the report.
+
+Default value: package where the class annotated with `@SpringBootApplication` is located
 
 |`jplusone.debug-mode`
-|Flag determining if JPlusOne debug mode is enabled
+|Flag determining if JPlusOne debug mode is enabled.
+
+Default value: `false`
 
 |`jplusone.report.enabled`
-|Flag determining if report should be written to logs
+|Flag determining if report should be written to logs.
+
+Default value: `true`
 
 |`jplusone.report.operation-filtering-mode`
 |Defines what kind of operations should be visible in the report. Possible values: `IMPLICIT_OPERATIONS_ONLY`, `EXPLICIT_OPERATIONS_ONLY`, `ALL_OPERATIONS`
 
+Default value: `IMPLICIT_OPERATIONS_ONLY`
+
 |`jplusone.report.statement-filtering-mode`
 |Defines what kind of SQL statements should be visible in the report. Possible values: `READ_STATEMENTS_ONLY`, `WRITE_STATEMENTS_ONLY`, `ALL_STATEMENTS`
 
+Default value: `READ_STATEMENTS_ONLY`
+
 |`jplusone.report.proxy-call-frames-hidden`
 |Flag determining if proxy call frames are hidden. It does not affect last frame of the call stack.
+
+Default value: `true`
+
+|`jplusone.report.output`
+|Defines which output will be used to print report. Possible values: `LOGGER`, `STDOUT`
+
+Default value: `LOGGER`
 |===
+
+== Troubleshooting
+==== Problems
+Having JPlusOne configured, each testcase method which tests logic related with JPA persistence operations (direct or indirect use of EntityManager)
+should result in either detailed report being printed in logs or the information in the logs that no JPA operations / SQL statements matching criteria has been captured.
+
+There are multiple reasons why no logs entries for `com.adgadev.jplusone` are printed or such log entries are printed only for part of the persistence related tests. Most common cases are:
+
+* Logging system configuration (i.e. logback) has been changed / overwritten dynamically i.e by autoconfiguration when spring boot works in debug mode ("debug: true" YAML property)
+* Due to the fact that SpringRunner caches spring contexts used in tests and logging system configuration is being refreshed only during new spring context creation,
+there might be a situation that invalid logging system configuration is being used when test runner intertwines execution of tests from various spring contexts.
+
++
+In example, assuming there are two spring contexts (S1 context with logger configuration L1 and S2 context with logger configuration L2) and three test classes (A, B, C), where A and B uses S1 context and C uses S2 context.
+When test runner executes tests in order A,B,C everything is fine, but when order execution is A,C,B testcases from class B will use the same logger configuration as C - L2 logger instead of L1.
+
+==== Workarounds
+There are two possible workarounds for such issue:
+
+* Refresh JPlusOne logger configuration before executing first testcase for each integration test class:
++
+[source,java]
+----
+@BeforeClass
+public static void refreshLoggerConfiguration() {
+   LoggingSystem.get(ClassLoader.getSystemClassLoader())
+                .setLogLevel("com.adgadev.jplusone", LogLevel.DEBUG);
+}
+----
+* Force JPlusOne reports to be printed directly to the stdout, instead of logger, using property:
+`jplusone.report.output=STDOUT`

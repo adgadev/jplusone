@@ -5,9 +5,11 @@
 jplusone:
 #  enabled: true
 #  application-root-package: "com.adgadev.jplusone.test"
-#  debug-mode: false
+  debug-mode: true
   report:
 #    enabled: true
+#    output: LOGGER
 #    proxy-call-frames-hidden: false
     operation-filtering-mode: ALL_OPERATIONS
     statement-filtering-mode: ALL_STATEMENTS
+
