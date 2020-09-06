@@ -65,32 +65,6 @@ public class LoggingStateListener implements StateListener {
     }
 
     @Override
-    public void transactionStarted(Identifier transactionId) {
-        if (verbosityLevel.isDebugModeEnabled()) {
-            if (verbosityLevel.isTransactionStackVisible()) {
-                framesProvider.captureCallFrames().printStackTrace("JPA Transaction started, ID: " + transactionId);
-            } else {
-                log.debug("JPA Transaction started, ID: {}", transactionId);
-            }
-        }
-
-        stateListener.transactionStarted(transactionId);
-    }
-
-    @Override
-    public void transactionFinished(Identifier transactionId) {
-        if (verbosityLevel.isDebugModeEnabled()) {
-            if (verbosityLevel.isTransactionStackVisible()) {
-                framesProvider.captureCallFrames().printStackTrace("JPA Transaction finished, ID: " + transactionId);
-            } else {
-                log.debug("JPA Transaction finished, ID: {}", transactionId);
-            }
-        }
-
-        stateListener.transactionFinished(transactionId);
-    }
-
-    @Override
     public void statementExecuted(String sql) {
         if (verbosityLevel.isDebugModeEnabled()) {
             if (verbosityLevel.isSqlStatementStackVisible()) {

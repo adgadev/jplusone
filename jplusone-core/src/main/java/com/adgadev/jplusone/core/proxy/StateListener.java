@@ -24,10 +24,6 @@ public interface StateListener {
 
     void entityManagerClosed(Identifier entityManagerId);
 
-    void transactionStarted(Identifier transactionId);
-
-    void transactionFinished(Identifier transactionId);
-
     void statementExecuted(String sql);
 
     void statementExecuted(Supplier<String> sqlSupplier);

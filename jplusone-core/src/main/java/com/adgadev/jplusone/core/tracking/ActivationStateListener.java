@@ -16,8 +16,8 @@
 
 package com.adgadev.jplusone.core.tracking;
 
-import com.adgadev.jplusone.core.proxy.StateListener;
 import com.adgadev.jplusone.core.proxy.Identifier;
+import com.adgadev.jplusone.core.proxy.StateListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,20 +42,6 @@ public class ActivationStateListener implements StateListener {
     public void entityManagerClosed(Identifier entityManagerId) {
         if (context.isRecordingEnabled()) {
             executeSilently(() -> delegate.entityManagerClosed(entityManagerId));
-        }
-    }
-
-    @Override
-    public void transactionStarted(Identifier transactionId) {
-        if (context.isRecordingEnabled()) {
-            executeSilently(() -> delegate.transactionStarted(transactionId));
-        }
-    }
-
-    @Override
-    public void transactionFinished(Identifier transactionId) {
-        if (context.isRecordingEnabled()) {
-            executeSilently(() -> delegate.transactionFinished(transactionId));
         }
     }
 

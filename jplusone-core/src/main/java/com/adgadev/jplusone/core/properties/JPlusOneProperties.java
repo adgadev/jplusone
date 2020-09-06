@@ -42,7 +42,7 @@ public class JPlusOneProperties {
 
     private boolean debugMode = false;
 
-    private VerbosityLevel verbosityLevel = VerbosityLevel.V4;
+    private VerbosityLevel verbosityLevel = VerbosityLevel.V3;
 
     private JPlusOneReportProperties report = new JPlusOneReportProperties();
 

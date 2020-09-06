@@ -17,13 +17,13 @@
 package com.adgadev.jplusone.core.tracking;
 
 import com.adgadev.jplusone.core.frame.FramesProvider;
+import com.adgadev.jplusone.core.proxy.Identifier;
 import com.adgadev.jplusone.core.proxy.StateListener;
+import com.adgadev.jplusone.core.registry.FrameStack;
 import com.adgadev.jplusone.core.registry.LazyInitialisation;
+import com.adgadev.jplusone.core.registry.RootNode;
 import com.adgadev.jplusone.core.registry.SessionNode;
 import com.adgadev.jplusone.core.report.ReportGenerator;
-import com.adgadev.jplusone.core.proxy.Identifier;
-import com.adgadev.jplusone.core.registry.FrameStack;
-import com.adgadev.jplusone.core.registry.RootNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -82,16 +82,6 @@ public class TrackingStateListener implements StateListener {
         } else {
             log.warn("Session has been closed already");
         }
-    }
-
-    @Override
-    public void transactionStarted(Identifier transactionId) {
-        // TODO: implement
-    }
-
-    @Override
-    public void transactionFinished(Identifier transactionId) {
-        // TODO: implement
     }
 
     @Override

@@ -22,11 +22,7 @@ public class Identifier {
 
     private final static AtomicInteger ENTITY_MANAGER_SEQUENCE = new AtomicInteger(0);
 
-    private final static AtomicInteger TRANSACTION_SEQUENCE = new AtomicInteger(0);
-
     private static final String ENTITY_MANAGER_SEQUENCE_LABEL = "EM";
-
-    private static final String TRANSACTION_SEQUENCE_LABEL = "TX";
 
     private final String label;
 
@@ -39,10 +35,6 @@ public class Identifier {
 
     public static Identifier nextEntityManagerIdentifier() {
         return new Identifier(ENTITY_MANAGER_SEQUENCE_LABEL, ENTITY_MANAGER_SEQUENCE);
-    }
-
-    public static Identifier nextTransactionIdentifier() {
-        return new Identifier(TRANSACTION_SEQUENCE_LABEL, TRANSACTION_SEQUENCE);
     }
 
     @Override

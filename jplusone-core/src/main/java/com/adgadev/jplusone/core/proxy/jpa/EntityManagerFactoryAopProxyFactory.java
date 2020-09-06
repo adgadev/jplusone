@@ -50,7 +50,7 @@ public class EntityManagerFactoryAopProxyFactory {
             Object result = methodInvocation.proceed();
 
             if (methodInvocation.getMethod().getName().equals("createEntityManager")) {
-                log.debug("Return entityManagerFactory");
+                log.trace("Returning wrapped entityManager");
                 return wrapEntityManager((EntityManager) result);
             }
 
@@ -59,7 +59,7 @@ public class EntityManagerFactoryAopProxyFactory {
 
         private EntityManager wrapEntityManager(EntityManager entityManager) {
             Identifier entityManagerIdentifier = Identifier.nextEntityManagerIdentifier();
-            log.debug("EntityManager {} is associated with object {}", entityManagerIdentifier.toString(), entityManager.toString());
+            log.trace("EntityManager {} is associated with object {}", entityManagerIdentifier.toString(), entityManager.toString());
             EntityManager entityManagerProxy = EntityManagerAopProxyFactory.createProxy(entityManager, stateListener, entityManagerIdentifier);
             stateListener.entityManagerCreated(entityManagerIdentifier);
             return entityManagerProxy;
@@ -76,7 +76,7 @@ public class EntityManagerFactoryAopProxyFactory {
             Object result = methodInvocation.proceed();
 
             if (methodInvocation.getMethod().getName().equals("getNativeEntityManagerFactory")) {
-                log.debug("Return nativeEntityManager");
+                log.trace("Returning wrapped nativeEntityManagerFactory");
                 return wrapEntityManagerFactory((EntityManagerFactory) result);
             }
 
