@@ -19,6 +19,7 @@ package com.adgadev.jplusone.core.report;
 import com.adgadev.jplusone.core.frame.FrameExtract;
 import com.adgadev.jplusone.core.properties.JPlusOneProperties.JPlusOneReportProperties;
 import com.adgadev.jplusone.core.properties.JPlusOneProperties.JPlusOneReportProperties.Output;
+import com.adgadev.jplusone.core.registry.LazyInitialisation;
 import com.adgadev.jplusone.core.registry.OperationNodeView;
 import com.adgadev.jplusone.core.registry.OperationType;
 import com.adgadev.jplusone.core.registry.SessionNodeView;
@@ -107,8 +108,8 @@ public class ReportGenerator {
                     }
                 }
 
-                if (operation.getLazyInitialisation() != null) {
-                    builder.append(NEWLINE + INDENTS.get(5) + operation.getLazyInitialisation());
+                for (LazyInitialisation lazyInitialisation: operation.getLazyInitialisations()) {
+                    builder.append(NEWLINE + INDENTS.get(5) + lazyInitialisation);
                 }
 
                 for (StatementNodeView statement : operation.getStatements()) {

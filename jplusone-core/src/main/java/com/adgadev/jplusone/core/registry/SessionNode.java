@@ -75,7 +75,7 @@ public class SessionNode implements SessionNodeView {
 
     public SessionNode close(FrameStack completeSessionFrameStack) {
         if (operations.isEmpty()) {
-            log.warn("Closing empty SessionNode");
+            log.trace("Closing empty SessionNode");
             return new SessionNode(emptyList(), sessionFrameStack);
 
         } else {

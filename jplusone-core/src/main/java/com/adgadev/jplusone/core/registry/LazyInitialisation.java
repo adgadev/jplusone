@@ -32,7 +32,7 @@ public class LazyInitialisation {
 
     private final LazyInitialisationType type;
 
-    static LazyInitialisation entityLazyInitialisation(String entityClassName) {
+    public static LazyInitialisation entityLazyInitialisation(String entityClassName) {
         return new LazyInitialisation(entityClassName, null, LazyInitialisationType.ENTITY);
     }
 

@@ -16,7 +16,6 @@
 
 package com.adgadev.jplusone.test.domain.commerce.crud;
 
-import com.adgadev.jplusone.core.registry.LazyInitialisation.LazyInitialisationType;
 import com.adgadev.jplusone.core.registry.OperationNodeView;
 import com.adgadev.jplusone.core.registry.OperationType;
 import com.adgadev.jplusone.core.registry.RootNodeView;
@@ -41,9 +40,9 @@ import javax.persistence.EntityTransaction;
 import java.sql.PreparedStatement;
 import java.util.List;
 
+import static com.adgadev.jplusone.core.registry.LazyInitialisation.collectionLazyInitialisation;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.Matchers.equalTo;
 
 @ActiveProfiles("integration-test")
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
@@ -78,7 +77,7 @@ class JpaCascadeCrudServiceTest {
         assertThat(operationNodeView1, notNullValue());
         assertThat(operationNodeView1.getOperationType(), equalTo(OperationType.EXPLICIT));
         assertThat(operationNodeView1.getStatements(), hasSize(equalTo(1)));
-        assertThat(operationNodeView1.getLazyInitialisation(), nullValue());
+        assertThat(operationNodeView1.getLazyInitialisations(), empty());
         MatcherAssert.assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(JpaCascadeCrudService.class, "addManufacturerProduct"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(ManufacturerRepository.class, "findById"),
@@ -90,10 +89,7 @@ class JpaCascadeCrudServiceTest {
         assertThat(operationNodeView2, notNullValue());
         assertThat(operationNodeView2.getOperationType(), equalTo(OperationType.IMPLICIT));
         assertThat(operationNodeView2.getStatements(), hasSize(equalTo(1)));
-        assertThat(operationNodeView2.getLazyInitialisation(), notNullValue());
-        assertThat(operationNodeView2.getLazyInitialisation().getEntityClassName(), equalTo(Manufacturer.class.getName()));
-        assertThat(operationNodeView2.getLazyInitialisation().getFieldName(), equalTo("products"));
-        assertThat(operationNodeView2.getLazyInitialisation().getType(), equalTo(LazyInitialisationType.COLLECTION));
+        assertThat(operationNodeView2.getLazyInitialisations(), contains(collectionLazyInitialisation(Manufacturer.class.getName(), "products")));
         MatcherAssert.assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(JpaCascadeCrudService.class, "addManufacturerProduct"),
                 FrameExtractSpecification.anyAppMethodCallFrame(Manufacturer.class, "addProduct"),
@@ -105,7 +101,7 @@ class JpaCascadeCrudServiceTest {
         assertThat(operationNodeView3, notNullValue());
         assertThat(operationNodeView3.getOperationType(), equalTo(OperationType.EXPLICIT)); // TODO: why it's explicit?
         assertThat(operationNodeView3.getStatements(), hasSize(equalTo(1)));
-        assertThat(operationNodeView3.getLazyInitialisation(), nullValue());
+        assertThat(operationNodeView3.getLazyInitialisations(), empty());
         MatcherAssert.assertThat(operationNodeView3.getCallFramesStack(), JPlusOneMatchers.allFrameCallMatcher(FrameExtractSpecification.notAppMethodCallFrame()));
         MatcherAssert.assertThat(operationNodeView3.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyThirdPartyMethodCallFrameOnClassAssignableFrom(EntityTransaction.class, "commit"),
@@ -156,7 +152,7 @@ class JpaCascadeCrudServiceTest {
         assertThat(operationNodeView1, notNullValue());
         assertThat(operationNodeView1.getOperationType(), equalTo(OperationType.EXPLICIT));
         assertThat(operationNodeView1.getStatements(), hasSize(equalTo(1)));
-        assertThat(operationNodeView1.getLazyInitialisation(), nullValue());
+        assertThat(operationNodeView1.getLazyInitialisations(), empty());
         MatcherAssert.assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(JpaCascadeCrudService.class, "updateManufacturerProductName"),
                 FrameExtractSpecification.anyAppMethodCallFrame(JpaCascadeCrudService.class, "getManufacturerById"),
@@ -169,10 +165,7 @@ class JpaCascadeCrudServiceTest {
         assertThat(operationNodeView2, notNullValue());
         assertThat(operationNodeView2.getOperationType(), equalTo(OperationType.IMPLICIT));
         assertThat(operationNodeView2.getStatements(), hasSize(equalTo(1)));
-        assertThat(operationNodeView2.getLazyInitialisation(), notNullValue());
-        assertThat(operationNodeView2.getLazyInitialisation().getEntityClassName(), equalTo(Manufacturer.class.getName()));
-        assertThat(operationNodeView2.getLazyInitialisation().getFieldName(), equalTo("products"));
-        assertThat(operationNodeView2.getLazyInitialisation().getType(), equalTo(LazyInitialisationType.COLLECTION));
+        assertThat(operationNodeView2.getLazyInitialisations(), contains(collectionLazyInitialisation(Manufacturer.class.getName(), "products")));
         MatcherAssert.assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(JpaCascadeCrudService.class, "updateManufacturerProductName"),
                 FrameExtractSpecification.anyAppMethodCallFrame(Manufacturer.class, "addProduct"),
@@ -184,7 +177,7 @@ class JpaCascadeCrudServiceTest {
         assertThat(operationNodeView3, notNullValue());
         assertThat(operationNodeView3.getOperationType(), equalTo(OperationType.EXPLICIT)); // TODO: why it's explicit?
         assertThat(operationNodeView3.getStatements(), hasSize(equalTo(1)));
-        assertThat(operationNodeView3.getLazyInitialisation(), nullValue());
+        assertThat(operationNodeView3.getLazyInitialisations(), empty());
         MatcherAssert.assertThat(operationNodeView3.getCallFramesStack(), JPlusOneMatchers.allFrameCallMatcher(FrameExtractSpecification.notAppMethodCallFrame()));
         MatcherAssert.assertThat(operationNodeView3.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyThirdPartyMethodCallFrameOnClassAssignableFrom(EntityTransaction.class, "commit"),
@@ -235,7 +228,7 @@ class JpaCascadeCrudServiceTest {
         assertThat(operationNodeView1, notNullValue());
         assertThat(operationNodeView1.getOperationType(), equalTo(OperationType.EXPLICIT));
         assertThat(operationNodeView1.getStatements(), hasSize(equalTo(1)));
-        assertThat(operationNodeView1.getLazyInitialisation(), nullValue());
+        assertThat(operationNodeView1.getLazyInitialisations(), empty());
         MatcherAssert.assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(JpaCascadeCrudService.class, "deleteManufacturerProduct"),
                 FrameExtractSpecification.anyAppMethodCallFrame(JpaCascadeCrudService.class, "getManufacturerById"),
@@ -248,10 +241,7 @@ class JpaCascadeCrudServiceTest {
         assertThat(operationNodeView2, notNullValue());
         assertThat(operationNodeView2.getOperationType(), equalTo(OperationType.IMPLICIT));
         assertThat(operationNodeView2.getStatements(), hasSize(equalTo(1)));
-        assertThat(operationNodeView2.getLazyInitialisation(), notNullValue());
-        assertThat(operationNodeView2.getLazyInitialisation().getEntityClassName(), equalTo(Manufacturer.class.getName()));
-        assertThat(operationNodeView2.getLazyInitialisation().getFieldName(), equalTo("products"));
-        assertThat(operationNodeView2.getLazyInitialisation().getType(), equalTo(LazyInitialisationType.COLLECTION));
+        assertThat(operationNodeView2.getLazyInitialisations(), contains(collectionLazyInitialisation(Manufacturer.class.getName(), "products")));
         MatcherAssert.assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(JpaCascadeCrudService.class, "deleteManufacturerProduct"),
                 FrameExtractSpecification.anyAppMethodCallFrame(Manufacturer.class, "deleteProduct"),
@@ -264,7 +254,7 @@ class JpaCascadeCrudServiceTest {
         assertThat(operationNodeView3, notNullValue());
         assertThat(operationNodeView3.getOperationType(), equalTo(OperationType.EXPLICIT)); // TODO: why it's explicit?
         assertThat(operationNodeView3.getStatements(), hasSize(equalTo(1)));
-        assertThat(operationNodeView3.getLazyInitialisation(), nullValue());
+        assertThat(operationNodeView3.getLazyInitialisations(), empty());
         MatcherAssert.assertThat(operationNodeView3.getCallFramesStack(), JPlusOneMatchers.allFrameCallMatcher(FrameExtractSpecification.notAppMethodCallFrame()));
         MatcherAssert.assertThat(operationNodeView3.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyThirdPartyMethodCallFrameOnClassAssignableFrom(EntityTransaction.class, "commit"),

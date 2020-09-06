@@ -16,8 +16,8 @@
 
 package com.adgadev.jplusone.core.registry;
 
-import com.adgadev.jplusone.core.registry.LazyInitialisation.LazyInitialisationType;
 import com.adgadev.jplusone.core.frame.FrameExtract;
+import com.adgadev.jplusone.core.registry.LazyInitialisation.LazyInitialisationType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,13 +40,19 @@ public class OperationNode implements OperationNodeView {
 
     private OperationType operationType;
 
-    private LazyInitialisation lazyInitialisation;
+    private List<LazyInitialisation> lazyInitialisations;
 
     public OperationNode(FrameStack callFramesStack) {
+        LazyInitialisation lazyInitialisation = resolveLazyInitialisationDetails(callFramesStack);
+
         this.statements = new ArrayList<>();
+        this.lazyInitialisations = new ArrayList<>();
         this.callFramesStack = callFramesStack;
-        this.lazyInitialisation = resolveLazyInitialisationDetails(callFramesStack);
         this.operationType = nonNull(lazyInitialisation) ? OperationType.IMPLICIT : OperationType.EXPLICIT;
+
+        if (nonNull(lazyInitialisation)) {
+            this.lazyInitialisations.add(lazyInitialisation);
+        }
     }
 
     void addStatement(String sql) {
@@ -55,25 +61,24 @@ public class OperationNode implements OperationNodeView {
     }
 
     void addLazyInitialisation(LazyInitialisation lazyInitialisation) {
-        if (this.lazyInitialisation == null) {
-            this.lazyInitialisation = lazyInitialisation;
+        if (this.lazyInitialisations.isEmpty()) {
+            this.lazyInitialisations.add(lazyInitialisation);
             this.operationType = OperationType.IMPLICIT;
 
-        } else if (this.lazyInitialisation.getType() == LazyInitialisationType.ENTITY) {
-            log.debug("Operation triggered lazy initialisation of collection, not just entity, existing: {}, captured: {}",
-                    this.lazyInitialisation, lazyInitialisation); // TODO: check what happens when method on entity proxy invoked where this entity has association with eager fetch
-            this.lazyInitialisation = lazyInitialisation;
+        } if (!lazyInitialisations.contains(lazyInitialisation)) {
+            LazyInitialisation lazyInitialisationToRemove = LazyInitialisation.entityLazyInitialisation(lazyInitialisation.getEntityClassName());
 
-        } else if (!this.lazyInitialisation.equals(lazyInitialisation)) {  // duplicate events sometimes occur
-            log.warn("Details of operation lazy initialisation already captured, existing: {}, captured: {}",
-                    this.lazyInitialisation, lazyInitialisation); // TODO: handle multiple collections loads events / statements for one operations (i.e. commit/flush/rollback)
+            if (lazyInitialisationToRemove.equals(getEntityLazyInitialisation())) {
+                this.lazyInitialisations.remove(lazyInitialisationToRemove);
+                this.lazyInitialisations.add(lazyInitialisation);
+            }
         }
     }
 
     OperationNode close(FrameStack sessionFrameStack) {
         FrameStack operationSubFramesStack = callFramesStack.subtract(sessionFrameStack);
 
-        return new OperationNode(statements, operationSubFramesStack, operationType, lazyInitialisation);
+        return new OperationNode(statements, operationSubFramesStack, operationType, lazyInitialisations);
     }
 
     boolean hasCallFramesStack(FrameStack callFramesStack) {
@@ -86,6 +91,13 @@ public class OperationNode implements OperationNodeView {
                 .filter(clazz -> clazz.isAnnotationPresent(Entity.class))
                 .map(Class::getCanonicalName)
                 .map(LazyInitialisation::entityLazyInitialisation)
+                .orElse(null);
+    }
+
+    private LazyInitialisation getEntityLazyInitialisation() {
+        return lazyInitialisations.stream()
+                .filter(initialisation -> initialisation.getType() == LazyInitialisationType.ENTITY)
+                .findFirst()
                 .orElse(null);
     }
 }

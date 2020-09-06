@@ -26,5 +26,5 @@ public interface OperationNodeView {
 
     OperationType getOperationType();
 
-    LazyInitialisation getLazyInitialisation();
+    List<LazyInitialisation> getLazyInitialisations();
 }

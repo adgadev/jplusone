@@ -16,7 +16,6 @@
 
 package com.adgadev.jplusone.test.domain.bookshop;
 
-import com.adgadev.jplusone.core.registry.LazyInitialisation.LazyInitialisationType;
 import com.adgadev.jplusone.core.registry.OperationNodeView;
 import com.adgadev.jplusone.core.registry.OperationType;
 import com.adgadev.jplusone.core.registry.RootNodeView;
@@ -36,6 +35,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+import static com.adgadev.jplusone.core.registry.LazyInitialisation.entityLazyInitialisation;
 import static com.adgadev.jplusone.test.matchers.frame.FrameExtractSpecification.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -81,8 +81,8 @@ class BookshopControllerTest {
         OperationNodeView operationNodeView1 = sessionNode.getOperations().get(0);
         assertThat(operationNodeView1, notNullValue());
         assertThat(operationNodeView1.getOperationType(), equalTo(OperationType.EXPLICIT));
-        assertThat(operationNodeView1.getStatements(), hasSize(equalTo(1)));
-        assertThat(operationNodeView1.getLazyInitialisation(), nullValue());
+        assertThat(operationNodeView1.getStatements(), hasSize(1));
+        assertThat(operationNodeView1.getLazyInitialisations(), empty());
         assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 anyAppMethodCallFrame(BookshopController.class, "getSampleBookUsingLazyLoading"),
                 anyProxyMethodCallFrame(BookshopService.class, "getSampleBookDetailsUsingLazyLoading"),
@@ -94,11 +94,8 @@ class BookshopControllerTest {
         OperationNodeView operationNodeView2 = sessionNode.getOperations().get(1);
         assertThat(operationNodeView2, notNullValue());
         assertThat(operationNodeView2.getOperationType(), equalTo(OperationType.IMPLICIT));
-        assertThat(operationNodeView2.getStatements(), hasSize(equalTo(1)));
-        assertThat(operationNodeView2.getLazyInitialisation(), notNullValue());
-        assertThat(operationNodeView2.getLazyInitialisation().getType(), equalTo(LazyInitialisationType.ENTITY));
-        assertThat(operationNodeView2.getLazyInitialisation().getEntityClassName(), equalTo(Author.class.getName()));
-        assertThat(operationNodeView2.getLazyInitialisation().getFieldName(), nullValue());
+        assertThat(operationNodeView2.getStatements(), hasSize(1));
+        assertThat(operationNodeView2.getLazyInitialisations(), contains(entityLazyInitialisation(Author.class.getName())));
         assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 anyAppMethodCallFrame(BookshopController.class, "getSampleBookUsingLazyLoading"),
                 anyProxyMethodCallFrame(BookshopService.class, "getSampleBookDetailsUsingLazyLoading"),
@@ -143,8 +140,8 @@ class BookshopControllerTest {
         OperationNodeView operationNodeView1 = sessionNode.getOperations().get(0);
         assertThat(operationNodeView1, notNullValue());
         assertThat(operationNodeView1.getOperationType(), equalTo(OperationType.EXPLICIT));
-        assertThat(operationNodeView1.getStatements(), hasSize(equalTo(1)));
-        assertThat(operationNodeView1.getLazyInitialisation(), nullValue());
+        assertThat(operationNodeView1.getStatements(), hasSize(1));
+        assertThat(operationNodeView1.getLazyInitialisations(), empty());
         assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 anyAppMethodCallFrame(BookshopController.class, "getSampleBookUsingEagerLoading"),
                 anyProxyMethodCallFrame(BookshopService.class, "getSampleBookDetailsUsingEagerLoading"),
@@ -155,8 +152,8 @@ class BookshopControllerTest {
         OperationNodeView operationNodeView2 = sessionNode.getOperations().get(1);
         assertThat(operationNodeView2, notNullValue());
         assertThat(operationNodeView2.getOperationType(), equalTo(OperationType.EXPLICIT));
-        assertThat(operationNodeView2.getStatements(), hasSize(equalTo(1)));
-        assertThat(operationNodeView2.getLazyInitialisation(), nullValue());
+        assertThat(operationNodeView2.getStatements(), hasSize(1));
+        assertThat(operationNodeView2.getLazyInitialisations(), empty());
         assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 anyAppMethodCallFrame(BookshopController.class, "getSampleBookUsingEagerLoading"),
                 anyProxyMethodCallFrame(BookshopService.class, "getSampleBookDetailsUsingEagerLoading"),
