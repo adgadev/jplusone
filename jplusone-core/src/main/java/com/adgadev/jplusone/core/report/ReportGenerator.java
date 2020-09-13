@@ -97,7 +97,9 @@ public class ReportGenerator {
         builder.append(NEWLINE + INDENTS.get(3) + "SESSION BOUNDARY");
 
         for (OperationNodeView operation : session.getOperations()) {
-            if (visibleOperationsType.contains(operation.getOperationType())) {
+            if (visibleOperationsType.contains(operation.getOperationType())
+                    && containsAnyVisibleStatements(operation, visibleStatementsType)) {
+
                 builder.append(NEWLINE + INDENTS.get(4) + "OPERATION [" + operation.getOperationType() + "]");
                 List<FrameExtract> operationCallFrames = operation.getCallFramesStack().getCallFrames();
 
@@ -122,6 +124,13 @@ public class ReportGenerator {
         }
 
         return builder.toString();
+    }
+
+    private boolean containsAnyVisibleStatements(OperationNodeView operation, Set<StatementType> visibleStatementsType) {
+        return operation.getStatements().stream()
+                .filter(statementNode -> visibleStatementsType.contains(statementNode.getStatementType()))
+                .findFirst()
+                .isPresent();
     }
 
     private List<FrameExtract> filterApplicationCallFrames(List<FrameExtract> callFrames, boolean proxyCallFramesHidden) {
