@@ -1,8 +1,8 @@
 :jdk-icon: https://img.shields.io/badge/java-9+-4c7e9f.svg
 :jdk-link: https://www.oracle.com/technetwork/java/javase/downloads
 
-:maven-central-icon: https://img.shields.io/maven-central/v/com.adgadev/jplusone
-:maven-central-link: https://search.maven.org/artifact/com.adgadev/jplusone
+:maven-central-icon: https://img.shields.io/maven-central/v/com.adgadev.jplusone/jplusone-modules
+:maven-central-link: https://search.maven.org/artifact/com.adgadev.jplusone/jplusone-modules
 
 :apache-license-icon: https://img.shields.io/badge/License-Apache%202.0-blue.svg
 :apache-license-link: http://www.apache.org/licenses/LICENSE-2.0.txt
