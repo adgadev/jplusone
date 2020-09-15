@@ -17,24 +17,24 @@
 package com.adgadev.jplusone.asserts.impl;
 
 import com.adgadev.jplusone.asserts.api.JPlusOneAssertionContext;
-import com.adgadev.jplusone.core.JPlusOneAutoConfiguration;
+import com.adgadev.jplusone.asserts.impl.rule.Rule;
 import com.adgadev.jplusone.core.registry.RootNodeView;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
-@RequiredArgsConstructor
-@ConditionalOnBean(RootNodeView.class)
-@AutoConfigureAfter(JPlusOneAutoConfiguration.class)
-class JPlusOneAssertAutoConfiguration {
+import static com.adgadev.jplusone.asserts.impl.util.ValidationUtils.ensureThat;
+import static java.util.Objects.nonNull;
 
-    private final RootNodeView rootNode;
+@RequiredArgsConstructor(staticName = "of")
+class Assertion {
 
-    @Bean
-    public JPlusOneAssertionContext jPlusOneAssertionContext() {
-        return new JPlusOneAssertionContextImpl(rootNode);
+    private final Rule rule;
+
+    private final JPlusOneAssertionContext context;
+
+    void check() {
+        Object contextData = context.getContextData();
+        ensureThat(nonNull(contextData), "context data must not be null");
+        ensureThat(contextData instanceof RootNodeView, "Unsupported context data type");
+        rule.check((RootNodeView) contextData);
     }
 }

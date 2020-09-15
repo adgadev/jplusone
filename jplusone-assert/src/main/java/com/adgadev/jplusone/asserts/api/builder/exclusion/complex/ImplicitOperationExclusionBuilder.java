@@ -28,15 +28,7 @@ public interface ImplicitOperationExclusionBuilder {
 
     ImplicitExclusionBuilderStage2 loadingAnyCollection();
 
-    ImplicitExclusionBuilderStage2 flushingData();
-
-
-    interface ImplicitExclusionBuilderStage2 extends ImplicitOperationExclusionBuilder, ExclusionBuilderTimesStage<ImplicitExclusionBuilderStage3> {
+    interface ImplicitExclusionBuilderStage2 extends ImplicitOperationExclusionBuilder, ExclusionBuilderTimesStage<ImplicitOperationExclusionBuilder> {
     }
 
-    interface ImplicitExclusionBuilderStage3 extends ImplicitOperationExclusionBuilder, ExclusionBuilderSqlStatementsStage<ImplicitExclusionBuilderStage4> {
-    }
-
-    interface ImplicitExclusionBuilderStage4 extends ImplicitOperationExclusionBuilder, ExclusionBuilderTimesStage<ImplicitOperationExclusionBuilder> {
-    }
 }

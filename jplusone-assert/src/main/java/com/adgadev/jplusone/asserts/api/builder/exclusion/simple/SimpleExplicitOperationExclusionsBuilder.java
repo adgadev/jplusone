@@ -22,14 +22,10 @@ public interface SimpleExplicitOperationExclusionsBuilder extends ConditionDoneB
 
     ConditionDoneBuilder exceptFetchingData();
 
+    ConditionDoneBuilder exceptFetchingDataViaAnyMethodIn(Class<?> clazz);
+
     ConditionDoneBuilder exceptFetchingDataVia(Class<?> clazz, String methodName);
 
     ConditionDoneBuilder exceptFetchingDataVia(String className, String methodName);
-
-    ConditionDoneBuilder exceptModifyingData();
-
-    ConditionDoneBuilder exceptModifyingDataVia(Class<?> clazz, String methodName);
-
-    ConditionDoneBuilder exceptModifyingDataVia(String className, String methodName);
 
 }

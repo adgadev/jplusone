@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-package com.adgadev.jplusone.asserts.api;
+package com.adgadev.jplusone.asserts.impl.rule;
 
-import com.adgadev.jplusone.asserts.api.builder.SessionSelectorBuilder;
+import com.adgadev.jplusone.core.registry.RootNodeView;
+import com.adgadev.jplusone.core.registry.SessionNodeView;
 
-public interface JPlusOneAssertions {
+import java.util.List;
 
-    SessionSelectorBuilder within();
+
+@FunctionalInterface
+public interface SessionSelector {
+
+    List<? extends SessionNodeView> getMatchingSessions(RootNodeView rootNodeView);
 
 }

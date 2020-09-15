@@ -16,6 +16,7 @@
 
 package com.adgadev.jplusone.asserts.api.builder;
 
+import java.util.Arrays;
 import java.util.function.Function;
 
 public interface AmountMatcher extends Function<Integer, Boolean> {
@@ -44,4 +45,16 @@ public interface AmountMatcher extends Function<Integer, Boolean> {
         return amount -> amount < value;
     }
 
+    static AmountMatcher anyNumber() {
+        return amount -> true;
+    }
+
+    static AmountMatcher range(int startInclusive, int endInclusive) {
+        // TODO: add assertions for arguments in all methods here
+        return amount -> amount >= startInclusive && amount <= endInclusive;
+    }
+
+    static AmountMatcher oneOf(int... values) {
+        return amount -> Arrays.asList(values).contains(amount);
+    }
 }

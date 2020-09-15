@@ -14,19 +14,16 @@
  * limitations under the License.
  */
 
-package com.adgadev.jplusone.asserts.api.builder.exclusion.complex;
+package com.adgadev.jplusone.asserts.impl.util;
 
-public interface ExplicitOperationExclusionBuilder {
+import java.util.Collection;
 
-    ExplicitExclusionBuilderStage2 fetchingData();
+public class CollectionUtils {
 
-    ExplicitExclusionBuilderStage2 fetchingDataViaAnyMethodIn(Class<?> clazz);
-
-    ExplicitExclusionBuilderStage2 fetchingDataVia(Class<?> clazz, String methodName);
-
-    ExplicitExclusionBuilderStage2 fetchingDataVia(String className, String methodName);
-
-    interface ExplicitExclusionBuilderStage2 extends ExplicitOperationExclusionBuilder, ExclusionBuilderTimesStage<ExplicitOperationExclusionBuilder> {
+    public static <T> T getLastElement(Collection<T> collection) {
+        return collection.stream()
+                .skip(Math.max(collection.size() - 1, 0))
+                .findFirst()
+                .orElse(null);
     }
-
 }

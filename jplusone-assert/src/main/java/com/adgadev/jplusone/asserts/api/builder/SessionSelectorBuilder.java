@@ -24,12 +24,6 @@ public interface SessionSelectorBuilder {
 
     ExecutionFilterBuilder lastSession();
 
-    ExecutionFilterBuilder nthSession();
+    ExecutionFilterBuilder nthSession(int n);
 
-    ExecutionFilterBuilder explicitSessionBoundary(SessionBoundary sessionBoundary);
-
-    interface SessionBoundary {
-        // TODO: design
-        // capture start stop / everythin within lambda
-    }
 }

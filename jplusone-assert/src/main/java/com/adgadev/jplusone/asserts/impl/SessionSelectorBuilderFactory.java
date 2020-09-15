@@ -16,19 +16,12 @@
 
 package com.adgadev.jplusone.asserts.impl;
 
-import com.adgadev.jplusone.asserts.api.JPlusOneAssertions;
 import com.adgadev.jplusone.asserts.api.builder.SessionSelectorBuilder;
-import com.adgadev.jplusone.core.registry.RootNodeView;
-import lombok.RequiredArgsConstructor;
+import com.adgadev.jplusone.asserts.impl.rule.Rule;
 
-@RequiredArgsConstructor
-class JPlusOneAssertionsImpl implements JPlusOneAssertions {
+public class SessionSelectorBuilderFactory {
 
-    private final RootNodeView rootNode;
-
-    @Override
-    public SessionSelectorBuilder within() {
-        return null; // TODO: implement
+    public SessionSelectorBuilder create() {
+        return new SessionSelectorBuilderImpl(new Rule());
     }
-
 }

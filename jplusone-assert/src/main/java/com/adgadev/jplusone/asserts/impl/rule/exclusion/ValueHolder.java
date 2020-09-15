@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package com.adgadev.jplusone.asserts.api.builder.exclusion.complex;
+package com.adgadev.jplusone.asserts.impl.rule.exclusion;
 
-public interface ExplicitOperationExclusionBuilder {
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-    ExplicitExclusionBuilderStage2 fetchingData();
+@Getter
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+class ValueHolder<T> {
 
-    ExplicitExclusionBuilderStage2 fetchingDataViaAnyMethodIn(Class<?> clazz);
+    private final T value;
 
-    ExplicitExclusionBuilderStage2 fetchingDataVia(Class<?> clazz, String methodName);
-
-    ExplicitExclusionBuilderStage2 fetchingDataVia(String className, String methodName);
-
-    interface ExplicitExclusionBuilderStage2 extends ExplicitOperationExclusionBuilder, ExclusionBuilderTimesStage<ExplicitOperationExclusionBuilder> {
+    static <T> ValueHolder<T> of(T value) {
+        return new ValueHolder<>(value);
     }
-
 }

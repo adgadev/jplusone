@@ -17,24 +17,24 @@
 package com.adgadev.jplusone.asserts.impl;
 
 import com.adgadev.jplusone.asserts.api.JPlusOneAssertionContext;
-import com.adgadev.jplusone.core.JPlusOneAutoConfiguration;
-import com.adgadev.jplusone.core.registry.RootNodeView;
+import com.adgadev.jplusone.asserts.api.builder.ConditionBuilder;
+import com.adgadev.jplusone.asserts.api.builder.ConditionDoneBuilder;
+import com.adgadev.jplusone.asserts.impl.rule.Rule;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
 @RequiredArgsConstructor
-@ConditionalOnBean(RootNodeView.class)
-@AutoConfigureAfter(JPlusOneAutoConfiguration.class)
-class JPlusOneAssertAutoConfiguration {
+class ConditionDoneBuilderImpl implements ConditionDoneBuilder {
 
-    private final RootNodeView rootNode;
+    private final Rule rule;
 
-    @Bean
-    public JPlusOneAssertionContext jPlusOneAssertionContext() {
-        return new JPlusOneAssertionContextImpl(rootNode);
+    @Override
+    public ConditionBuilder andShouldBe() {
+        return new ConditionBuilderImpl(rule, rule.newCondition());
+    }
+
+    @Override
+    public void check(@NonNull JPlusOneAssertionContext context) {
+        Assertion.of(rule, context).check();
     }
 }

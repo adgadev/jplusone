@@ -14,19 +14,9 @@
  * limitations under the License.
  */
 
-package com.adgadev.jplusone.asserts.api.builder.exclusion.complex;
+package com.adgadev.jplusone.asserts.api;
 
-public interface ExplicitOperationExclusionBuilder {
+public interface JPlusOneAssertionContext {
 
-    ExplicitExclusionBuilderStage2 fetchingData();
-
-    ExplicitExclusionBuilderStage2 fetchingDataViaAnyMethodIn(Class<?> clazz);
-
-    ExplicitExclusionBuilderStage2 fetchingDataVia(Class<?> clazz, String methodName);
-
-    ExplicitExclusionBuilderStage2 fetchingDataVia(String className, String methodName);
-
-    interface ExplicitExclusionBuilderStage2 extends ExplicitOperationExclusionBuilder, ExclusionBuilderTimesStage<ExplicitOperationExclusionBuilder> {
-    }
-
+    Object getContextData();
 }

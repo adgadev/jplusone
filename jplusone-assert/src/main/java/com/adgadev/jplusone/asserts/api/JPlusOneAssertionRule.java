@@ -16,8 +16,14 @@
 
 package com.adgadev.jplusone.asserts.api;
 
+import com.adgadev.jplusone.asserts.api.builder.SessionSelectorBuilder;
+import com.adgadev.jplusone.asserts.impl.SessionSelectorBuilderFactory;
+
 public interface JPlusOneAssertionRule {
 
-    void check();
+    static SessionSelectorBuilder within() {
+        return new SessionSelectorBuilderFactory().create();
+    }
 
+    void check(JPlusOneAssertionContext context);
 }

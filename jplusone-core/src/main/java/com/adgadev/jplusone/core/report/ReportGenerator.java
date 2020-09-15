@@ -81,7 +81,7 @@ public class ReportGenerator {
         }
     }
 
-    private String sessionToString(SessionNodeView session, Set<OperationType> visibleOperationsType, Set<StatementType> visibleStatementsType) {
+    public String sessionToString(SessionNodeView session, Set<OperationType> visibleOperationsType, Set<StatementType> visibleStatementsType) {
         StringBuilder builder = new StringBuilder();
         builder.append(NEWLINE + INDENTS.get(1) + "ROOT");
 

@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package com.adgadev.jplusone.asserts.api.builder.exclusion.complex;
+package com.adgadev.jplusone.asserts.impl;
 
-public interface ExplicitOperationExclusionBuilder {
+import com.adgadev.jplusone.asserts.api.JPlusOneAssertionContext;
+import com.adgadev.jplusone.core.registry.RootNodeView;
+import lombok.RequiredArgsConstructor;
 
-    ExplicitExclusionBuilderStage2 fetchingData();
+@RequiredArgsConstructor
+class JPlusOneAssertionContextImpl implements JPlusOneAssertionContext {
 
-    ExplicitExclusionBuilderStage2 fetchingDataViaAnyMethodIn(Class<?> clazz);
+    private final RootNodeView rootNode;
 
-    ExplicitExclusionBuilderStage2 fetchingDataVia(Class<?> clazz, String methodName);
-
-    ExplicitExclusionBuilderStage2 fetchingDataVia(String className, String methodName);
-
-    interface ExplicitExclusionBuilderStage2 extends ExplicitOperationExclusionBuilder, ExclusionBuilderTimesStage<ExplicitOperationExclusionBuilder> {
+    @Override
+    public RootNodeView getContextData() {
+        return rootNode;
     }
-
 }

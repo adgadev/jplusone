@@ -28,6 +28,4 @@ public interface SimpleImplicitOperationExclusionsBuilder extends ConditionDoneB
 
     ConditionDoneBuilder exceptLoadingAnyCollection();
 
-    ConditionDoneBuilder exceptFlushingData();
-
 }

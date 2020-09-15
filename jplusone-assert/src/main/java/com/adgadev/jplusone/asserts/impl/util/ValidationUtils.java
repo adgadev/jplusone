@@ -14,19 +14,13 @@
  * limitations under the License.
  */
 
-package com.adgadev.jplusone.asserts.api.builder.exclusion.complex;
+package com.adgadev.jplusone.asserts.impl.util;
 
-public interface ExplicitOperationExclusionBuilder {
+public class ValidationUtils {
 
-    ExplicitExclusionBuilderStage2 fetchingData();
-
-    ExplicitExclusionBuilderStage2 fetchingDataViaAnyMethodIn(Class<?> clazz);
-
-    ExplicitExclusionBuilderStage2 fetchingDataVia(Class<?> clazz, String methodName);
-
-    ExplicitExclusionBuilderStage2 fetchingDataVia(String className, String methodName);
-
-    interface ExplicitExclusionBuilderStage2 extends ExplicitOperationExclusionBuilder, ExclusionBuilderTimesStage<ExplicitOperationExclusionBuilder> {
+    public static void ensureThat(boolean condition, String message) {
+        if (!condition) {
+            throw new RuntimeException(message);
+        }
     }
-
 }
