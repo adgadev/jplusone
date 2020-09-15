@@ -34,13 +34,13 @@ class BookshopServiceTest {
     @Test
     void shouldFetchUsingLazyLoading() {
         BookDto bookDto = bookshopService.getSampleBookDetailsUsingLazyLoading();
-        assertEquals(new BookDto("Mario Puzo", "Godfather"), bookDto);
+        assertEquals(new BookDto("Mario Puzo", "Godfather", 1), bookDto);
     }
 
     @Test
     void shouldFetchUsingEagerLoading() {
         BookDto bookDto = bookshopService.getSampleBookDetailsUsingEagerLoading();
-        assertEquals(new BookDto("Mario Puzo", "Godfather"), bookDto);
+        assertEquals(new BookDto("Mario Puzo", "Godfather", 1), bookDto);
     }
 
     @Test

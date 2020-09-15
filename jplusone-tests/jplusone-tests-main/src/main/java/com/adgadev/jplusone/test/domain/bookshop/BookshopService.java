@@ -33,15 +33,17 @@ class BookshopService {
     public BookDto getSampleBookDetailsUsingLazyLoading() {
         Book book = bookRepository.findById(1L).get();
         String authorName = book.getAuthor().getName();
+        int amountOfBooks = book.getAuthor().countWrittenBooks();
 
-        return new BookDto(authorName, book.getTitle());
+        return new BookDto(authorName, book.getTitle(), amountOfBooks);
     }
 
     public BookDto getSampleBookDetailsUsingEagerLoading() {
         Book book = bookRepository.findByIdAndFetchAuthor(1L).get();
         String authorName = book.getAuthor().getName();
+        int amountOfBooks = book.getAuthor().countWrittenBooks();
 
-        return new BookDto(authorName, book.getTitle());
+        return new BookDto(authorName, book.getTitle(), amountOfBooks);
     }
 
     public void runActionOnSampleAuthorProxy() {

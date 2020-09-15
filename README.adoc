@@ -7,7 +7,7 @@
 :apache-license-icon: https://img.shields.io/badge/License-Apache%202.0-blue.svg
 :apache-license-link: http://www.apache.org/licenses/LICENSE-2.0.txt
 
-:release_version: 0.7.0
+:release_version: 0.9.0
 
 = JPlusOne
 
@@ -87,9 +87,9 @@ i.e. as a result of traversing domain entities graph which was not fully loaded 
 
 === Sample report:
 ----
-2020-04-12 14:25:47.139 DEBUG 14026 --- [           main] c.g.j.core.report.ReportGenerator        :
+2020-09-14 19:41:45.138 DEBUG 14913 --- [           main] c.a.j.core.report.ReportGenerator        :
     ROOT
-        com.adgadev.jplusone.test.domain.bookshop.BookshopControllerTest.shouldGetBookDetailsLazily(BookshopControllerTest.java:44)
+        com.adgadev.jplusone.test.domain.bookshop.BookshopControllerTest.shouldGetBookDetailsLazily(BookshopControllerTest.java:65)
         com.adgadev.jplusone.test.domain.bookshop.BookshopController.getSampleBookUsingLazyLoading(BookshopController.java:31)
         com.adgadev.jplusone.test.domain.bookshop.BookshopService.getSampleBookDetailsUsingLazyLoading [PROXY]
             SESSION BOUNDARY
@@ -98,19 +98,28 @@ i.e. as a result of traversing domain entities graph which was not fully loaded 
                     com.adgadev.jplusone.test.domain.bookshop.BookRepository.findById [PROXY]
                         STATEMENT [READ]
                             select [...] from
-                                 book book0_
+                                book book0_
                             where
-                                 book0_.id = 1
+                                book0_.id=1
                 OPERATION [IMPLICIT]
                     com.adgadev.jplusone.test.domain.bookshop.BookshopService.getSampleBookDetailsUsingLazyLoading(BookshopService.java:35)
                     com.adgadev.jplusone.test.domain.bookshop.Author.getName [PROXY]
                     com.adgadev.jplusone.test.domain.bookshop.Author [FETCHING ENTITY]
                         STATEMENT [READ]
                             select [...] from
-                                 author author0_
-                                 left outer join genre genre1_ on author0_.genre_id = genre1_.id
+                                author author0_
+                                left outer join genre genre1_ on author0_.genre_id=genre1_.id
                             where
-                                 author0_.id = 1
+                                author0_.id=1
+                OPERATION [IMPLICIT]
+                    com.adgadev.jplusone.test.domain.bookshop.BookshopService.getSampleBookDetailsUsingLazyLoading(BookshopService.java:36)
+                    com.adgadev.jplusone.test.domain.bookshop.Author.countWrittenBooks(Author.java:53)
+                    com.adgadev.jplusone.test.domain.bookshop.Author.books [FETCHING COLLECTION]
+                        STATEMENT [READ]
+                            select [...] from
+                                book books0_
+                            where
+                                books0_.author_id=1
 ----
 
 == Configuration
@@ -123,7 +132,7 @@ When no configuration is provided JPlusOne assumes following settings:
 * Operations / SQL statements triggered by Flyway are ignored
 
 ==== Custom configuration
-You can overwrite default configuration by adding some of the following properties to your `application.yml`:
+You can overwrite default configuration by adding some of the following properties to your `application.yml` (optional):
 
 [source,yaml]
 ----
@@ -135,7 +144,7 @@ jplusone:
   report:
     enabled: true
     output: LOGGER
-    proxy-call-frames-hidden: false
+    proxy-call-frames-hidden: true
     operation-filtering-mode: ALL_OPERATIONS
     statement-filtering-mode: ALL_STATEMENTS
 ----

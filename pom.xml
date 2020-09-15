@@ -29,18 +29,12 @@
     <url>https://github.com/adgadev/jplusone</url>
 
     <properties>
-        <revision>0.8.1-SNAPSHOT</revision>
+        <revision>0.9.0-SNAPSHOT</revision>
         <spring-boot.version>2.2.6.RELEASE</spring-boot.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <deployAtEnd>true</deployAtEnd>
     </properties>
-
-    <modules>
-        <module>jplusone-core</module>
-        <module>jplusone-assert</module>
-        <module>jplusone-tests</module>
-    </modules>
 
     <licenses>
         <license>
@@ -132,6 +126,20 @@
 
     <profiles>
         <profile>
+            <id>all-modules</id>
+            <activation>
+                <property>
+                    <name>!deployable-modules-only</name>
+                </property>
+            </activation>
+            <modules>
+                <module>jplusone-core</module>
+                <module>jplusone-assert</module>
+                <module>jplusone-tests</module>
+            </modules>
+        </profile>
+
+        <profile>
             <id>release</id>
             <build>
                 <plugins>
@@ -185,6 +193,14 @@
 
         <profile>
             <id>maven-central</id>
+            <properties>
+                <maven.deploy.skip>true</maven.deploy.skip>
+            </properties>
+            <!-- there is a bug with nexus-staging-maven-plugin & deployAtTheEnd https://issues.sonatype.org/browse/NEXUS-9138 hence classic deploy is used-->
+            <modules>
+                <!-- only deployable modules listed -->
+                <module>jplusone-core</module>
+            </modules>
             <build>
                 <plugins>
                     <plugin>
@@ -193,7 +209,7 @@
                         <version>1.6.8</version>
                         <extensions>true</extensions>
                         <configuration>
-                            <serverId>ossrh</serverId>
+                            <serverId>sonatype-nexus-staging</serverId>
                             <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                             <autoReleaseAfterClose>true</autoReleaseAfterClose>
                         </configuration>

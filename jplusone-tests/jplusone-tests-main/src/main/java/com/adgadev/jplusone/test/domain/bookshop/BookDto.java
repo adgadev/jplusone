@@ -25,4 +25,6 @@ public class BookDto {
 
     private String title;
 
+    private int amountOfBooksWrittenByAuthor;
+
 }

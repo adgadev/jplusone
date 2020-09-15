@@ -24,6 +24,9 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import java.util.HashSet;
+import java.util.Set;
 
 @Slf4j
 @Getter
@@ -39,8 +42,15 @@ class Author {
     @JoinColumn(name = "genre_id")
     private Genre genre;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "author")
+    private Set<Book> books = new HashSet<>();
+
     public void runAction() {
         log.debug("Some action");
+    }
+
+    int countWrittenBooks() {
+        return books.size();
     }
 
 }

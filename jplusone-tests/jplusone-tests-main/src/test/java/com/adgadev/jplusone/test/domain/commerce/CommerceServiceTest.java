@@ -16,7 +16,6 @@
 
 package com.adgadev.jplusone.test.domain.commerce;
 
-import com.adgadev.jplusone.core.registry.LazyInitialisation.LazyInitialisationType;
 import com.adgadev.jplusone.core.registry.OperationNodeView;
 import com.adgadev.jplusone.core.registry.OperationType;
 import com.adgadev.jplusone.core.registry.RootNodeView;

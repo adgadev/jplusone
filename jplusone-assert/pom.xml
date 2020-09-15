@@ -32,6 +32,7 @@
 
     <properties>
         <maven.compiler.release>9</maven.compiler.release>
+        <maven.deploy.skip>true</maven.deploy.skip> <!-- TODO: remove line once this artifact is ready -->
     </properties>
 
     <dependencyManagement>

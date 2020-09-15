@@ -6,6 +6,6 @@ jplusone:
   report:
     enabled: true
     output: LOGGER
-    proxy-call-frames-hidden: false
+    proxy-call-frames-hidden: true
     operation-filtering-mode: ALL_OPERATIONS
     statement-filtering-mode: ALL_STATEMENTS

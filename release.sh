@@ -24,8 +24,10 @@ fi
 
 echo ">>>>>> Releasing version $RELEASE_VERSION <<<<<<"
 mvn3 versions:set-property -Dproperty=revision -DnewVersion=$RELEASE_VERSION -DgenerateBackupPoms=false
-mvn3 clean deploy -Prelease -Pgrexdev-ssh
-#mvn3 clean deploy -Prelease -Pmaven-central -s ~/.m2/settings-central.xml
+# active -Pmaven-central profile cases than only deployable modules are build, hence mvn clean install before that
+mvn3 clean install
+mvn3 clean deploy -Ddeployable-modules-only -Prelease -Pmaven-central -s ~/.m2/settings-central.xml
+#mvn3 clean deploy -Prelease -Pgrexdev-ssh
 
 git add pom.xml
 git commit -m "Release $RELEASE_VERSION"
