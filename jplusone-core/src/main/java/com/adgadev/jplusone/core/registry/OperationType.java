@@ -18,5 +18,6 @@ package com.adgadev.jplusone.core.registry;
 
 public enum OperationType {
     IMPLICIT,
-    EXPLICIT
+    EXPLICIT,
+    COMMIT
 }

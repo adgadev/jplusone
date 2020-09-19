@@ -99,7 +99,7 @@ class JpaCascadeCrudServiceTest {
 
         OperationNodeView operationNodeView3 = sessionNode.getOperations().get(2);
         assertThat(operationNodeView3, notNullValue());
-        assertThat(operationNodeView3.getOperationType(), equalTo(OperationType.EXPLICIT)); // TODO: why it's explicit?
+        assertThat(operationNodeView3.getOperationType(), equalTo(OperationType.COMMIT));
         assertThat(operationNodeView3.getStatements(), hasSize(equalTo(1)));
         assertThat(operationNodeView3.getLazyInitialisations(), empty());
         MatcherAssert.assertThat(operationNodeView3.getCallFramesStack(), JPlusOneMatchers.allFrameCallMatcher(FrameExtractSpecification.notAppMethodCallFrame()));
@@ -175,7 +175,7 @@ class JpaCascadeCrudServiceTest {
 
         OperationNodeView operationNodeView3 = sessionNode.getOperations().get(2);
         assertThat(operationNodeView3, notNullValue());
-        assertThat(operationNodeView3.getOperationType(), equalTo(OperationType.EXPLICIT)); // TODO: why it's explicit?
+        assertThat(operationNodeView3.getOperationType(), equalTo(OperationType.COMMIT));
         assertThat(operationNodeView3.getStatements(), hasSize(equalTo(1)));
         assertThat(operationNodeView3.getLazyInitialisations(), empty());
         MatcherAssert.assertThat(operationNodeView3.getCallFramesStack(), JPlusOneMatchers.allFrameCallMatcher(FrameExtractSpecification.notAppMethodCallFrame()));
@@ -252,7 +252,7 @@ class JpaCascadeCrudServiceTest {
 
         OperationNodeView operationNodeView3 = sessionNode.getOperations().get(2);
         assertThat(operationNodeView3, notNullValue());
-        assertThat(operationNodeView3.getOperationType(), equalTo(OperationType.EXPLICIT)); // TODO: why it's explicit?
+        assertThat(operationNodeView3.getOperationType(), equalTo(OperationType.COMMIT));
         assertThat(operationNodeView3.getStatements(), hasSize(equalTo(1)));
         assertThat(operationNodeView3.getLazyInitialisations(), empty());
         MatcherAssert.assertThat(operationNodeView3.getCallFramesStack(), JPlusOneMatchers.allFrameCallMatcher(FrameExtractSpecification.notAppMethodCallFrame()));

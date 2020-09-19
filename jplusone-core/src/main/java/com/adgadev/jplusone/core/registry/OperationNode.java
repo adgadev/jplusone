@@ -24,6 +24,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.Entity;
+import javax.persistence.EntityTransaction;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,11 +45,12 @@ public class OperationNode implements OperationNodeView {
 
     public OperationNode(FrameStack callFramesStack) {
         LazyInitialisation lazyInitialisation = resolveLazyInitialisationDetails(callFramesStack);
+        boolean transactionCommitOperation = isTransactionCommitOperation(callFramesStack);
 
         this.statements = new ArrayList<>();
         this.lazyInitialisations = new ArrayList<>();
         this.callFramesStack = callFramesStack;
-        this.operationType = nonNull(lazyInitialisation) ? OperationType.IMPLICIT : OperationType.EXPLICIT;
+        this.operationType = resolveOperationType(lazyInitialisation, transactionCommitOperation);
 
         if (nonNull(lazyInitialisation)) {
             this.lazyInitialisations.add(lazyInitialisation);
@@ -63,7 +65,10 @@ public class OperationNode implements OperationNodeView {
     void addLazyInitialisation(LazyInitialisation lazyInitialisation) {
         if (this.lazyInitialisations.isEmpty()) {
             this.lazyInitialisations.add(lazyInitialisation);
-            this.operationType = OperationType.IMPLICIT;
+
+            if (operationType == OperationType.EXPLICIT) {
+                this.operationType = OperationType.IMPLICIT;
+            }
 
         } if (!lazyInitialisations.contains(lazyInitialisation)) {
             LazyInitialisation lazyInitialisationToRemove = LazyInitialisation.entityLazyInitialisation(lazyInitialisation.getEntityClassName());
@@ -85,6 +90,12 @@ public class OperationNode implements OperationNodeView {
         return this.callFramesStack.equals(callFramesStack);
     }
 
+    private boolean isTransactionCommitOperation(FrameStack callFramesStack) {
+        // TODO: proxy EntityTransaction instead of walking whole frame stack toimprove performance
+        return callFramesStack.findLastMatchingFrame(frameExtract -> frameExtract.matchesMethodInvocation(EntityTransaction.class, "commit"))
+                .isPresent();
+    }
+
     private LazyInitialisation resolveLazyInitialisationDetails(FrameStack callFramesStack) {
         return callFramesStack.findLastMatchingFrame(FrameExtract::isNotThirdPartyClass)
                 .map(frameExtract -> frameExtract.getClazz())
@@ -99,5 +110,15 @@ public class OperationNode implements OperationNodeView {
                 .filter(initialisation -> initialisation.getType() == LazyInitialisationType.ENTITY)
                 .findFirst()
                 .orElse(null);
+    }
+
+    private OperationType resolveOperationType(LazyInitialisation lazyInitialisation, boolean transactionCommitOperation) {
+        if (transactionCommitOperation) {
+            return OperationType.COMMIT;
+        } else if (lazyInitialisation != null) {
+            return OperationType.IMPLICIT;
+        } else {
+            return OperationType.EXPLICIT;
+        }
     }
 }

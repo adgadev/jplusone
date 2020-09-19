@@ -81,6 +81,7 @@ JPlusOne uses following terms to categorize operations:
 
 * *Explicit operation* - explicit invocation of some API utilizing Java Persistence API (JPA) which in result triggers some kind of SQL statement,
 i.e. SpringDataJPA repository or EntityManager or QueryDsl
+* *Commit operation* - JPA transaction commit resulting in session flush
 * *Implicit operation* - All kind of situations where SQL statements were triggered without some explicit call on JPA based API,
 i.e. as a result of traversing domain entities graph which was not fully loaded or invoking method on proxy entity, or by flushing dirty entity / collection
 
@@ -173,7 +174,7 @@ Default value: `false`
 Default value: `true`
 
 |`jplusone.report.operation-filtering-mode`
-|Defines what kind of operations should be visible in the report. Possible values: `IMPLICIT_OPERATIONS_ONLY`, `EXPLICIT_OPERATIONS_ONLY`, `ALL_OPERATIONS`
+|Defines what kind of operations should be visible in the report. Possible values: `IMPLICIT_OPERATIONS_ONLY`, `EXPLICIT_OPERATIONS_ONLY`, `COMMIT_OPERATIONS_ONLY`, `ALL_OPERATIONS`
 
 Default value: `IMPLICIT_OPERATIONS_ONLY`
 

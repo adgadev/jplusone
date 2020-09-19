@@ -90,7 +90,7 @@ class JpaRepositoryCrudServiceTest {
 
         OperationNodeView operationNodeView2 = sessionNode.getOperations().get(1);
         assertThat(operationNodeView2, notNullValue());
-        assertThat(operationNodeView2.getOperationType(), equalTo(OperationType.EXPLICIT)); // TODO: why it's explicit?
+        assertThat(operationNodeView2.getOperationType(), equalTo(OperationType.COMMIT));
         assertThat(operationNodeView2.getStatements(), hasSize(equalTo(1)));
         assertThat(operationNodeView2.getLazyInitialisations(), empty());
         MatcherAssert.assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.allFrameCallMatcher(FrameExtractSpecification.notAppMethodCallFrame()));
@@ -147,7 +147,7 @@ class JpaRepositoryCrudServiceTest {
 
         OperationNodeView operationNodeView2 = sessionNode.getOperations().get(1);
         assertThat(operationNodeView2, notNullValue());
-        assertThat(operationNodeView2.getOperationType(), equalTo(OperationType.EXPLICIT)); // TODO: why it's explicit?
+        assertThat(operationNodeView2.getOperationType(), equalTo(OperationType.COMMIT));
         assertThat(operationNodeView2.getStatements(), hasSize(equalTo(1)));
         assertThat(operationNodeView2.getLazyInitialisations(), empty());
         MatcherAssert.assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.allFrameCallMatcher(FrameExtractSpecification.notAppMethodCallFrame()));
@@ -193,7 +193,7 @@ class JpaRepositoryCrudServiceTest {
 
         OperationNodeView operationNodeView1 = sessionNode.getOperations().get(0);
         assertThat(operationNodeView1, notNullValue());
-        assertThat(operationNodeView1.getOperationType(), equalTo(OperationType.EXPLICIT)); // TODO: why it's explicit?
+        assertThat(operationNodeView1.getOperationType(), equalTo(OperationType.EXPLICIT));
         assertThat(operationNodeView1.getStatements(), hasSize(equalTo(1)));
         assertThat(operationNodeView1.getLazyInitialisations(), empty());
         MatcherAssert.assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
@@ -204,7 +204,7 @@ class JpaRepositoryCrudServiceTest {
 
         OperationNodeView operationNodeView2 = sessionNode.getOperations().get(1);
         assertThat(operationNodeView2, notNullValue());
-        assertThat(operationNodeView2.getOperationType(), equalTo(OperationType.EXPLICIT)); // TODO: why it's explicit?
+        assertThat(operationNodeView2.getOperationType(), equalTo(OperationType.COMMIT));
         assertThat(operationNodeView2.getStatements(), hasSize(equalTo(1)));
         assertThat(operationNodeView2.getLazyInitialisations(), empty());
         MatcherAssert.assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.allFrameCallMatcher(FrameExtractSpecification.notAppMethodCallFrame()));
@@ -248,7 +248,7 @@ class JpaRepositoryCrudServiceTest {
 
         OperationNodeView operationNodeView1 = sessionNode.getOperations().get(0);
         assertThat(operationNodeView1, notNullValue());
-        assertThat(operationNodeView1.getOperationType(), equalTo(OperationType.EXPLICIT)); // TODO: why it's explicit?
+        assertThat(operationNodeView1.getOperationType(), equalTo(OperationType.EXPLICIT));
         assertThat(operationNodeView1.getStatements(), hasSize(equalTo(1)));
         assertThat(operationNodeView1.getLazyInitialisations(), empty());
         MatcherAssert.assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
@@ -270,7 +270,7 @@ class JpaRepositoryCrudServiceTest {
 
         OperationNodeView operationNodeView3 = sessionNode.getOperations().get(2);
         assertThat(operationNodeView3, notNullValue());
-        assertThat(operationNodeView3.getOperationType(), equalTo(OperationType.EXPLICIT)); // TODO: why it's explicit?
+        assertThat(operationNodeView3.getOperationType(), equalTo(OperationType.COMMIT));
         assertThat(operationNodeView3.getStatements(), hasSize(equalTo(1)));
         assertThat(operationNodeView3.getLazyInitialisations(), empty());
         MatcherAssert.assertThat(operationNodeView3.getCallFramesStack(), JPlusOneMatchers.allFrameCallMatcher(FrameExtractSpecification.notAppMethodCallFrame()));
@@ -320,7 +320,7 @@ class JpaRepositoryCrudServiceTest {
 
         OperationNodeView operationNodeView1 = sessionNode.getOperations().get(0);
         assertThat(operationNodeView1, notNullValue());
-        assertThat(operationNodeView1.getOperationType(), equalTo(OperationType.EXPLICIT)); // TODO: why it's explicit?
+        assertThat(operationNodeView1.getOperationType(), equalTo(OperationType.EXPLICIT));
         assertThat(operationNodeView1.getStatements(), hasSize(equalTo(1)));
         assertThat(operationNodeView1.getLazyInitialisations(), empty());
         MatcherAssert.assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
@@ -344,7 +344,7 @@ class JpaRepositoryCrudServiceTest {
 
         OperationNodeView operationNodeView3 = sessionNode.getOperations().get(2);
         assertThat(operationNodeView3, notNullValue());
-        assertThat(operationNodeView3.getOperationType(), equalTo(OperationType.EXPLICIT)); // TODO: why it's explicit?
+        assertThat(operationNodeView3.getOperationType(), equalTo(OperationType.COMMIT));
         assertThat(operationNodeView3.getStatements(), hasSize(equalTo(1)));
         assertThat(operationNodeView3.getLazyInitialisations(), empty());
         MatcherAssert.assertThat(operationNodeView3.getCallFramesStack(), JPlusOneMatchers.allFrameCallMatcher(FrameExtractSpecification.notAppMethodCallFrame()));

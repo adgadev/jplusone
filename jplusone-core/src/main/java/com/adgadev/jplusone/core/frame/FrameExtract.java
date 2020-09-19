@@ -52,6 +52,10 @@ public class FrameExtract {
         return type == FrameClassKind.APPLICATION_CLASS;
     }
 
+    public boolean matchesMethodInvocation(Class<?> clazz, String methodName) {
+        return clazz.isAssignableFrom(this.clazz) && this.methodName.equals(methodName);
+    }
+
     @Override
     public String toString() {
         return fileName != null

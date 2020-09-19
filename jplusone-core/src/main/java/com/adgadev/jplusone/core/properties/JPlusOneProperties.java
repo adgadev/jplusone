@@ -55,7 +55,8 @@ public class JPlusOneProperties {
         public enum OperationFilteringMode {
             IMPLICIT_OPERATIONS_ONLY(EnumSet.of(OperationType.IMPLICIT)),
             EXPLICIT_OPERATIONS_ONLY(EnumSet.of(OperationType.EXPLICIT)),
-            ALL_OPERATIONS(EnumSet.of(OperationType.IMPLICIT, OperationType.EXPLICIT));
+            COMMIT_OPERATIONS_ONLY(EnumSet.of(OperationType.COMMIT)),
+            ALL_OPERATIONS(EnumSet.of(OperationType.IMPLICIT, OperationType.EXPLICIT, OperationType.COMMIT));
 
             private final Set<OperationType> operationTypes;
         }
