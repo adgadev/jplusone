@@ -22,7 +22,8 @@
 
     <artifactId>jplusone-assert</artifactId>
     <name>JPlusOne Assert</name>
-    <description>JPlusOne Assert</description>
+    <description>Tool for asserting "N+1 SELECT problem" occurrences in JPA based Spring Boot Java applications</description>
+    <url>https://github.com/adgadev/jplusone</url>
 
     <parent>
         <artifactId>jplusone-modules</artifactId>

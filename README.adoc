@@ -19,26 +19,15 @@ image:{maven-central-icon}[Maven Central Repository, link={maven-central-link}]
 *JPlusOne* is a Java library designed primarily to detect and report situations where N+1 SELECT problem occurs, i.e. initialization of lazy collection of entities
 or initialization of entity proxy, resulting in additional SQL statement(s).
 
-== Features
-The tool is not limited only to detecting lazy loading / N+1 problems. Apart from that it:
+== Prerequisites
+JPlusOne can be applied only to projects which meets following requirements:
 
-* Shows general activity at JPA and SQL level related with some business scenarios, not necessarily related with lazy loading.
-* Shows tree of application method calls and SQL statements (discarding all non-relevant data) associated with some business operation (i.e. REST controller endpoint call) in a handy way.
-* Allows to easily correlate JPA operations with resulting SQL statements.
-* Shows SQL statements with their parameters in simplified and pretty-printed form.
-* Uses Spring Boot Auto Configuration to seamlessly integrate with your application.
-* Provides Assertion API which can be used to write tests checking various aspects of JPA operations / SQL statements, i.e.
-if lazy loading has not started occurring in given test scenario or amount of SELECT queries is not larger than some amount  [*This feature is still in development*]
-
-More about N+1 SELECT problem you can find in link:https://stackoverflow.com/questions/97197/what-is-the-n1-selects-problem-in-orm-object-relational-mapping/39696775[this] thread at StackOverflow.
-
-== Dependencies
 * Java 9 or later
 * Spring Boot 2.x
 * JPA 2.x (Hibernate as implementation provider required)
 * Slf4j
 
-== Installation
+== Quickstart
 Add the following dependency to your project:
 [source,xml,subs="verbatim,attributes"]
 ----
@@ -58,35 +47,10 @@ logging.level:
     com.adgadev.jplusone: DEBUG
 ----
 
-== Usage
-JPlusOne tool is able to generate report showing all kind of JPA operations / SQL statements, but in order to generate such report you need
-to have Spring Boot based integration tests of your application (`@SpringBootTest`), which covers scenarios you are interested in
-(i.e. integration test of some endpoint of your application).
+Now run any integration test in your project which directly on indirectly utilizes JPA persistence,
+(i.e. by calling a business service which loads some JPA entity via EntityManager).
+For each such test a report of JPA operations / SQL statements, like the one below, will be generated and written to logs
 
-It's possible to use JPlusOne not in test but in production code, but this approach may add some additional overhead and may not be stable in some cases.
-
-=== How it works
-In order to collect data JPlusOne intercepts all operations invoked on EntityManager / EntityManagerFactory and all SQL statements invoked on DataSource and, by wrapping those beans in proxies
-
-One report is generated per each JPA EntityManager instance (Hibernate session). A report is written to log just after EntityManager is closed.
-It's worth to mention that behaviour determining when EntityManager is closed (session is closed) can be altered by:
-
-* using `@Transactional` on integration test class or test case method - it extends scope of SUT's session / transaction so that it span across testcase method, session is effectively closed when test method finishes
-* enabling property `spring.jpa.open-in-view` - session closes not when a method of a service annotated with `@Transactional` is finished, but when controller which invoked such service method is finished
-Usually Spring uses separate session per transaction strategy, but
-
-
-=== Types of operations
-JPlusOne uses following terms to categorize operations:
-
-* *Explicit operation* - explicit invocation of some API utilizing Java Persistence API (JPA) which in result triggers some kind of SQL statement,
-i.e. SpringDataJPA repository or EntityManager or QueryDsl
-* *Commit operation* - JPA transaction commit resulting in session flush
-* *Implicit operation* - All kind of situations where SQL statements were triggered without some explicit call on JPA based API,
-i.e. as a result of traversing domain entities graph which was not fully loaded or invoking method on proxy entity, or by flushing dirty entity / collection
-
-
-=== Sample report:
 ----
 2020-09-14 19:41:45.138 DEBUG 14913 --- [           main] c.a.j.core.report.ReportGenerator        :
     ROOT
@@ -122,6 +86,50 @@ i.e. as a result of traversing domain entities graph which was not fully loaded 
                             where
                                 books0_.author_id=1
 ----
+
+Sample project showing `jplusone-core` in action is available https://github.com/adgadev/jplusone/tree/master/jplusone-tests/jplusone-tests-main[here]. It's a simple spring boot project with some JPA domain modeled. Just run any test there to see a report.
+
+== Features
+The tool is not limited only to detecting lazy loading / N+1 problems. Apart from that it:
+
+* Shows general activity at JPA and SQL level related with some business scenarios, not necessarily related with lazy loading.
+* Shows tree of application method calls and SQL statements (discarding all non-relevant data) associated with some business operation (i.e. REST controller endpoint call) in a handy way.
+* Allows to easily correlate JPA operations with resulting SQL statements.
+* Shows SQL statements with their parameters in simplified and pretty-printed form.
+* Uses Spring Boot Auto Configuration to seamlessly integrate with your application.
+* Provides Assertion API which can be used to write tests checking various aspects of JPA operations / SQL statements, i.e.
+if lazy loading has not started occurring in given test scenario or amount of SELECT queries is not larger than some amount  [*This feature is still in development*]
+
+More about N+1 SELECT problem you can find in link:https://stackoverflow.com/questions/97197/what-is-the-n1-selects-problem-in-orm-object-relational-mapping/39696775[this] thread at StackOverflow.
+
+
+== Usage
+JPlusOne tool is able to generate report showing all kind of JPA operations / SQL statements, but in order to generate such report you need
+to have Spring Boot based integration tests of your application (`@SpringBootTest`), which covers scenarios you are interested in
+(i.e. integration test of some endpoint of your application).
+
+It's possible to use JPlusOne not in test but in production code, but this approach may add some additional overhead and may not be stable in some cases.
+
+=== How it works
+In order to collect data JPlusOne intercepts all operations invoked on EntityManager / EntityManagerFactory and all SQL statements invoked on DataSource and, by wrapping those beans in proxies
+
+One report is generated per each JPA EntityManager instance (Hibernate session). A report is written to log just after EntityManager is closed.
+It's worth to mention that behaviour determining when EntityManager is closed (session is closed) can be altered by:
+
+* using `@Transactional` on integration test class or test case method - it extends scope of SUT's session / transaction so that it span across testcase method, session is effectively closed when test method finishes
+* enabling property `spring.jpa.open-in-view` - session closes not when a method of a service annotated with `@Transactional` is finished, but when controller which invoked such service method is finished
+Usually Spring uses separate session per transaction strategy, but
+
+
+=== Types of operations
+JPlusOne uses following terms to categorize operations:
+
+* *Explicit operation* - explicit invocation of some API utilizing Java Persistence API (JPA) which in result triggers some kind of SQL statement,
+i.e. SpringDataJPA repository or EntityManager or QueryDsl
+* *Commit operation* - JPA transaction commit resulting in session flush
+* *Implicit operation* - All kind of situations where SQL statements were triggered without some explicit call on JPA based API,
+i.e. as a result of traversing domain entities graph which was not fully loaded or invoking method on proxy entity, or by flushing dirty entity / collection
+
 
 == Configuration
 ==== Default configuration

@@ -22,7 +22,8 @@
 
     <artifactId>jplusone-core</artifactId>
     <name>JPlusOne Core</name>
-    <description>JPlusOne Core</description>
+    <description>Tool for automatic detection "N+1 select problem" occurrences in JPA based Spring Boot Java applications</description>
+    <url>https://github.com/adgadev/jplusone</url>
 
     <parent>
         <artifactId>jplusone-modules</artifactId>
