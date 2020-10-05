@@ -74,7 +74,6 @@ public class Condition {
     private void checkOperation(SessionNodeView session, List<OperationNodeView> operations) {
         ensureThat(nonNull(amountVerifier), "amountVerifier is not set");
         ensureThat(nonNull(operationType), "operationType is not set");
-        ensureThat(nonNull(operationExclusionList), "operationExclusionList is not set");
 
         List<OperationNodeView> matchingOperations = operations.stream()
                 .filter(operation -> operation.getOperationType() == operationType)
