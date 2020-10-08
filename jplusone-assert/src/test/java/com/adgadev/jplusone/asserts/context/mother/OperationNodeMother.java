@@ -17,9 +17,11 @@
 package com.adgadev.jplusone.asserts.context.mother;
 
 import com.adgadev.jplusone.asserts.context.stub.OperationNodeStub;
+import com.adgadev.jplusone.core.registry.FrameStack;
 import com.adgadev.jplusone.core.registry.LazyInitialisation;
 import com.adgadev.jplusone.core.registry.OperationType;
 
+import static com.adgadev.jplusone.asserts.context.mother.FrameStackMother.anyFrameStack;
 import static com.adgadev.jplusone.asserts.context.mother.FrameStackMother.anyFrameStackForOperation;
 import static com.adgadev.jplusone.asserts.context.mother.StatementNodeMother.anySelectStatementNode;
 import static com.adgadev.jplusone.asserts.context.mother.StatementNodeMother.anyUpdateStatementNode;
@@ -42,9 +44,13 @@ public class OperationNodeMother {
     }
 
     public static OperationNodeStub anyImplicitOperationNode(LazyInitialisation lazyInitialisation) {
+        return anyImplicitOperationNode(lazyInitialisation, anyFrameStack());
+    }
+
+    public static OperationNodeStub anyImplicitOperationNode(LazyInitialisation lazyInitialisation, FrameStack operationFrameStack) {
         return OperationNodeStub.builder()
                 .operationType(OperationType.IMPLICIT)
-                .callFramesStack(anyFrameStackForOperation())
+                .callFramesStack(operationFrameStack)
                 .statements(asList(anySelectStatementNode()))
                 .lazyInitialisations(asList(lazyInitialisation))
                 .build();

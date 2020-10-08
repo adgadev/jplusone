@@ -18,6 +18,7 @@ package com.adgadev.jplusone.asserts.context.mother;
 
 import com.adgadev.jplusone.asserts.context.stub.OperationNodeStub;
 import com.adgadev.jplusone.asserts.context.stub.SessionNodeStub;
+import com.adgadev.jplusone.core.registry.FrameStack;
 
 import java.util.List;
 
@@ -37,12 +38,20 @@ public class SessionNodeMother {
     }
 
     public static SessionNodeStub anySessionNode(OperationNodeStub operation) {
-        return anySessionNode(asList(operation));
+        return anySessionNode(asList(operation), anyFrameStackForSession());
     }
 
-    public static SessionNodeStub anySessionNode(List<OperationNodeStub> operations) {
+    public static SessionNodeStub anySessionNode(OperationNodeStub operation, FrameStack sessionFrameStack) {
+        return anySessionNode(asList(operation), sessionFrameStack);
+    }
+
+    public static SessionNodeStub anySessionNode(OperationNodeStub... operations) {
+        return anySessionNode(asList(operations), anyFrameStackForSession());
+    }
+
+    public static SessionNodeStub anySessionNode(List<OperationNodeStub> operations, FrameStack sessionFrameStack) {
         return SessionNodeStub.builder()
-                .sessionFrameStack(anyFrameStackForSession())
+                .sessionFrameStack(sessionFrameStack)
                 .operations(operations)
                 .build();
     }

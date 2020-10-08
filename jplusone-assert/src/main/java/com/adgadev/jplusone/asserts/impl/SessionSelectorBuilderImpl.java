@@ -28,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 import java.util.function.Function;
 
+import static com.adgadev.jplusone.asserts.impl.util.ValidationUtils.ensureThat;
 import static java.util.Collections.emptyList;
 
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
@@ -55,7 +56,11 @@ class SessionSelectorBuilderImpl implements SessionSelectorBuilder {
 
     @Override
     public ExecutionFilterBuilder nthSession(int n) {
-        rule.setSessionSelector(getSessionSelector(size -> Math.max(0, n)));
+        ensureThat(n >= 0, "Session number must be positive");
+        rule.setSessionSelector(getSessionSelector(size -> {
+            ensureThat(n < size, "Session number is larger than last captured session number");
+            return n;
+        }));
         return new ExecutionFilterBuilderImpl(rule);
     }
 

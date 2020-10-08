@@ -34,6 +34,10 @@ public class RootNodeMother {
         return anyRootNode(asList(session));
     }
 
+    public static RootNodeStub anyRootNode(SessionNodeStub... sessions) {
+        return anyRootNode(asList(sessions));
+    }
+
     public static RootNodeStub anyRootNode(List<SessionNodeStub> sessions) {
         return RootNodeStub.builder()
                 .sessions(sessions)
