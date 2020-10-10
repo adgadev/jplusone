@@ -21,7 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("integration-test")
-@SpringBootTest
+@SpringBootTest(classes = TestDomainApplication.class)
 class BookshopApplicationTest {
 
     @Test

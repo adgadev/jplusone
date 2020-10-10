@@ -16,16 +16,14 @@
 
 package com.adgadev.jplusone.test;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@ActiveProfiles("integration-test")
-@SpringBootTest(classes = TestDomainApplication.class)
-class BookshopApplicationTest {
+@SpringBootApplication
+public class TestDomainApplication {
 
-    @Test
-    void contextLoads() {
+    public static void main(String[] args) {
+        SpringApplication.run(TestDomainApplication.class, args);
     }
 
 }

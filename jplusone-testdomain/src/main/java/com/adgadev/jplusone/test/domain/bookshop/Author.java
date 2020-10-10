@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-package com.adgadev.jplusone.test;
+package com.adgadev.jplusone.test.domain.bookshop;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import lombok.Getter;
 
-@ActiveProfiles("integration-test")
-@SpringBootTest(classes = TestDomainApplication.class)
-class BookshopApplicationTest {
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
-    @Test
-    void contextLoads() {
-    }
+@Getter
+@Entity
+public class Author {
+
+    @Id
+    private Long id;
+
+    private String name;
 
 }

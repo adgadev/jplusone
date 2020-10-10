@@ -135,6 +135,7 @@
             <modules>
                 <module>jplusone-core</module>
                 <module>jplusone-assert</module>
+                <module>jplusone-testdomain</module>
                 <module>jplusone-tests</module>
             </modules>
         </profile>

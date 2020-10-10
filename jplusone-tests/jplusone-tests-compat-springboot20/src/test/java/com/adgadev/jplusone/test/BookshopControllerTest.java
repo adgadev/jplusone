@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("integration-test")
-@SpringBootTest(webEnvironment = MOCK)
+@SpringBootTest(webEnvironment = MOCK, classes = TestDomainApplication.class)
 @AutoConfigureMockMvc
 class BookshopControllerTest {
 

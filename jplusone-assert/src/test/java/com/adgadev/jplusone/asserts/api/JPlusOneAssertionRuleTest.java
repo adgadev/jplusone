@@ -17,10 +17,10 @@
 package com.adgadev.jplusone.asserts.api;
 
 import com.adgadev.jplusone.asserts.api.builder.SqlStatementGroupType;
-import com.adgadev.jplusone.asserts.domain.bookshop.Author;
-import com.adgadev.jplusone.asserts.domain.bookshop.Book;
-import com.adgadev.jplusone.asserts.domain.bookshop.BookRepository;
-import com.adgadev.jplusone.asserts.domain.bookshop.BookshopService;
+import com.adgadev.jplusone.test.domain.bookshop.Author;
+import com.adgadev.jplusone.test.domain.bookshop.Book;
+import com.adgadev.jplusone.test.domain.bookshop.BookRepository;
+import com.adgadev.jplusone.test.domain.bookshop.BookshopService;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.EntityManager;

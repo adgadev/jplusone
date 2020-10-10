@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-package com.adgadev.jplusone.test;
+package com.adgadev.jplusone.test.domain.bookshop;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-@ActiveProfiles("integration-test")
-@SpringBootTest(classes = TestDomainApplication.class)
-class BookshopApplicationTest {
+import java.util.Optional;
 
-    @Test
-    void contextLoads() {
-    }
+@Repository
+public interface BookRepository extends JpaRepository<Book, Long> {
 
+    @Query("SELECT b FROM Book b " +
+            "LEFT JOIN FETCH b.author " +
+            "WHERE b.id=:id")
+    Optional<Book> findByIdAndFetchAuthor(@Param("id") Long id);
 }

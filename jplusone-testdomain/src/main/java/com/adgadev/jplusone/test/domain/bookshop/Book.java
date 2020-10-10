@@ -14,18 +14,29 @@
  * limitations under the License.
  */
 
-package com.adgadev.jplusone.test;
+package com.adgadev.jplusone.test.domain.bookshop;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import lombok.Getter;
+import lombok.ToString;
 
-@ActiveProfiles("integration-test")
-@SpringBootTest(classes = TestDomainApplication.class)
-class BookshopApplicationTest {
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
-    @Test
-    void contextLoads() {
-    }
+@Getter
+@Entity
+@ToString(exclude = "author")
+public class Book {
+
+    @Id
+    private Long id;
+
+    private String title;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id")
+    private Author author;
 
 }
