@@ -201,6 +201,8 @@
             <modules>
                 <!-- only deployable modules listed -->
                 <module>jplusone-core</module>
+                <module>jplusone-assert</module>
+                <module>jplusone-testdomain</module>
             </modules>
             <build>
                 <plugins>
