@@ -79,4 +79,8 @@ public class OperationNodeMother {
 
     public static class SampleEntityB {
     }
+
+    public static class SampleEntityC {
+    }
+
 }

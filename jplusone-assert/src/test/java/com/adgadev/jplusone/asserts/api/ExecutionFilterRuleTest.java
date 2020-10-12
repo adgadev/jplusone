@@ -38,7 +38,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class ExecutionFilterTest {
+class ExecutionFilterRuleTest {
 
     @RequiredArgsConstructor
     private enum ContextDataSet {

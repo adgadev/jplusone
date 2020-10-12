@@ -35,7 +35,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class SessionSelectorTest {
+class SessionSelectorRuleTest {
 
     @RequiredArgsConstructor
     private enum ContextDataSet {
