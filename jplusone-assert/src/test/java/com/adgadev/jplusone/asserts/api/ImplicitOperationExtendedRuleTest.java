@@ -19,20 +19,17 @@ package com.adgadev.jplusone.asserts.api;
 import com.adgadev.jplusone.asserts.context.mother.OperationNodeMother.SampleEntityA;
 import com.adgadev.jplusone.asserts.context.mother.OperationNodeMother.SampleEntityB;
 import com.adgadev.jplusone.asserts.context.mother.OperationNodeMother.SampleEntityC;
-import com.adgadev.jplusone.asserts.context.stub.SessionNodeStub;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
-import org.junit.jupiter.api.function.Executable;
 
+import static com.adgadev.jplusone.asserts.api.RuleTestUtils.expectFailingRule;
+import static com.adgadev.jplusone.asserts.api.RuleTestUtils.expectMatchingRule;
 import static com.adgadev.jplusone.asserts.context.mother.LazyInitializationMother.anyCollectionLazyInitialisation;
 import static com.adgadev.jplusone.asserts.context.mother.LazyInitializationMother.anyEntityLazyInitialisation;
 import static com.adgadev.jplusone.asserts.context.mother.OperationNodeMother.anyExplicitOperationNode;
 import static com.adgadev.jplusone.asserts.context.mother.OperationNodeMother.anyImplicitOperationNode;
-import static com.adgadev.jplusone.asserts.context.mother.RootNodeMother.anyRootNode;
 import static com.adgadev.jplusone.asserts.context.mother.SessionNodeMother.anySessionNode;
-import static com.adgadev.jplusone.asserts.impl.JPlusOneAssertionContextMother.anyContext;
 import static java.util.Arrays.asList;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 class ImplicitOperationExtendedRuleTest {
@@ -399,17 +396,4 @@ class ImplicitOperationExtendedRuleTest {
                 )))
         );
     }
-
-    private Executable expectMatchingRule(JPlusOneAssertionRule rule, SessionNodeStub session) {
-        return () -> rule.check(anyContext(anyRootNode(session)));
-    }
-
-    private Executable expectFailingRule(JPlusOneAssertionRule rule, SessionNodeStub session) {
-        return () -> assertThrows(AssertionError.class, () ->
-                rule.check(anyContext(anyRootNode(session)))
-        );
-    }
-
-    // TODO: add tests for rules using .times()
-
 }

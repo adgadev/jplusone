@@ -17,9 +17,12 @@
 package com.adgadev.jplusone.asserts.context.mother;
 
 import com.adgadev.jplusone.asserts.context.stub.OperationNodeStub;
+import com.adgadev.jplusone.asserts.context.stub.StatementNodeStub;
 import com.adgadev.jplusone.core.registry.FrameStack;
 import com.adgadev.jplusone.core.registry.LazyInitialisation;
 import com.adgadev.jplusone.core.registry.OperationType;
+
+import java.util.List;
 
 import static com.adgadev.jplusone.asserts.context.mother.FrameStackMother.anyFrameStack;
 import static com.adgadev.jplusone.asserts.context.mother.FrameStackMother.anyFrameStackForOperation;
@@ -28,8 +31,13 @@ import static com.adgadev.jplusone.asserts.context.mother.StatementNodeMother.an
 import static com.adgadev.jplusone.core.registry.LazyInitialisation.collectionLazyInitialisation;
 import static com.adgadev.jplusone.core.registry.LazyInitialisation.entityLazyInitialisation;
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 
 public class OperationNodeMother {
+
+    public static OperationNodeStub anyOperationNode(StatementNodeStub... statements) {
+        return anyExplicitOperationNode(statements);
+    }
 
     public static OperationNodeStub anyImplicitOperationNode() {
         return anyEntityLazyInitialisationOperationNode();
@@ -56,12 +64,25 @@ public class OperationNodeMother {
                 .build();
     }
 
+
     public static OperationNodeStub anyExplicitOperationNode() {
+        return anyExplicitOperationNode(asList(anyUpdateStatementNode()), anyFrameStackForOperation());
+    }
+
+    public static OperationNodeStub anyExplicitOperationNode(StatementNodeStub... statements) {
+        return anyExplicitOperationNode(asList(statements), anyFrameStackForOperation());
+    }
+
+    public static OperationNodeStub anyExplicitOperationNode(StatementNodeStub statement, FrameStack operationFrameStack) {
+        return anyExplicitOperationNode(asList(statement), operationFrameStack);
+    }
+
+    public static OperationNodeStub anyExplicitOperationNode(List<StatementNodeStub> statements, FrameStack operationFrameStack) {
         return OperationNodeStub.builder()
                 .operationType(OperationType.EXPLICIT)
-                .callFramesStack(anyFrameStackForOperation())
-                .statements(asList(anyUpdateStatementNode()))
-                .lazyInitialisations(null)
+                .callFramesStack(operationFrameStack)
+                .statements(statements)
+                .lazyInitialisations(emptyList())
                 .build();
     }
 
@@ -70,7 +91,7 @@ public class OperationNodeMother {
                 .operationType(OperationType.COMMIT)
                 .callFramesStack(anyFrameStackForOperation())
                 .statements(asList(anyUpdateStatementNode()))
-                .lazyInitialisations(null)
+                .lazyInitialisations(emptyList())
                 .build();
     }
 

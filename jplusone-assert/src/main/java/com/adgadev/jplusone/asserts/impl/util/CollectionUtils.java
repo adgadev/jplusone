@@ -17,6 +17,11 @@
 package com.adgadev.jplusone.asserts.impl.util;
 
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
+
+import static java.util.Collections.emptyList;
 
 public class CollectionUtils {
 
@@ -25,5 +30,25 @@ public class CollectionUtils {
                 .skip(Math.max(collection.size() - 1, 0))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public static <T> List<T> getMaxCommonHeadFragmentOfLists(List<T> firstList, List<T> secondList) {
+        Iterator<T> firstIterator = firstList.iterator();
+        Iterator<T> secondIterator = secondList.iterator();
+        int amountOfSameItems = 0;
+        boolean differenceFound = false;
+
+        while (firstIterator.hasNext() && secondIterator.hasNext() && !differenceFound) {
+            T firstListItem = firstIterator.next();
+            T secondListItem = secondIterator.next();
+
+            if (Objects.equals(firstListItem, secondListItem)) {
+                amountOfSameItems++;
+            } else {
+                differenceFound = true;
+            }
+        }
+
+        return amountOfSameItems == 0 ? emptyList() : firstList.subList(0, amountOfSameItems);
     }
 }

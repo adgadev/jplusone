@@ -40,6 +40,13 @@ public class StatementNodeMother {
                 .build();
     }
 
+    public static StatementNodeStub anyInsertStatementNode() {
+        return StatementNodeStub.builder()
+                .statementType(StatementType.INSERT)
+                .sql("INSERT INTO books(id, title) VALUES (1, 'Godfather'")
+                .build();
+    }
+
     public static StatementNodeStub anyUpdateStatementNode() {
         return StatementNodeStub.builder()
                 .statementType(StatementType.UPDATE)

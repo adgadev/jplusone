@@ -18,6 +18,9 @@ package com.adgadev.jplusone.asserts.impl.rule.exclusion;
 
 import com.adgadev.jplusone.asserts.api.builder.AmountMatcher;
 import com.adgadev.jplusone.core.registry.OperationNodeView;
+import com.adgadev.jplusone.core.registry.StatementNodeView;
+import com.adgadev.jplusone.core.registry.StatementType;
+import com.adgadev.jplusone.core.registry.StatementType.StatementGroupType;
 import lombok.Setter;
 
 public class ExplicitOperationExclusion implements OperationExclusion {
@@ -30,7 +33,7 @@ public class ExplicitOperationExclusion implements OperationExclusion {
 
     @Override
     public boolean matchesOperation(OperationNodeView operation) {
-        return operation.getCallFramesStack()
+        return isFetchOperation(operation) && operation.getCallFramesStack()
                 .findLastMatchingFrame(fetchingDataCriteria::matches)
                 .isPresent();
     }
@@ -38,5 +41,12 @@ public class ExplicitOperationExclusion implements OperationExclusion {
     @Override
     public boolean matchesUseAmount(int exclusionUseAmount) {
         return fetchingDataAmountMatcher.apply(exclusionUseAmount);
+    }
+
+    private boolean isFetchOperation(OperationNodeView operation) {
+        return operation.getStatements().stream()
+                .map(StatementNodeView::getStatementType)
+                .map(StatementType::getStatementGroupType)
+                .anyMatch(statementGroupType -> statementGroupType == StatementGroupType.READ);
     }
 }

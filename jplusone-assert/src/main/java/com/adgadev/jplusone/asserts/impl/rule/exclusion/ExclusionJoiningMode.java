@@ -23,21 +23,37 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 import static com.adgadev.jplusone.asserts.impl.util.CollectionUtils.getLastElement;
+import static com.adgadev.jplusone.asserts.impl.util.CollectionUtils.getMaxCommonHeadFragmentOfLists;
 
 @Getter
 @RequiredArgsConstructor
 public enum ExclusionJoiningMode {
     ANY(false) {
+        @Override
+        List<OperationNodeView> resolveExcludedOperationCandidates(List<OperationNodeView> operations, List<OperationNodeView> excludedOperationPreCandidates) {
+            return excludedOperationPreCandidates;
+        }
+
         List<OperationNodeView> resolveOperationsToCheckInNextIteration(List<OperationNodeView> operations, List<OperationNodeView> excludedOperationsPortion) {
             return operations;
         }
     },
     ALL(true) {
+        @Override
+        List<OperationNodeView> resolveExcludedOperationCandidates(List<OperationNodeView> operations, List<OperationNodeView> excludedOperationPreCandidates) {
+            return excludedOperationPreCandidates;
+        }
+
         List<OperationNodeView> resolveOperationsToCheckInNextIteration(List<OperationNodeView> operations, List<OperationNodeView> excludedOperationsPortion) {
             return operations;
         }
     },
     ALL_STRICT_ORDER(true) {
+        @Override
+        List<OperationNodeView> resolveExcludedOperationCandidates(List<OperationNodeView> operations, List<OperationNodeView> excludedOperationPreCandidates) {
+            return getMaxCommonHeadFragmentOfLists(excludedOperationPreCandidates, operations);
+        }
+
         List<OperationNodeView> resolveOperationsToCheckInNextIteration(List<OperationNodeView> operations, List<OperationNodeView> excludedOperationsPortion) {
             OperationNodeView lastExcludedOperation = getLastElement(excludedOperationsPortion);
             int lastProcessedOperationIndex = operations.indexOf(lastExcludedOperation);
@@ -47,6 +63,7 @@ public enum ExclusionJoiningMode {
 
     private final boolean exclusionApplicationRequired;
 
+    abstract List<OperationNodeView> resolveExcludedOperationCandidates(List<OperationNodeView> currentOperations, List<OperationNodeView> excludedOperationPreCandidates);
 
     abstract List<OperationNodeView> resolveOperationsToCheckInNextIteration(List<OperationNodeView> currentOperations, List<OperationNodeView> nextExcludedOperationsPortion);
 }

@@ -26,6 +26,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import static com.adgadev.jplusone.core.utils.ReflectionUtils.not;
+import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor(staticName = "of")
@@ -51,11 +52,12 @@ public class OperationExclusionList {
         List<OperationNodeView> operations = initialOperations;
         Set<OperationNodeView> excludedOperations = new HashSet<>();
 
-        for (OperationExclusion exclusion: exclusions) {
+        for (OperationExclusion exclusion : exclusions) {
+            List<OperationNodeView> currentOperations = operations;
             List<OperationNodeView> excludedOperationsCandidates = operations.stream()
                     .filter(not(excludedOperations::contains))
                     .filter(exclusion::matchesOperation)
-                    .collect(toList());
+                    .collect(collectingAndThen(toList(), candidates -> joiningMode.resolveExcludedOperationCandidates(currentOperations, candidates)));
 
             int maxExclusionUseAmount = findMaximizedExclusionUseAmount(exclusion, excludedOperationsCandidates.size());
 
