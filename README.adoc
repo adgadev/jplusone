@@ -7,7 +7,7 @@
 :apache-license-icon: https://img.shields.io/badge/License-Apache%202.0-blue.svg
 :apache-license-link: http://www.apache.org/licenses/LICENSE-2.0.txt
 
-:release_version: 0.9.1
+:release_version: 1.0.0
 
 = JPlusOne
 
@@ -97,8 +97,8 @@ The tool is not limited only to detecting lazy loading / N+1 problems. Apart fro
 * Allows to easily correlate JPA operations with resulting SQL statements.
 * Shows SQL statements with their parameters in simplified and pretty-printed form.
 * Uses Spring Boot Auto Configuration to seamlessly integrate with your application.
-* Provides Assertion API which can be used to write tests checking various aspects of JPA operations / SQL statements, i.e.
-if lazy loading has not started occurring in given test scenario or amount of SELECT queries is not larger than some amount  [*This feature is still in development*]
+* Provides https://github.com/adgadev/jplusone#assertion-api[Assertion API] which can be used to write tests checking various aspects of JPA operations / SQL statements, i.e.
+if lazy loading has not started occurring in given test scenario or amount of SELECT queries is not larger than some amount
 
 More about N+1 SELECT problem you can find in link:https://stackoverflow.com/questions/97197/what-is-the-n1-selects-problem-in-orm-object-relational-mapping/39696775[this] thread at StackOverflow.
 
@@ -232,3 +232,63 @@ public static void refreshLoggerConfiguration() {
 ----
 * Force JPlusOne reports to be printed directly to the stdout, instead of logger, using property:
 `jplusone.report.output=STDOUT`
+
+== Assertion API
+
+JPlusOne provides Assertion API which can be used to write tests checking various aspects of JPA operations / SQL statements, i.e.
+if lazy loading has not started occurring in given test scenario or amount of SELECT queries is not larger than some amount.
+
+Such tests may be very useful in situation when you have optimized lazy loading processes in your business operations and you want to enforce
+that further development changes in your application, often done by other developers, won't degrade the performance accidentally
+i.e. by introducing some additional lazy loading operations.
+
+=== How to use assertion API
+In order to use it you need to add following dependency and write or extend spring boot tests of your application by defining
+`JPlusOneAssertionRule` and asserting it against `JPlusOneAssertionContext` bean, injected via `@Autowired` dependency.
+
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>com.adgadev.jplusone</groupId>
+    <artifactId>jplusone-assert</artifactId>
+    <version>{release_version}</version>
+    <scope>test</scope>
+</dependency>
+----
+
+There is a fluent, self-descriptive API for building assertion rules, just start typing `JPlusOneAssertionRule.within()`
+and your IDE will guide you through the process of defining it
+[source,java]
+----
+@SpringBootTest
+class LazyLoadingTest {
+
+    @Autowired
+    private JPlusOneAssertionContext assertionContext;
+
+    @Autowired
+    private SampleService sampleService;
+
+    @Test
+    public void shouldBusinessCheckOperationAgainstJPlusOneAssertionRule() {
+        JPlusOneAssertionRule rule = JPlusOneAssertionRule
+                .within().lastSession()
+                .shouldBe().noImplicitOperations().exceptAnyOf(exclusions -> exclusions
+                        .loadingEntity(Author.class).times(atMost(2))
+                        .loadingCollection(Author.class, "books")
+                );
+
+        // trigger business operation which you wish to be asserted against the rule,
+        // i.e. via directly calling a service or via sending request to your API controller
+        sampleService.executeBusinessOperation();
+
+        rule.check(assertionContext);
+    }
+}
+----
+
+Sample spring boot test showing jplusone assertion in action is available https://github.com/adgadev/jplusone/tree/master/jplusone-assert/src/test/java/com/adgadev/jplusone/asserts/api/JPlusOneAssertionIntegrationTest.java[here].
+
+More examples presenting building various assertion rules can be found https://github.com/adgadev/jplusone/tree/master/jplusone-assert/src/test/java/com/adgadev/jplusone/asserts/api/JPlusOneAssertionRuleTest.java[here].
+
