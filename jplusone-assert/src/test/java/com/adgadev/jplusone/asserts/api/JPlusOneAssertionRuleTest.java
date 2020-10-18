@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.persistence.EntityManager;
 
-import static com.adgadev.jplusone.asserts.api.builder.AmountMatcher.atMost;
+import static com.adgadev.jplusone.asserts.api.builder.AmountMatcher.*;
 import static com.adgadev.jplusone.asserts.api.builder.SqlStatementType.INSERT_STATEMENT;
 import static com.adgadev.jplusone.asserts.api.builder.SqlStatementType.SELECT_STATEMENT;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -69,6 +69,21 @@ class JPlusOneAssertionRuleTest {
                         .loadingEntity(Book.class)
                         .loadingEntity(Author.class)
                         .loadingAnyCollectionInEntity(Book.class)
+                );
+        assertThat(rule, notNullValue());
+    }
+
+    @Test
+    void shouldCreateRule4b() {
+        // ensuring no more implicit operations in specific test case appeared
+        JPlusOneAssertionRule rule = JPlusOneAssertionRule
+                .within().lastSession()
+                .shouldBe().noImplicitOperations().exceptAnyOf(builder -> builder
+                        .loadingEntity(Book.class).times(atMost(2))
+                        .loadingEntity(Author.class)
+                        .loadingAnyCollectionInEntity(Book.class).times(exactly(1))
+                        .loadingCollection(Author.class, "books").times(atLeast(2))
+
                 );
         assertThat(rule, notNullValue());
     }
@@ -131,7 +146,7 @@ class JPlusOneAssertionRuleTest {
 
     @Test
     void shouldCreateRule10() {
-        // 7. ensuring that explicit operations are used only for fetching
+        // ensuring that explicit operations are used only for fetching
         JPlusOneAssertionRule rule = JPlusOneAssertionRule
                 .within().lastSession()
                 .shouldBe().noExplicitOperations().exceptFetchingData();
@@ -140,7 +155,6 @@ class JPlusOneAssertionRuleTest {
 
     @Test
     void shouldCreateRule11() {
-        // 7. ensuring that explicit operations are used only for fetching
         JPlusOneAssertionRule rule = JPlusOneAssertionRule
                 .within().lastSession()
                 .shouldBe().noExplicitOperations().exceptFetchingDataVia(BookRepository.class, "findById");
@@ -149,7 +163,6 @@ class JPlusOneAssertionRuleTest {
 
     @Test
     void shouldCreateRule12() {
-        // 7. ensuring that explicit operations are used only for fetching
         JPlusOneAssertionRule rule = JPlusOneAssertionRule
                 .within().lastSession()
                 .shouldBe().noExplicitOperations().exceptAnyOf(exclusions -> exclusions
