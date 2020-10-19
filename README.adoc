@@ -7,6 +7,15 @@
 :apache-license-icon: https://img.shields.io/badge/License-Apache%202.0-blue.svg
 :apache-license-link: http://www.apache.org/licenses/LICENSE-2.0.txt
 
+:action-status-icon: https://github.com/adgadev/jplusone/workflows/Build%20and%20Test/badge.svg
+:action-status-link: https://github.com/adgadev/jplusone/actions
+
+:maintainability-icon: https://api.codeclimate.com/v1/badges/d3cfc1cc05d724ea52b4/maintainability
+:maintainability-link: https://codeclimate.com/github/adgadev/jplusone/maintainability
+
+:codacy-icon: https://app.codacy.com/project/badge/Grade/ccb1fea2aa554aceb691cb32ed270c14
+:codacy-link: https://www.codacy.com/gh/adgadev/jplusone/dashboard?utm_source=github.com&utm_medium=referral&utm_content=adgadev/jplusone&utm_campaign=Badge_Grade
+
 :release_version: 1.0.0
 
 = JPlusOne
@@ -14,7 +23,9 @@
 image:{jdk-icon}[JDK, link={jdk-link}]
 image:{apache-license-icon}[Apache License 2, link={apache-license-link}]
 image:{maven-central-icon}[Maven Central Repository, link={maven-central-link}]
-
+image:{action-status-icon}[Action Status, link={action-status-link}]
+image:{maintainability-icon}[Maintainability, link={maintainability-link}]
+image:{codacy-icon}[Codacy code quality, link={codacy-link}]
 
 *JPlusOne* is a Java library designed primarily to detect and report situations where N+1 SELECT problem occurs, i.e. initialization of lazy collection of entities
 or initialization of entity proxy, resulting in additional SQL statement(s).
