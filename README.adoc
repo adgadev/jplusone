@@ -157,6 +157,8 @@ You can overwrite default configuration by adding some of the following properti
 [source,yaml]
 ----
 # com.adgadev.jplusone.core.properties.JPlusOneProperties
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fadgadev%2Fjplusone.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fadgadev%2Fjplusone?ref=badge_shield)
+
 jplusone:
   enabled: true
   application-root-package: "com.sampleorganisation.sampleproject"
@@ -303,3 +305,7 @@ Sample spring boot test showing jplusone assertion in action is available https:
 
 More examples presenting building various assertion rules can be found https://github.com/adgadev/jplusone/tree/master/jplusone-assert/src/test/java/com/adgadev/jplusone/asserts/api/JPlusOneAssertionRuleTest.java[here].
 
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fadgadev%2Fjplusone.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fadgadev%2Fjplusone?ref=badge_large)
