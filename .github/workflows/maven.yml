@@ -30,3 +30,7 @@ jobs:
 
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+
+    - uses: codecov/codecov-action@v1.0.3
+      with:
+        token: ${{secrets.CODECOV_TOKEN}}
