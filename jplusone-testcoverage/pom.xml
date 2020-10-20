@@ -62,6 +62,8 @@
                         </goals>
                         <configuration>
                             <excludes>
+                                <!-- excluding static proxies -->
+                                <exclude>com/adgadev/jplusone/core/proxy/datasource/**/*Proxy.*</exclude>
                                 <!-- excluding classes using purely for tests -->
                                 <exclude>com/adgadev/jplusone/test/**/*</exclude>
                             </excludes>

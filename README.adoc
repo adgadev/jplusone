@@ -16,6 +16,12 @@
 :codacy-icon: https://app.codacy.com/project/badge/Grade/ccb1fea2aa554aceb691cb32ed270c14
 :codacy-link: https://www.codacy.com/gh/adgadev/jplusone/dashboard?utm_source=github.com&utm_medium=referral&utm_content=adgadev/jplusone&utm_campaign=Badge_Grade
 
+:codecov-icon: https://codecov.io/gh/adgadev/jplusone/branch/master/graph/badge.svg?token=BPXXOVXP8D
+:codecov-link: https://codecov.io/gh/adgadev/jplusone
+
+:fossa-icon: https://app.fossa.com/api/projects/git%2Bgithub.com%2Fadgadev%2Fjplusone.svg?type=shield
+:fossa-link: https://app.fossa.com/projects/git%2Bgithub.com%2Fadgadev%2Fjplusone?ref=badge_shield
+
 :release_version: 1.0.0
 
 = JPlusOne
@@ -26,6 +32,9 @@ image:{maven-central-icon}[Maven Central Repository, link={maven-central-link}]
 image:{action-status-icon}[Action Status, link={action-status-link}]
 image:{maintainability-icon}[Maintainability, link={maintainability-link}]
 image:{codacy-icon}[Codacy code quality, link={codacy-link}]
+image:{codecov-icon}[Code coverage, link={codecov-link}]
+image:{fossa-icon}[FOSSA Status, link={fossa-link}]
+
 
 *JPlusOne* is a Java library designed primarily to detect and report situations where N+1 SELECT problem occurs, i.e. initialization of lazy collection of entities
 or initialization of entity proxy, resulting in additional SQL statement(s).
@@ -303,3 +312,8 @@ Sample spring boot test showing jplusone assertion in action is available https:
 
 More examples presenting building various assertion rules can be found https://github.com/adgadev/jplusone/tree/master/jplusone-assert/src/test/java/com/adgadev/jplusone/asserts/api/JPlusOneAssertionRuleTest.java[here].
 
+== License
+:fossa-large-icon: https://app.fossa.com/api/projects/git%2Bgithub.com%2Fadgadev%2Fjplusone.svg?type=large
+:fossa-large-link: https://app.fossa.com/projects/git%2Bgithub.com%2Fadgadev%2Fjplusone?ref=badge_large
+
+image:{fossa-large-icon}[FOSSA Status, link={fossa-large-link}]
