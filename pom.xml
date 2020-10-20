@@ -120,6 +120,18 @@
                         </execution>
                     </executions>
                 </plugin>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.8.6</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
@@ -137,6 +149,7 @@
                 <module>jplusone-assert</module>
                 <module>jplusone-testdomain</module>
                 <module>jplusone-tests</module>
+                <module>jplusone-testcoverage</module>
             </modules>
         </profile>
 
