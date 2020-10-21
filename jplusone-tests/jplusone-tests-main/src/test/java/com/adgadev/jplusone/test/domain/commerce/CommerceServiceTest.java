@@ -24,7 +24,6 @@ import com.adgadev.jplusone.core.registry.StatementNodeView;
 import com.adgadev.jplusone.core.registry.StatementType;
 import com.adgadev.jplusone.test.matchers.JPlusOneMatchers;
 import com.adgadev.jplusone.test.matchers.frame.FrameExtractSpecification;
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -65,7 +64,7 @@ class CommerceServiceTest {
         assertThat(sessionNode, notNullValue());
         assertThat(sessionNode.getOperations(), hasSize(equalTo(6)));
 
-        MatcherAssert.assertThat(sessionNode.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(sessionNode.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(CommerceServiceTest.class, "shouldLoadVariousObjects"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(CommerceService.class, "loadVariousObjects")
         )));
@@ -75,7 +74,7 @@ class CommerceServiceTest {
         assertThat(operationNodeView1.getOperationType(), equalTo(OperationType.EXPLICIT));
         assertThat(operationNodeView1.getStatements(), hasSize(equalTo(1)));
         assertThat(operationNodeView1.getLazyInitialisations(), empty());
-        MatcherAssert.assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(CommerceService.class, "loadVariousObjects"),
                 FrameExtractSpecification.anyThirdPartyMethodCallFrameOnClassAssignableFrom(EntityManager.class, "find")
         )));
@@ -85,7 +84,7 @@ class CommerceServiceTest {
         assertThat(operationNodeView2.getOperationType(), equalTo(OperationType.EXPLICIT));
         assertThat(operationNodeView2.getStatements(), hasSize(equalTo(1)));
         assertThat(operationNodeView2.getLazyInitialisations(), empty());
-        MatcherAssert.assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(CommerceService.class, "loadVariousObjects"),
                 FrameExtractSpecification.anyThirdPartyMethodCallFrameOnClassAssignableFrom(EntityManager.class, "find")
         )));
@@ -95,7 +94,7 @@ class CommerceServiceTest {
         assertThat(operationNodeView3.getOperationType(), equalTo(OperationType.IMPLICIT));
         assertThat(operationNodeView3.getStatements(), hasSize(equalTo(1)));
         assertThat(operationNodeView3.getLazyInitialisations(), contains(entityLazyInitialisation(ClientProfile.class.getName())));
-        MatcherAssert.assertThat(operationNodeView3.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(operationNodeView3.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(CommerceService.class, "loadVariousObjects"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(ClientProfile.class, "getPhotoLink")
         )));
@@ -105,7 +104,7 @@ class CommerceServiceTest {
         assertThat(operationNodeView4.getOperationType(), equalTo(OperationType.IMPLICIT));
         assertThat(operationNodeView4.getStatements(), hasSize(equalTo(1)));
         assertThat(operationNodeView4.getLazyInitialisations(), contains(collectionLazyInitialisation(Client.class.getName(), "orders")));
-        MatcherAssert.assertThat(operationNodeView4.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(operationNodeView4.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(CommerceService.class, "loadVariousObjects")
         )));
 
@@ -114,7 +113,7 @@ class CommerceServiceTest {
         assertThat(operationNodeView5.getOperationType(), equalTo(OperationType.IMPLICIT));
         assertThat(operationNodeView5.getStatements(), hasSize(equalTo(1)));
         assertThat(operationNodeView5.getLazyInitialisations(), contains(collectionLazyInitialisation(Order.class.getName(), "products")));
-        MatcherAssert.assertThat(operationNodeView5.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(operationNodeView5.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(CommerceService.class, "loadVariousObjects")
         )));
 
@@ -123,7 +122,7 @@ class CommerceServiceTest {
         assertThat(operationNodeView6.getOperationType(), equalTo(OperationType.IMPLICIT));
         assertThat(operationNodeView6.getStatements(), hasSize(equalTo(1)));
         assertThat(operationNodeView6.getLazyInitialisations(), contains(entityLazyInitialisation(Manufacturer.class.getName())));
-        MatcherAssert.assertThat(operationNodeView6.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(operationNodeView6.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(CommerceService.class, "loadVariousObjects"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(Manufacturer.class, "getName")
         )));

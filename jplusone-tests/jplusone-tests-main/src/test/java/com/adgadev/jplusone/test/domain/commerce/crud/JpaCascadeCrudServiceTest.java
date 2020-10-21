@@ -26,7 +26,6 @@ import com.adgadev.jplusone.test.domain.commerce.Manufacturer;
 import com.adgadev.jplusone.test.domain.commerce.Product;
 import com.adgadev.jplusone.test.matchers.JPlusOneMatchers;
 import com.adgadev.jplusone.test.matchers.frame.FrameExtractSpecification;
-import org.hamcrest.MatcherAssert;
 import org.hibernate.Session;
 import org.hibernate.internal.SessionImpl;
 import org.junit.jupiter.api.Test;
@@ -68,7 +67,7 @@ class JpaCascadeCrudServiceTest {
         assertThat(sessionNode, notNullValue());
         assertThat(sessionNode.getOperations(), hasSize(equalTo(3)));
 
-        MatcherAssert.assertThat(sessionNode.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(sessionNode.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(JpaCascadeCrudServiceTest.class, "shouldAddManufacturerProduct"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(JpaCascadeCrudService.class, "addManufacturerProduct")
         )));
@@ -78,7 +77,7 @@ class JpaCascadeCrudServiceTest {
         assertThat(operationNodeView1.getOperationType(), equalTo(OperationType.EXPLICIT));
         assertThat(operationNodeView1.getStatements(), hasSize(equalTo(1)));
         assertThat(operationNodeView1.getLazyInitialisations(), empty());
-        MatcherAssert.assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(JpaCascadeCrudService.class, "addManufacturerProduct"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(ManufacturerRepository.class, "findById"),
                 FrameExtractSpecification.anyThirdPartyMethodCallFrameOnClassAssignableFrom(EntityManager.class, "find"),
@@ -90,7 +89,7 @@ class JpaCascadeCrudServiceTest {
         assertThat(operationNodeView2.getOperationType(), equalTo(OperationType.IMPLICIT));
         assertThat(operationNodeView2.getStatements(), hasSize(equalTo(1)));
         assertThat(operationNodeView2.getLazyInitialisations(), contains(collectionLazyInitialisation(Manufacturer.class.getName(), "products")));
-        MatcherAssert.assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(JpaCascadeCrudService.class, "addManufacturerProduct"),
                 FrameExtractSpecification.anyAppMethodCallFrame(Manufacturer.class, "addProduct"),
                 FrameExtractSpecification.anyThirdPartyMethodCallFrameOnClassAssignableFrom(Session.class, "initializeCollection"),
@@ -102,8 +101,8 @@ class JpaCascadeCrudServiceTest {
         assertThat(operationNodeView3.getOperationType(), equalTo(OperationType.COMMIT));
         assertThat(operationNodeView3.getStatements(), hasSize(equalTo(1)));
         assertThat(operationNodeView3.getLazyInitialisations(), empty());
-        MatcherAssert.assertThat(operationNodeView3.getCallFramesStack(), JPlusOneMatchers.allFrameCallMatcher(FrameExtractSpecification.notAppMethodCallFrame()));
-        MatcherAssert.assertThat(operationNodeView3.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(operationNodeView3.getCallFramesStack(), JPlusOneMatchers.allFrameCallMatcher(FrameExtractSpecification.notAppMethodCallFrame()));
+        assertThat(operationNodeView3.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyThirdPartyMethodCallFrameOnClassAssignableFrom(EntityTransaction.class, "commit"),
                 FrameExtractSpecification.anyThirdPartyMethodCallFrame(SessionImpl.class, "doFlush"),
                 FrameExtractSpecification.anyThirdPartyMethodCallFrameOnClassAssignableFrom(PreparedStatement.class, "executeUpdate")
@@ -143,7 +142,7 @@ class JpaCascadeCrudServiceTest {
         assertThat(sessionNode, notNullValue());
         assertThat(sessionNode.getOperations(), hasSize(equalTo(3)));
 
-        MatcherAssert.assertThat(sessionNode.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(sessionNode.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(JpaCascadeCrudServiceTest.class, "shouldUpdateManufacturerProductName"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(JpaCascadeCrudService.class, "updateManufacturerProductName")
         )));
@@ -153,7 +152,7 @@ class JpaCascadeCrudServiceTest {
         assertThat(operationNodeView1.getOperationType(), equalTo(OperationType.EXPLICIT));
         assertThat(operationNodeView1.getStatements(), hasSize(equalTo(1)));
         assertThat(operationNodeView1.getLazyInitialisations(), empty());
-        MatcherAssert.assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(JpaCascadeCrudService.class, "updateManufacturerProductName"),
                 FrameExtractSpecification.anyAppMethodCallFrame(JpaCascadeCrudService.class, "getManufacturerById"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(ManufacturerRepository.class, "findById"),
@@ -166,7 +165,7 @@ class JpaCascadeCrudServiceTest {
         assertThat(operationNodeView2.getOperationType(), equalTo(OperationType.IMPLICIT));
         assertThat(operationNodeView2.getStatements(), hasSize(equalTo(1)));
         assertThat(operationNodeView2.getLazyInitialisations(), contains(collectionLazyInitialisation(Manufacturer.class.getName(), "products")));
-        MatcherAssert.assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(JpaCascadeCrudService.class, "updateManufacturerProductName"),
                 FrameExtractSpecification.anyAppMethodCallFrame(Manufacturer.class, "addProduct"),
                 FrameExtractSpecification.anyThirdPartyMethodCallFrameOnClassAssignableFrom(Session.class, "initializeCollection"),
@@ -178,8 +177,8 @@ class JpaCascadeCrudServiceTest {
         assertThat(operationNodeView3.getOperationType(), equalTo(OperationType.COMMIT));
         assertThat(operationNodeView3.getStatements(), hasSize(equalTo(1)));
         assertThat(operationNodeView3.getLazyInitialisations(), empty());
-        MatcherAssert.assertThat(operationNodeView3.getCallFramesStack(), JPlusOneMatchers.allFrameCallMatcher(FrameExtractSpecification.notAppMethodCallFrame()));
-        MatcherAssert.assertThat(operationNodeView3.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(operationNodeView3.getCallFramesStack(), JPlusOneMatchers.allFrameCallMatcher(FrameExtractSpecification.notAppMethodCallFrame()));
+        assertThat(operationNodeView3.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyThirdPartyMethodCallFrameOnClassAssignableFrom(EntityTransaction.class, "commit"),
                 FrameExtractSpecification.anyThirdPartyMethodCallFrame(SessionImpl.class, "doFlush"),
                 FrameExtractSpecification.anyThirdPartyMethodCallFrameOnClassAssignableFrom(PreparedStatement.class, "executeUpdate")
@@ -219,7 +218,7 @@ class JpaCascadeCrudServiceTest {
         assertThat(sessionNode, notNullValue());
         assertThat(sessionNode.getOperations(), hasSize(equalTo(3)));
 
-        MatcherAssert.assertThat(sessionNode.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(sessionNode.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(JpaCascadeCrudServiceTest.class, "shouldDeleteManufacturerProduct"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(JpaCascadeCrudService.class, "deleteManufacturerProduct")
         )));
@@ -229,7 +228,7 @@ class JpaCascadeCrudServiceTest {
         assertThat(operationNodeView1.getOperationType(), equalTo(OperationType.EXPLICIT));
         assertThat(operationNodeView1.getStatements(), hasSize(equalTo(1)));
         assertThat(operationNodeView1.getLazyInitialisations(), empty());
-        MatcherAssert.assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(JpaCascadeCrudService.class, "deleteManufacturerProduct"),
                 FrameExtractSpecification.anyAppMethodCallFrame(JpaCascadeCrudService.class, "getManufacturerById"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(ManufacturerRepository.class, "findById"),
@@ -242,7 +241,7 @@ class JpaCascadeCrudServiceTest {
         assertThat(operationNodeView2.getOperationType(), equalTo(OperationType.IMPLICIT));
         assertThat(operationNodeView2.getStatements(), hasSize(equalTo(1)));
         assertThat(operationNodeView2.getLazyInitialisations(), contains(collectionLazyInitialisation(Manufacturer.class.getName(), "products")));
-        MatcherAssert.assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(JpaCascadeCrudService.class, "deleteManufacturerProduct"),
                 FrameExtractSpecification.anyAppMethodCallFrame(Manufacturer.class, "deleteProduct"),
                 FrameExtractSpecification.anyAppMethodCallFrame(Manufacturer.class, "findProductByName"),
@@ -255,8 +254,8 @@ class JpaCascadeCrudServiceTest {
         assertThat(operationNodeView3.getOperationType(), equalTo(OperationType.COMMIT));
         assertThat(operationNodeView3.getStatements(), hasSize(equalTo(1)));
         assertThat(operationNodeView3.getLazyInitialisations(), empty());
-        MatcherAssert.assertThat(operationNodeView3.getCallFramesStack(), JPlusOneMatchers.allFrameCallMatcher(FrameExtractSpecification.notAppMethodCallFrame()));
-        MatcherAssert.assertThat(operationNodeView3.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(operationNodeView3.getCallFramesStack(), JPlusOneMatchers.allFrameCallMatcher(FrameExtractSpecification.notAppMethodCallFrame()));
+        assertThat(operationNodeView3.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyThirdPartyMethodCallFrameOnClassAssignableFrom(EntityTransaction.class, "commit"),
                 FrameExtractSpecification.anyThirdPartyMethodCallFrame(SessionImpl.class, "doFlush"),
                 FrameExtractSpecification.anyThirdPartyMethodCallFrameOnClassAssignableFrom(PreparedStatement.class, "executeUpdate")

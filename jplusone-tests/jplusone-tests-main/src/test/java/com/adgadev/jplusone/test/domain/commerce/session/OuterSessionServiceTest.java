@@ -21,7 +21,6 @@ import com.adgadev.jplusone.core.registry.RootNodeView;
 import com.adgadev.jplusone.core.registry.SessionNodeView;
 import com.adgadev.jplusone.test.matchers.JPlusOneMatchers;
 import com.adgadev.jplusone.test.matchers.frame.FrameExtractSpecification;
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Test;
@@ -106,14 +105,14 @@ class OuterSessionServiceTest {
 
         SessionNodeView sessionNode = rootNodeWrapper.getFirstNewSession();
         assertThat(sessionNode.getOperations(), hasSize(equalTo(1)));
-        MatcherAssert.assertThat(sessionNode.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(sessionNode.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionServiceTest.class, "shouldFetchDataOuterTx"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(OuterSessionService.class, "fetchDataOuterTx")
         )));
 
         OperationNodeView operationNodeView1 = sessionNode.getOperations().get(0);
         assertThat(operationNodeView1.getStatements(), hasSize(equalTo(1)));
-        MatcherAssert.assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionService.class, "fetchDataOuterTx"),
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionService.class, "fetchData")
         )));
@@ -132,7 +131,7 @@ class OuterSessionServiceTest {
         assertThat(sessionNode1.getOperations(), hasSize(equalTo(1)));
         assertThat(sessionNode2.getOperations(), hasSize(equalTo(0)));
 
-        MatcherAssert.assertThat(sessionNode1.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(sessionNode1.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionServiceTest.class, "shouldFetchDataInnerNewTx"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(OuterSessionService.class, "fetchDataInnerNewTx"),
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionService.class, "fetchDataInnerNewTx"),
@@ -143,7 +142,7 @@ class OuterSessionServiceTest {
 
         OperationNodeView operationNodeView1 = sessionNode1.getOperations().get(0);
         assertThat(operationNodeView1.getStatements(), hasSize(equalTo(1)));
-        MatcherAssert.assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(InnerSessionService.class, "fetchDataInNewTransaction")
         )));
     }
@@ -158,21 +157,21 @@ class OuterSessionServiceTest {
 
         SessionNodeView sessionNode = rootNodeWrapper.getFirstNewSession();
         assertThat(sessionNode.getOperations(), hasSize(equalTo(2)));
-        MatcherAssert.assertThat(sessionNode.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(sessionNode.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionServiceTest.class, "shouldFetchDataOuterTxInnerTx"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(OuterSessionService.class, "fetchDataOuterTxInnerTx")
         )));
 
         OperationNodeView operationNodeView1 = sessionNode.getOperations().get(0);
         assertThat(operationNodeView1.getStatements(), hasSize(equalTo(1)));
-        MatcherAssert.assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionService.class, "fetchDataOuterTxInnerTx"),
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionService.class, "fetchData")
         )));
 
         OperationNodeView operationNodeView2 = sessionNode.getOperations().get(1);
         assertThat(operationNodeView2.getStatements(), hasSize(equalTo(1)));
-        MatcherAssert.assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionService.class, "fetchDataOuterTxInnerTx"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(InnerSessionService.class, "fetchDataInExistingTransaction"),
                 FrameExtractSpecification.anyAppMethodCallFrame(InnerSessionService.class, "fetchDataInExistingTransaction")
@@ -192,27 +191,27 @@ class OuterSessionServiceTest {
         assertThat(sessionNode1.getOperations(), hasSize(equalTo(1)));
         assertThat(sessionNode2.getOperations(), hasSize(equalTo(1)));
 
-        MatcherAssert.assertThat(sessionNode1.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(sessionNode1.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionServiceTest.class, "shouldFetchDataOuterTxInnerNewTx"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(OuterSessionService.class, "fetchDataOuterTxInnerNewTx"),
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionService.class, "fetchDataOuterTxInnerNewTx"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(InnerSessionService.class, "fetchDataInNewTransaction")
         )));
 
-        MatcherAssert.assertThat(sessionNode2.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(sessionNode2.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionServiceTest.class, "shouldFetchDataOuterTxInnerNewTx"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(OuterSessionService.class, "fetchDataOuterTxInnerNewTx")
         )));
 
         OperationNodeView operationNodeView1 = sessionNode1.getOperations().get(0);
         assertThat(operationNodeView1.getStatements(), hasSize(equalTo(1)));
-        MatcherAssert.assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(InnerSessionService.class, "fetchDataInNewTransaction")
         )));
 
         OperationNodeView operationNodeView2 = sessionNode2.getOperations().get(0);
         assertThat(operationNodeView2.getStatements(), hasSize(equalTo(1)));
-        MatcherAssert.assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionService.class, "fetchDataOuterTxInnerNewTx"),
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionService.class, "fetchData")
         )));
@@ -231,14 +230,14 @@ class OuterSessionServiceTest {
         assertThat(sessionNode1.getOperations(), hasSize(equalTo(1)));
         assertThat(sessionNode2.getOperations(), hasSize(equalTo(1)));
 
-        MatcherAssert.assertThat(sessionNode1.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(sessionNode1.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionServiceTest.class, "shouldFetchDataOuterNoTxInnerTx"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(OuterSessionService.class, "fetchDataOuterNoTxInnerTx"),
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionService.class, "fetchDataOuterNoTxInnerTx"),
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionService.class, "fetchData")
         )));
 
-        MatcherAssert.assertThat(sessionNode2.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(sessionNode2.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionServiceTest.class, "shouldFetchDataOuterNoTxInnerTx"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(OuterSessionService.class, "fetchDataOuterNoTxInnerTx"),
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionService.class, "fetchDataOuterNoTxInnerTx"),
@@ -247,11 +246,11 @@ class OuterSessionServiceTest {
 
         OperationNodeView operationNodeView1 = sessionNode1.getOperations().get(0);
         assertThat(operationNodeView1.getStatements(), hasSize(equalTo(1)));
-        MatcherAssert.assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.allFrameCallMatcher(FrameExtractSpecification.notAppMethodCallFrame()));
+        assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.allFrameCallMatcher(FrameExtractSpecification.notAppMethodCallFrame()));
 
         OperationNodeView operationNodeView2 = sessionNode2.getOperations().get(0);
         assertThat(operationNodeView2.getStatements(), hasSize(equalTo(1)));
-        MatcherAssert.assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(InnerSessionService.class, "fetchDataInExistingTransaction")
         )));
     }
@@ -269,14 +268,14 @@ class OuterSessionServiceTest {
         assertThat(sessionNode1.getOperations(), hasSize(equalTo(1)));
         assertThat(sessionNode2.getOperations(), hasSize(equalTo(1)));
 
-        MatcherAssert.assertThat(sessionNode1.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(sessionNode1.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionServiceTest.class, "shouldFetchDataOuterNoTxInnerNewTx"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(OuterSessionService.class, "fetchDataOuterNoTxInnerNewTx"),
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionService.class, "fetchDataOuterNoTxInnerNewTx"),
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionService.class, "fetchData")
         )));
 
-        MatcherAssert.assertThat(sessionNode2.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(sessionNode2.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionServiceTest.class, "shouldFetchDataOuterNoTxInnerNewTx"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(OuterSessionService.class, "fetchDataOuterNoTxInnerNewTx"),
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionService.class, "fetchDataOuterNoTxInnerNewTx"),
@@ -285,11 +284,11 @@ class OuterSessionServiceTest {
 
         OperationNodeView operationNodeView1 = sessionNode1.getOperations().get(0);
         assertThat(operationNodeView1.getStatements(), hasSize(equalTo(1)));
-        MatcherAssert.assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.allFrameCallMatcher(FrameExtractSpecification.notAppMethodCallFrame()));
+        assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.allFrameCallMatcher(FrameExtractSpecification.notAppMethodCallFrame()));
 
         OperationNodeView operationNodeView2 = sessionNode2.getOperations().get(0);
         assertThat(operationNodeView2.getStatements(), hasSize(equalTo(1)));
-        MatcherAssert.assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(InnerSessionService.class, "fetchDataInNewTransaction")
         )));
     }
@@ -304,14 +303,14 @@ class OuterSessionServiceTest {
 
         SessionNodeView sessionNode = rootNodeWrapper.getFirstNewSession();
         assertThat(sessionNode.getOperations(), hasSize(equalTo(2)));
-        MatcherAssert.assertThat(sessionNode.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(sessionNode.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionServiceTest.class, "shouldFetchDataInnerTxOuterTx"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(OuterSessionService.class, "fetchDataInnerTxOuterTx")
         )));
 
         OperationNodeView operationNodeView2 = sessionNode.getOperations().get(0);
         assertThat(operationNodeView2.getStatements(), hasSize(equalTo(1)));
-        MatcherAssert.assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionService.class, "fetchDataInnerTxOuterTx"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(InnerSessionService.class, "fetchDataInExistingTransaction"),
                 FrameExtractSpecification.anyAppMethodCallFrame(InnerSessionService.class, "fetchDataInExistingTransaction")
@@ -319,7 +318,7 @@ class OuterSessionServiceTest {
 
         OperationNodeView operationNodeView1 = sessionNode.getOperations().get(1);
         assertThat(operationNodeView1.getStatements(), hasSize(equalTo(1)));
-        MatcherAssert.assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionService.class, "fetchDataInnerTxOuterTx"),
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionService.class, "fetchData")
         )));
@@ -338,27 +337,27 @@ class OuterSessionServiceTest {
         assertThat(sessionNode1.getOperations(), hasSize(equalTo(1)));
         assertThat(sessionNode2.getOperations(), hasSize(equalTo(1)));
 
-        MatcherAssert.assertThat(sessionNode1.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(sessionNode1.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionServiceTest.class, "shouldFetchDataInnerNewTxOuterTx"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(OuterSessionService.class, "fetchDataInnerNewTxOuterTx"),
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionService.class, "fetchDataInnerNewTxOuterTx"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(InnerSessionService.class, "fetchDataInNewTransaction")
         )));
 
-        MatcherAssert.assertThat(sessionNode2.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(sessionNode2.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionServiceTest.class, "shouldFetchDataInnerNewTxOuterTx"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(OuterSessionService.class, "fetchDataInnerNewTxOuterTx")
         )));
 
         OperationNodeView operationNodeView1 = sessionNode1.getOperations().get(0);
         assertThat(operationNodeView1.getStatements(), hasSize(equalTo(1)));
-        MatcherAssert.assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(InnerSessionService.class, "fetchDataInNewTransaction")
         )));
 
         OperationNodeView operationNodeView2 = sessionNode2.getOperations().get(0);
         assertThat(operationNodeView2.getStatements(), hasSize(equalTo(1)));
-        MatcherAssert.assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionService.class, "fetchDataInnerNewTxOuterTx"),
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionService.class, "fetchData")
         )));
@@ -377,27 +376,27 @@ class OuterSessionServiceTest {
         assertThat(sessionNode1.getOperations(), hasSize(equalTo(1)));
         assertThat(sessionNode2.getOperations(), hasSize(equalTo(2)));
 
-        MatcherAssert.assertThat(sessionNode1.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(sessionNode1.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionServiceTest.class, "shouldFetchDataOuterTxInnerNewTxOuterTx"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(OuterSessionService.class, "fetchDataOuterTxInnerNewTxOuterTx"),
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionService.class, "fetchDataOuterTxInnerNewTxOuterTx"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(InnerSessionService.class, "fetchDataInNewTransaction")
         )));
 
-        MatcherAssert.assertThat(sessionNode2.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(sessionNode2.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionServiceTest.class, "shouldFetchDataOuterTxInnerNewTxOuterTx"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(OuterSessionService.class, "fetchDataOuterTxInnerNewTxOuterTx")
         )));
 
         OperationNodeView operationNodeView1 = sessionNode1.getOperations().get(0);
         assertThat(operationNodeView1.getStatements(), hasSize(equalTo(1)));
-        MatcherAssert.assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(operationNodeView1.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(InnerSessionService.class, "fetchDataInNewTransaction")
         )));
 
         OperationNodeView operationNodeView2 = sessionNode2.getOperations().get(0);
         assertThat(operationNodeView2.getStatements(), hasSize(equalTo(1)));
-        MatcherAssert.assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+        assertThat(operationNodeView2.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionService.class, "fetchDataOuterTxInnerNewTxOuterTx"),
                 FrameExtractSpecification.anyAppMethodCallFrame(OuterSessionService.class, "fetchData")
         )));
