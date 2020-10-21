@@ -45,8 +45,12 @@ image:{fossa-icon}[FOSSA Status, link={fossa-link}]
 image:{snyk-icon}[Known Vulnerabilities, link={snyk-link}]
 
 
-*JPlusOne* is a Java library designed primarily to detect and report situations where N+1 SELECT problem occurs, i.e. initialization of lazy collection of entities
-or initialization of entity proxy, resulting in additional SQL statement(s).
+
+*JPlusOne* is a Java library for correlating SQL statements with executions of JPA operations (explicit calls, lazy-loading, flush on commit)
+which triggered them and places in source code of your application which were involved in it.
+
+Based on collected data JPlusOne can report complete tree of JPA persistence related activity or just situations when lazy loading is occurring, potentially leading to N+1 SELECT problem.
+Moreover JPlusOne provides API which allows to write tests checking how effectively, from performance point of view, your application is using JPA (i.e. assert amount of lazy loading operations )
 
 == Prerequisites
 JPlusOne can be applied only to projects which meets following requirements:
@@ -119,8 +123,6 @@ For each such test a report of JPA operations / SQL statements, like the one bel
 Sample project showing `jplusone-core` in action is available https://github.com/adgadev/jplusone/tree/master/jplusone-tests/jplusone-tests-main[here]. It's a simple spring boot project with some JPA domain modeled. Just run any test there to see a report.
 
 == Features
-The tool is not limited only to detecting lazy loading / N+1 problems. Apart from that it:
-
 * Shows general activity at JPA and SQL level related with some business scenarios, not necessarily related with lazy loading.
 * Shows tree of application method calls and SQL statements (discarding all non-relevant data) associated with some business operation (i.e. REST controller endpoint call) in a handy way.
 * Allows to easily correlate JPA operations with resulting SQL statements.
