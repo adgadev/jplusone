@@ -17,7 +17,6 @@
 package com.adgadev.jplusone.asserts.context.mother;
 
 import com.adgadev.jplusone.asserts.context.stub.StatementNodeStub;
-import com.adgadev.jplusone.core.registry.StatementNodeView;
 import com.adgadev.jplusone.core.registry.StatementType;
 
 public class StatementNodeMother {

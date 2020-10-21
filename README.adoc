@@ -25,6 +25,11 @@
 :snyk-icon: https://snyk.io/test/github/adgadev/jplusone/badge.svg
 :snyk-link: https://snyk.io/test/github/adgadev/jplusone/
 
+:fossa-large-icon: https://app.fossa.com/api/projects/git%2Bgithub.com%2Fadgadev%2Fjplusone.svg?type=large
+:fossa-large-link: https://app.fossa.com/projects/git%2Bgithub.com%2Fadgadev%2Fjplusone?ref=badge_large
+
+:assertion-api-gif: https://github.com/adgadev/jplusone/blob/master/fluent-api.gif
+
 :release_version: 1.0.0
 
 = JPlusOne
@@ -52,7 +57,7 @@ JPlusOne can be applied only to projects which meets following requirements:
 * Slf4j
 
 == Quickstart
-Add the following dependency to your project:
+Add the following Maven dependency to your project:
 [source,xml,subs="verbatim,attributes"]
 ----
 <dependency>
@@ -267,9 +272,9 @@ that further development changes in your application, often done by other develo
 i.e. by introducing some additional lazy loading operations.
 
 === How to use assertion API
-In order to use it you need to add following dependency and write or extend spring boot tests of your application by defining
-`JPlusOneAssertionRule` and asserting it against `JPlusOneAssertionContext` bean, injected via `@Autowired` dependency.
+Ensure current JPlusOne https://github.com/adgadev/jplusone#configuration[Configuration] matches your application.
 
+Add following Maven dependency:
 
 [source,xml,subs="verbatim,attributes"]
 ----
@@ -280,9 +285,8 @@ In order to use it you need to add following dependency and write or extend spri
     <scope>test</scope>
 </dependency>
 ----
+Add spring boot tests which defines `JPlusOneAssertionRule`, executes one of the business operation in your application and asserts results of it against the defined rule.
 
-There is a fluent, self-descriptive API for building assertion rules, just start typing `JPlusOneAssertionRule.within()`
-and your IDE will guide you through the process of defining it
 [source,java]
 ----
 @SpringBootTest
@@ -312,12 +316,15 @@ class LazyLoadingTest {
 }
 ----
 
+There is a fluent, self-descriptive API for building assertion rules, just start typing `JPlusOneAssertionRule.within()`
+and your IDE will guide you through the process of defining it:
+
+image:{assertion-api-gif}[Fluent API for assertions]
+
 Sample spring boot test showing jplusone assertion in action is available https://github.com/adgadev/jplusone/tree/master/jplusone-assert/src/test/java/com/adgadev/jplusone/asserts/api/JPlusOneAssertionIntegrationTest.java[here].
 
 More examples presenting building various assertion rules can be found https://github.com/adgadev/jplusone/tree/master/jplusone-assert/src/test/java/com/adgadev/jplusone/asserts/api/JPlusOneAssertionRuleTest.java[here].
 
 == License
-:fossa-large-icon: https://app.fossa.com/api/projects/git%2Bgithub.com%2Fadgadev%2Fjplusone.svg?type=large
-:fossa-large-link: https://app.fossa.com/projects/git%2Bgithub.com%2Fadgadev%2Fjplusone?ref=badge_large
-
 image:{fossa-large-icon}[FOSSA Status, link={fossa-large-link}]
+
