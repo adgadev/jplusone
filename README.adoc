@@ -122,6 +122,70 @@ For each such test a report of JPA operations / SQL statements, like the one bel
 
 Sample project showing `jplusone-core` in action is available https://github.com/adgadev/jplusone/tree/master/jplusone-tests/jplusone-tests-main[here]. It's a simple spring boot project with some JPA domain modeled. Just run any test there to see a report.
 
+== Assertion API
+
+JPlusOne provides Assertion API which can be used to write tests checking various aspects of JPA operations / SQL statements, i.e.
+if lazy loading has not started occurring in given test scenario or amount of SELECT queries is not larger than some amount.
+
+Such tests may be very useful in situation when you have optimized lazy loading processes in your business operations and you want to enforce
+that further development changes in your application, often done by other developers, won't degrade the performance accidentally
+i.e. by introducing some additional lazy loading operations.
+
+=== How to use assertion API
+Ensure current JPlusOne https://github.com/adgadev/jplusone#configuration[Configuration] matches your application.
+
+Add following Maven dependency:
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>com.adgadev.jplusone</groupId>
+    <artifactId>jplusone-assert</artifactId>
+    <version>{release_version}</version>
+    <scope>test</scope>
+</dependency>
+----
+Add spring boot tests which defines `JPlusOneAssertionRule`, executes one of the business operation in your application and asserts results of it against the defined rule.
+
+[source,java]
+----
+@SpringBootTest
+class LazyLoadingTest {
+
+    @Autowired
+    private JPlusOneAssertionContext assertionContext;
+
+    @Autowired
+    private SampleService sampleService;
+
+    @Test
+    public void shouldBusinessCheckOperationAgainstJPlusOneAssertionRule() {
+        JPlusOneAssertionRule rule = JPlusOneAssertionRule
+                .within().lastSession()
+                .shouldBe().noImplicitOperations().exceptAnyOf(exclusions -> exclusions
+                        .loadingEntity(Author.class).times(atMost(2))
+                        .loadingCollection(Author.class, "books")
+                );
+
+        // trigger business operation which you wish to be asserted against the rule,
+        // i.e. via directly calling a service or via sending request to your API controller
+        sampleService.executeBusinessOperation();
+
+        rule.check(assertionContext);
+    }
+}
+----
+
+There is a fluent, self-descriptive API for building assertion rules, just start typing `JPlusOneAssertionRule.within()`
+and your IDE will guide you through the process of defining it:
+
+image:{assertion-api-gif}[Fluent API for assertions]
+
+Sample spring boot test showing jplusone assertion in action is available https://github.com/adgadev/jplusone/tree/master/jplusone-assert/src/test/java/com/adgadev/jplusone/asserts/api/JPlusOneAssertionIntegrationTest.java[here].
+
+More examples presenting building various assertion rules can be found https://github.com/adgadev/jplusone/tree/master/jplusone-assert/src/test/java/com/adgadev/jplusone/asserts/api/JPlusOneAssertionRuleTest.java[here].
+
+
 == Features
 * Shows general activity at JPA and SQL level related with some business scenarios, not necessarily related with lazy loading.
 * Shows tree of application method calls and SQL statements (discarding all non-relevant data) associated with some business operation (i.e. REST controller endpoint call) in a handy way.
@@ -134,7 +198,7 @@ if lazy loading has not started occurring in given test scenario or amount of SE
 More about N+1 SELECT problem you can find in link:https://stackoverflow.com/questions/97197/what-is-the-n1-selects-problem-in-orm-object-relational-mapping/39696775[this] thread at StackOverflow.
 
 
-== Usage
+== Overview
 JPlusOne tool is able to generate report showing all kind of JPA operations / SQL statements, but in order to generate such report you need
 to have Spring Boot based integration tests of your application (`@SpringBootTest`), which covers scenarios you are interested in
 (i.e. integration test of some endpoint of your application).
@@ -263,69 +327,6 @@ public static void refreshLoggerConfiguration() {
 ----
 * Force JPlusOne reports to be printed directly to the stdout, instead of logger, using property:
 `jplusone.report.output=STDOUT`
-
-== Assertion API
-
-JPlusOne provides Assertion API which can be used to write tests checking various aspects of JPA operations / SQL statements, i.e.
-if lazy loading has not started occurring in given test scenario or amount of SELECT queries is not larger than some amount.
-
-Such tests may be very useful in situation when you have optimized lazy loading processes in your business operations and you want to enforce
-that further development changes in your application, often done by other developers, won't degrade the performance accidentally
-i.e. by introducing some additional lazy loading operations.
-
-=== How to use assertion API
-Ensure current JPlusOne https://github.com/adgadev/jplusone#configuration[Configuration] matches your application.
-
-Add following Maven dependency:
-
-[source,xml,subs="verbatim,attributes"]
-----
-<dependency>
-    <groupId>com.adgadev.jplusone</groupId>
-    <artifactId>jplusone-assert</artifactId>
-    <version>{release_version}</version>
-    <scope>test</scope>
-</dependency>
-----
-Add spring boot tests which defines `JPlusOneAssertionRule`, executes one of the business operation in your application and asserts results of it against the defined rule.
-
-[source,java]
-----
-@SpringBootTest
-class LazyLoadingTest {
-
-    @Autowired
-    private JPlusOneAssertionContext assertionContext;
-
-    @Autowired
-    private SampleService sampleService;
-
-    @Test
-    public void shouldBusinessCheckOperationAgainstJPlusOneAssertionRule() {
-        JPlusOneAssertionRule rule = JPlusOneAssertionRule
-                .within().lastSession()
-                .shouldBe().noImplicitOperations().exceptAnyOf(exclusions -> exclusions
-                        .loadingEntity(Author.class).times(atMost(2))
-                        .loadingCollection(Author.class, "books")
-                );
-
-        // trigger business operation which you wish to be asserted against the rule,
-        // i.e. via directly calling a service or via sending request to your API controller
-        sampleService.executeBusinessOperation();
-
-        rule.check(assertionContext);
-    }
-}
-----
-
-There is a fluent, self-descriptive API for building assertion rules, just start typing `JPlusOneAssertionRule.within()`
-and your IDE will guide you through the process of defining it:
-
-image:{assertion-api-gif}[Fluent API for assertions]
-
-Sample spring boot test showing jplusone assertion in action is available https://github.com/adgadev/jplusone/tree/master/jplusone-assert/src/test/java/com/adgadev/jplusone/asserts/api/JPlusOneAssertionIntegrationTest.java[here].
-
-More examples presenting building various assertion rules can be found https://github.com/adgadev/jplusone/tree/master/jplusone-assert/src/test/java/com/adgadev/jplusone/asserts/api/JPlusOneAssertionRuleTest.java[here].
 
 == License
 image:{fossa-large-icon}[FOSSA Status, link={fossa-large-link}]
