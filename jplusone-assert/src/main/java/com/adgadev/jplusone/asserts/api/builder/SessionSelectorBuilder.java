@@ -20,10 +20,14 @@ public interface SessionSelectorBuilder {
 
     ExecutionFilterBuilder eachSession();
 
+    @Deprecated(forRemoval = true) // counting from beginning may give non-deterministic results when spring context is cached in test
     ExecutionFilterBuilder firstSession();
 
     ExecutionFilterBuilder lastSession();
 
+    @Deprecated(forRemoval = true) // counting from beginning may give non-deterministic results when spring context is cached in test
     ExecutionFilterBuilder nthSession(int n);
+
+    ExecutionFilterBuilder nthLastSession(int n);
 
 }

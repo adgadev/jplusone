@@ -224,4 +224,71 @@ class SessionSelectorRuleTest {
                 .within().nthSession(-1)
                 .shouldBe().noImplicitOperations());
     }
+
+    //--------------------
+    private static Stream<Arguments> provideNthLastSessionAssertionSucceedData() {
+        return Stream.of(
+                Arguments.of(ContextDataSet.SESSION_WITH_EXPLICIT_OPERATION, 0),
+                Arguments.of(ContextDataSet.TWO_SESSIONS_WITH_EXPLICIT_OPERATIONS, 0),
+                Arguments.of(ContextDataSet.TWO_SESSIONS_WITH_EXPLICIT_OPERATIONS, 1),
+                Arguments.of(ContextDataSet.SESSION_WITH_EXPLICIT_OPERATION_AND_SESSION_WITH_IMPLICIT_OPERATION, 1),
+                Arguments.of(ContextDataSet.SESSION_WITH_IMPLICIT_OPERATION_AND_SESSION_WITH_EXPLICIT_OPERATION, 0)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideNthLastSessionAssertionSucceedData")
+    void shouldNthLastSessionAssertionSucceed(ContextDataSet contextDataSet, int sessionNumber) {
+        JPlusOneAssertionRule rule = JPlusOneAssertionRule
+                .within().nthLastSession(sessionNumber)
+                .shouldBe().noImplicitOperations();
+
+        rule.check(contextDataSet.context);
+    }
+
+    private static Stream<Arguments> provideNthLastSessionAssertionFailData() {
+        return Stream.of(
+                Arguments.of(ContextDataSet.SESSION_WITH_IMPLICIT_OPERATION, 0),
+                Arguments.of(ContextDataSet.TWO_SESSIONS_WITH_IMPLICIT_OPERATIONS, 0),
+                Arguments.of(ContextDataSet.TWO_SESSIONS_WITH_IMPLICIT_OPERATIONS, 1),
+                Arguments.of(ContextDataSet.SESSION_WITH_EXPLICIT_OPERATION_AND_SESSION_WITH_IMPLICIT_OPERATION, 0),
+                Arguments.of(ContextDataSet.SESSION_WITH_IMPLICIT_OPERATION_AND_SESSION_WITH_EXPLICIT_OPERATION, 1)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideNthLastSessionAssertionFailData")
+    void shouldNthLastSessionAssertionFail(ContextDataSet contextDataSet, int sessionNumber) {
+        JPlusOneAssertionRule rule = JPlusOneAssertionRule
+                .within().nthLastSession(sessionNumber)
+                .shouldBe().noImplicitOperations();
+
+        Error error = assertThrows(AssertionError.class, () -> rule.check(contextDataSet.context));
+        assertThat(error.getMessage(), startsWith("Actual amount of IMPLICIT operations after applying exclusions is different than the expected amount"));
+    }
+
+    private static Stream<Arguments> provideNthLastSessionInvalidData() {
+        return Stream.of(
+                Arguments.of(ContextDataSet.SESSION_WITH_EXPLICIT_OPERATION, 1, RuntimeException.class, "Session number is larger than last captured session number"),
+                Arguments.of(ContextDataSet.NO_SESSION, 0, RuntimeException.class, "Session number is larger than last captured session number")
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideNthLastSessionInvalidData")
+    void shouldNthLastSessionAssertionFailWithRuntimeException(ContextDataSet contextDataSet, int sessionNumber, Class<? extends Exception> exceptionClass, String exceptionMessage) {
+        JPlusOneAssertionRule rule = JPlusOneAssertionRule
+                .within().nthLastSession(sessionNumber)
+                .shouldBe().noImplicitOperations();
+
+        Exception exception = assertThrows(exceptionClass, () -> rule.check(contextDataSet.context));
+        assertThat(exception.getMessage(), equalTo(exceptionMessage));
+    }
+
+    @Test
+    void shouldFailToCreateNthLastSessionRuleForNegativeNumber() {
+        assertThrows(RuntimeException.class, () -> JPlusOneAssertionRule
+                .within().nthLastSession(-1)
+                .shouldBe().noImplicitOperations());
+    }
 }

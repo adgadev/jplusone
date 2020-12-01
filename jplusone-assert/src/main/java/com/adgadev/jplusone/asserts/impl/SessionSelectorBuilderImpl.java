@@ -64,6 +64,16 @@ class SessionSelectorBuilderImpl implements SessionSelectorBuilder {
         return new ExecutionFilterBuilderImpl(rule);
     }
 
+    @Override
+    public ExecutionFilterBuilder nthLastSession(int n) {
+        ensureThat(n >= 0, "Session number must be positive");
+        rule.setSessionSelector(getSessionSelector(size -> {
+            ensureThat(n < size, "Session number is larger than last captured session number");
+            return size - 1 - n;
+        }));
+        return new ExecutionFilterBuilderImpl(rule);
+    }
+
     private SessionSelector getSessionSelector(Function<Integer, Integer> sizeToElementPosition) {
         return rootNodeView -> rootNodeView.getSessions()
                 .stream()
