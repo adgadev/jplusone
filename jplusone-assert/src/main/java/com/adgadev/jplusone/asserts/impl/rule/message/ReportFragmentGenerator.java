@@ -16,22 +16,18 @@
 
 package com.adgadev.jplusone.asserts.impl.rule.message;
 
-import com.adgadev.jplusone.core.properties.JPlusOneProperties.JPlusOneReportProperties;
 import com.adgadev.jplusone.core.registry.FrameStack;
 import com.adgadev.jplusone.core.registry.OperationNodeView;
 import com.adgadev.jplusone.core.registry.OperationType;
 import com.adgadev.jplusone.core.registry.SessionNodeView;
 import com.adgadev.jplusone.core.registry.StatementType;
-import com.adgadev.jplusone.core.report.ReportGenerator;
+import com.adgadev.jplusone.core.report.SessionFormatter;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
-import static com.adgadev.jplusone.core.properties.JPlusOneProperties.JPlusOneReportProperties.OperationFilteringMode.ALL_OPERATIONS;
-import static com.adgadev.jplusone.core.properties.JPlusOneProperties.JPlusOneReportProperties.StatementFilteringMode.ALL_STATEMENTS;
 
 public class ReportFragmentGenerator {
 
@@ -40,17 +36,14 @@ public class ReportFragmentGenerator {
     }
 
     String generate(SessionNodeView session, List<OperationNodeView> operations, Set<StatementType> filteredStatementTypes) {
-        JPlusOneReportProperties properties = new JPlusOneReportProperties();
-        properties.setOperationFilteringMode(ALL_OPERATIONS);
-        properties.setStatementFilteringMode(ALL_STATEMENTS);
-
-        ReportGenerator reportGenerator = new ReportGenerator(properties);
-        SessionFragment sessionFragment = new SessionFragment(session, operations);
-        Set<OperationType> operationTypes = properties.getOperationFilteringMode().getOperationTypes();
+        Set<OperationType> operationTypes = Set.of(OperationType.values());
         Set<StatementType> statementTypes = Optional.ofNullable(filteredStatementTypes)
-                .orElse(properties.getStatementFilteringMode().getStatementTypes());
+                .orElseGet(() -> Set.of(StatementType.values()));
 
-        return reportGenerator.sessionToString(sessionFragment, operationTypes, statementTypes);
+        SessionFormatter sessionFormatter = new SessionFormatter(operationTypes, statementTypes, true);
+        SessionFragment sessionFragment = new SessionFragment(session, operations);
+
+        return sessionFormatter.format(sessionFragment);
     }
 
     @RequiredArgsConstructor

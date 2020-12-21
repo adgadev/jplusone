@@ -24,12 +24,12 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class ReportSqlFormatterTest {
+class SqlFormatterTest {
 
     @ParameterizedTest
     @MethodSource("sqlDataProvider")
     void shouldFormatSql(String inputSql, String expectedSql) {
-        String formattedSql = ReportSqlFormatter.formatSql("    ", inputSql);
+        String formattedSql = SqlFormatter.formatSql("    ", inputSql);
         assertEquals(expectedSql, formattedSql);
     }
 
