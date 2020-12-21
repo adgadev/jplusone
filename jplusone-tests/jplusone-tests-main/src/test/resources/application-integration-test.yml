@@ -8,7 +8,7 @@ jplusone:
   debug-mode: false
   report:
     enabled: true
-    output: LOGGER
+    output: LOGGER_AND_FILE
     proxy-call-frames-hidden: true
     operation-filtering-mode: ALL_OPERATIONS
     statement-filtering-mode: ALL_STATEMENTS

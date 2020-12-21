@@ -20,7 +20,7 @@ import com.adgadev.jplusone.core.registry.StatementNode;
 
 import static org.hibernate.engine.jdbc.internal.FormatStyle.BASIC;
 
-class ReportSqlFormatter {
+class SqlFormatter {
 
     private static final String SELECT_CLAUSE_CAPTURED = "select " + StatementNode.COLUMN_LIST_SUBSTITUTE + " from";
 

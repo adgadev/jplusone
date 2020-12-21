@@ -74,7 +74,9 @@ public class JPlusOneProperties {
 
         public enum Output {
             LOGGER,
-            STDOUT
+            STDOUT,
+            FILE,
+            LOGGER_AND_FILE
         }
 
         private boolean enabled = true;
@@ -86,6 +88,8 @@ public class JPlusOneProperties {
         private StatementFilteringMode statementFilteringMode = READ_STATEMENTS_ONLY;
 
         private Output output = LOGGER;
+
+        private String filePath = "target/jplusone-report.txt";
 
     }
 

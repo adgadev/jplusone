@@ -16,46 +16,33 @@
 
 package com.adgadev.jplusone.core.report;
 
-import com.adgadev.jplusone.core.frame.FrameExtract;
 import com.adgadev.jplusone.core.properties.JPlusOneProperties.JPlusOneReportProperties;
-import com.adgadev.jplusone.core.properties.JPlusOneProperties.JPlusOneReportProperties.Output;
-import com.adgadev.jplusone.core.registry.LazyInitialisation;
-import com.adgadev.jplusone.core.registry.OperationNodeView;
 import com.adgadev.jplusone.core.registry.OperationType;
 import com.adgadev.jplusone.core.registry.SessionNodeView;
-import com.adgadev.jplusone.core.registry.StatementNodeView;
 import com.adgadev.jplusone.core.registry.StatementType;
+import com.adgadev.jplusone.core.report.output.ReportChannel;
+import com.adgadev.jplusone.core.report.output.ReportChannel.MessageType;
+import com.adgadev.jplusone.core.report.output.ReportChannelFactory;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
-
-import static com.adgadev.jplusone.core.utils.CollectionUtils.getLastItemOfList;
-import static com.adgadev.jplusone.core.utils.StreamUtils.filterToList;
 
 @Slf4j
 public class ReportGenerator {
 
-    private final String NEWLINE = "\n";
-
-    private static String INDENT = "    ";
-
-    private final Map<Integer, String> INDENTS = Map.of(
-            1, INDENT,
-            2, INDENT + INDENT,
-            3, INDENT + INDENT + INDENT,
-            4, INDENT + INDENT + INDENT + INDENT,
-            5, INDENT + INDENT + INDENT + INDENT + INDENT,
-            6, INDENT + INDENT + INDENT + INDENT + INDENT + INDENT,
-            7, INDENT + INDENT + INDENT + INDENT + INDENT + INDENT + INDENT
-    );
-
     private final JPlusOneReportProperties reportProperties;
 
-    public ReportGenerator(JPlusOneReportProperties reportProperties) {
+    private final ReportChannel reportChannel;
+
+    private final SessionFormatter sessionFormatter;
+
+    public ReportGenerator(JPlusOneReportProperties reportProperties, ReportChannelFactory reportChannelFactory) {
+        Set<OperationType> visibleOperationsType = reportProperties.getOperationFilteringMode().getOperationTypes();
+        Set<StatementType> visibleStatementsType = reportProperties.getStatementFilteringMode().getStatementTypes();
+
         this.reportProperties = reportProperties;
+        this.reportChannel = reportChannelFactory.createReportChannel(log);
+        this.sessionFormatter = new SessionFormatter(visibleOperationsType, visibleStatementsType, reportProperties.isProxyCallFramesHidden());
 
         if (!reportProperties.isEnabled()) {
             log.debug("JPlusOne report generation is disabled");
@@ -74,91 +61,10 @@ public class ReportGenerator {
                     .count() > 0;
 
             if (matchedStatementAndOperationFound) {
-                printLog(sessionToString(session, visibleOperationsType, visibleStatementsType));
+                reportChannel.printMessage(MessageType.REPORT, sessionFormatter.format(session));
             } else {
-                printLog("No operations / statements matching report criteria found");
+                reportChannel.printMessage(MessageType.TEXT, "No operations / statements matching report criteria found");
             }
-        }
-    }
-
-    public String sessionToString(SessionNodeView session, Set<OperationType> visibleOperationsType, Set<StatementType> visibleStatementsType) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(NEWLINE + INDENTS.get(1) + "ROOT");
-
-        List<FrameExtract> sessionCallFrames = session.getSessionFrameStack().getCallFrames();
-
-        for (FrameExtract frame : filterApplicationCallFrames(sessionCallFrames, reportProperties.isProxyCallFramesHidden())) {
-            if (frame.isNotThirdPartyClass()) {
-                builder.append(NEWLINE + INDENTS.get(2));
-                builder.append(frame.format());
-            }
-        }
-
-        builder.append(NEWLINE + INDENTS.get(3) + "SESSION BOUNDARY");
-
-        for (OperationNodeView operation : session.getOperations()) {
-            if (visibleOperationsType.contains(operation.getOperationType())
-                    && containsAnyVisibleStatements(operation, visibleStatementsType)) {
-
-                builder.append(NEWLINE + INDENTS.get(4) + "OPERATION [" + operation.getOperationType() + "]");
-                List<FrameExtract> operationCallFrames = operation.getCallFramesStack().getCallFrames();
-
-                for (FrameExtract frame : filterApplicationCallFrames(operationCallFrames, reportProperties.isProxyCallFramesHidden())) {
-                    if (frame.isNotThirdPartyClass()) {
-                        builder.append(NEWLINE + INDENTS.get(5));
-                        builder.append(frame.format());
-                    }
-                }
-
-                for (LazyInitialisation lazyInitialisation: operation.getLazyInitialisations()) {
-                    builder.append(NEWLINE + INDENTS.get(5) + lazyInitialisation);
-                }
-
-                for (StatementNodeView statement : operation.getStatements()) {
-                    if (visibleStatementsType.contains(statement.getStatementType())) {
-                        builder.append(NEWLINE + INDENTS.get(6) + "STATEMENT [" + statement.getStatementType().getStatementGroupType() + "]");
-                        builder.append(ReportSqlFormatter.formatSql(INDENTS.get(7), statement.getSql()));
-                    }
-                }
-            }
-        }
-
-        return builder.toString();
-    }
-
-    private boolean containsAnyVisibleStatements(OperationNodeView operation, Set<StatementType> visibleStatementsType) {
-        return operation.getStatements().stream()
-                .filter(statementNode -> visibleStatementsType.contains(statementNode.getStatementType()))
-                .findFirst()
-                .isPresent();
-    }
-
-    private List<FrameExtract> filterApplicationCallFrames(List<FrameExtract> callFrames, boolean proxyCallFramesHidden) {
-        List<FrameExtract> applicationAllCallFrames = filterToList(callFrames, FrameExtract::isNotThirdPartyClass);
-
-        if (!proxyCallFramesHidden) {
-            return applicationAllCallFrames;
-        } else {
-            List<FrameExtract> result = filterToList(applicationAllCallFrames, FrameExtract::isApplicationClass);
-
-            if (!applicationAllCallFrames.isEmpty()) {
-                Optional<FrameExtract> lastApplicationCallFrame = getLastItemOfList(applicationAllCallFrames);
-                Optional<FrameExtract> lastApplicationClassCallFrame = getLastItemOfList(result);
-
-                if (lastApplicationCallFrame.isPresent() && !lastApplicationCallFrame.equals(lastApplicationClassCallFrame)) {
-                    result.add(lastApplicationCallFrame.get());
-                }
-            }
-
-            return result;
-        }
-    }
-
-    private void printLog(String message) {
-        if (reportProperties.getOutput() == Output.LOGGER) {
-            log.debug(message);
-        } else if (reportProperties.getOutput() == Output.STDOUT) {
-            System.out.println(message);
         }
     }
 }
