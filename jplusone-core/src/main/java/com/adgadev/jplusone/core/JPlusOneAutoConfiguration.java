@@ -20,6 +20,7 @@ import com.adgadev.jplusone.core.flyway.FlywayAspect;
 import com.adgadev.jplusone.core.proxy.ProxiedRootsBeanPostProcessor;
 import com.adgadev.jplusone.core.proxy.datasource.HikariDataSourceAspect;
 import com.adgadev.jplusone.core.proxy.hibernate.HibernateCollectionInitialisationEventListener;
+import com.adgadev.jplusone.core.report.output.ReportChannelFactory;
 import com.adgadev.jplusone.core.report.ReportGenerator;
 import com.adgadev.jplusone.core.tracking.LoggingStateListener;
 import com.adgadev.jplusone.core.utils.ApplicationScanner;
@@ -41,6 +42,7 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.persistence.EntityManagerFactory;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Configuration
 @RequiredArgsConstructor
@@ -48,6 +50,8 @@ import java.util.Optional;
 @ConditionalOnProperty(prefix = "jplusone", name = "enabled", matchIfMissing = true)
 @AutoConfigureAfter(name = "org.springframework.cloud.autoconfigure.RefreshAutoConfiguration")
 public class JPlusOneAutoConfiguration {
+
+    private static final AtomicInteger SPRING_CONTEXT_NUMBER_PROVIDER = new AtomicInteger(0);
 
     private final JPlusOneProperties jPlusOneProperties;
 
@@ -71,8 +75,14 @@ public class JPlusOneAutoConfiguration {
     }
 
     @Bean
-    public ReportGenerator reportGenerator() {
-        return new ReportGenerator(jPlusOneProperties.getReport());
+    public ReportChannelFactory reportChannelFactory() {
+        int springContextNumber = SPRING_CONTEXT_NUMBER_PROVIDER.incrementAndGet();
+        return new ReportChannelFactory(jPlusOneProperties.getReport(), springContextNumber);
+    }
+
+    @Bean
+    public ReportGenerator reportGenerator(ReportChannelFactory reportChannelFactory) {
+        return new ReportGenerator(jPlusOneProperties.getReport(), reportChannelFactory);
     }
 
     @Bean

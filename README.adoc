@@ -120,6 +120,8 @@ For each such test a report of JPA operations / SQL statements, like the one bel
                                 books0_.author_id=1
 ----
 
+There is also option to generate such report to separate file or stdout or both file and log.
+
 Sample project showing `jplusone-core` in action is available https://github.com/adgadev/jplusone/tree/master/jplusone-tests/jplusone-tests-main[here]. It's a simple spring boot project with some JPA domain modeled. Just run any test there to see a report.
 
 == Assertion API
@@ -251,6 +253,7 @@ jplusone:
     proxy-call-frames-hidden: true
     operation-filtering-mode: ALL_OPERATIONS
     statement-filtering-mode: ALL_STATEMENTS
+    file-path: target/jplusone-report.txt
 ----
 
 ==== Configuration properties:
@@ -292,9 +295,14 @@ Default value: `READ_STATEMENTS_ONLY`
 Default value: `true`
 
 |`jplusone.report.output`
-|Defines which output will be used to print report. Possible values: `LOGGER`, `STDOUT`
+|Defines which output will be used to print report. Possible values: `LOGGER`, `STDOUT`, `FILE`, `LOGGER_AND_FILE`
 
 Default value: `LOGGER`
+
+|`jplusone.report.file-path`
+|Absolute or relative path to a file with the report. It has an effect only if output is `FILE` or `LOGGER_AND_FILE`
+
+Default value: `target/jplusone-report.txt`
 |===
 
 == Troubleshooting
