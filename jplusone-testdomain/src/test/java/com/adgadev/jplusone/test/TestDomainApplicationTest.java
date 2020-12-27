@@ -24,5 +24,6 @@ class TestDomainApplicationTest {
 
     @Test
     void contextLoads() {
+        // empty
     }
 }

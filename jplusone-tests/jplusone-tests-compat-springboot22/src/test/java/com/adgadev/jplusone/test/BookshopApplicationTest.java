@@ -26,6 +26,7 @@ class BookshopApplicationTest {
 
     @Test
     void contextLoads() {
+        // empty
     }
 
 }
