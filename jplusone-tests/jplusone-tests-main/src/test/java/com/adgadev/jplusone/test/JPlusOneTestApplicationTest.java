@@ -26,5 +26,6 @@ class JPlusOneTestApplicationTest {
 
     @Test
     void contextLoads() {
+        // empty
     }
 }
