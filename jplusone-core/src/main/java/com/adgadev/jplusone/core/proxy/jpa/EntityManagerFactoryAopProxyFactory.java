@@ -48,8 +48,9 @@ public class EntityManagerFactoryAopProxyFactory {
         @Override
         public Object invoke(MethodInvocation methodInvocation) throws Throwable {
             Object result = methodInvocation.proceed();
+            String methodName = methodInvocation.getMethod().getName();
 
-            if (methodInvocation.getMethod().getName().equals("createEntityManager")) {
+            if (methodName.equals("createEntityManager") || methodName.equals("createNativeEntityManager")) {
                 log.trace("Returning wrapped entityManager");
                 return wrapEntityManager((EntityManager) result);
             }

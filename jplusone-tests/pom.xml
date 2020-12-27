@@ -46,6 +46,7 @@
         <module>jplusone-tests-compat-springboot20</module>
         <module>jplusone-tests-compat-springboot21</module>
         <module>jplusone-tests-compat-springboot22</module>
+        <module>jplusone-tests-compat-springboot23</module>
         <module>jplusone-tests-compat-springcloud</module>
     </modules>
 
