@@ -122,6 +122,9 @@ For each such test a report of JPA operations / SQL statements, like the one bel
 
 Sample project showing `jplusone-core` in action is available https://github.com/adgadev/jplusone/tree/master/jplusone-tests/jplusone-tests-main[here]. It's a simple spring boot project with some JPA domain modeled. Just run any test there to see a report.
 
+The article showing how JPlusOne can simplify finding origin and context of JPA issued SQL statements and step-by-step guide how to use it is available
+https://adgadev.com/finding-origin-and-context-of-jpa-issued-sql-statemets/[here]
+
 == Assertion API
 
 JPlusOne provides Assertion API which can be used to write tests checking various aspects of JPA operations / SQL statements, i.e.
