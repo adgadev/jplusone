@@ -1,0 +1,23 @@
+
+    ROOT
+        com.adgadev.jplusone.test.BookshopControllerTest.shouldGetBookDetailsLazily(BookshopControllerTest.java:#LINE_NUMBER#)
+        com.adgadev.jplusone.test.domain.bookshop.BookshopController.getSampleBookUsingLazyLoading(BookshopController.java:31)
+        com.adgadev.jplusone.test.domain.bookshop.BookshopService.getSampleBookDetailsUsingLazyLoading [PROXY]
+            SESSION BOUNDARY
+                OPERATION [EXPLICIT]
+                    com.adgadev.jplusone.test.domain.bookshop.BookshopService.getSampleBookDetailsUsingLazyLoading(BookshopService.java:34)
+                    com.adgadev.jplusone.test.domain.bookshop.BookRepository.findById [PROXY]
+                        STATEMENT [READ]
+                            select [...] from
+                                book book0_ 
+                            where
+                                book0_.id=1
+                OPERATION [IMPLICIT]
+                    com.adgadev.jplusone.test.domain.bookshop.BookshopService.getSampleBookDetailsUsingLazyLoading(BookshopService.java:35)
+                    com.adgadev.jplusone.test.domain.bookshop.Author.getName [PROXY]
+                    com.adgadev.jplusone.test.domain.bookshop.Author [FETCHING ENTITY]
+                        STATEMENT [READ]
+                            select [...] from
+                                author author0_ 
+                            where
+                                author0_.id=1
