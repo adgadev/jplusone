@@ -1,0 +1,15 @@
+
+    ROOT
+        com.adgadev.jplusone.test.BookshopControllerTest.shouldGetBookDetailsEagerly(BookshopControllerTest.java:#LINE_NUMBER#)
+        com.adgadev.jplusone.test.domain.bookshop.BookshopController.getSampleBookUsingEagerLoading(BookshopController.java:36)
+        com.adgadev.jplusone.test.domain.bookshop.BookshopService.getSampleBookDetailsUsingEagerLoading [PROXY]
+            SESSION BOUNDARY
+                OPERATION [EXPLICIT]
+                    com.adgadev.jplusone.test.domain.bookshop.BookshopService.getSampleBookDetailsUsingEagerLoading(BookshopService.java:41)
+                    com.adgadev.jplusone.test.domain.bookshop.BookRepository.findByIdAndFetchAuthor [PROXY]
+                        STATEMENT [READ]
+                            select [...] from
+                                book book0_ 
+                                left outer join author author1_ on book0_.author_id=author1_.id
+                            where
+                                book0_.id=1
