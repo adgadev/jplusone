@@ -17,22 +17,20 @@
 package com.adgadev.jplusone.core;
 
 import com.adgadev.jplusone.core.flyway.FlywayAspect;
-import com.adgadev.jplusone.core.proxy.ProxiedRootsBeanPostProcessor;
-import com.adgadev.jplusone.core.proxy.datasource.HikariDataSourceAspect;
-import com.adgadev.jplusone.core.proxy.hibernate.HibernateCollectionInitialisationEventListener;
-import com.adgadev.jplusone.core.report.output.ReportChannelFactory;
-import com.adgadev.jplusone.core.report.ReportGenerator;
-import com.adgadev.jplusone.core.tracking.LoggingStateListener;
-import com.adgadev.jplusone.core.utils.ApplicationScanner;
 import com.adgadev.jplusone.core.properties.JPlusOneProperties;
+import com.adgadev.jplusone.core.proxy.ProxiedRootsBeanPostProcessor;
+import com.adgadev.jplusone.core.proxy.hibernate.HibernateCollectionInitialisationEventListener;
 import com.adgadev.jplusone.core.registry.RootNode;
+import com.adgadev.jplusone.core.report.ReportGenerator;
+import com.adgadev.jplusone.core.report.output.ReportChannelFactory;
 import com.adgadev.jplusone.core.tracking.ActivationStateListener;
+import com.adgadev.jplusone.core.tracking.LoggingStateListener;
 import com.adgadev.jplusone.core.tracking.TrackingContext;
 import com.adgadev.jplusone.core.tracking.TrackingStateListener;
+import com.adgadev.jplusone.core.utils.ApplicationScanner;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -102,21 +100,13 @@ public class JPlusOneAutoConfiguration {
 
     @Bean
     public BeanPostProcessor proxiedRootsBeanPostProcessor(ActivationStateListener stateListener) {
-        boolean useHikariDataSourceAspect = applicationContext.containsBean("org.springframework.cloud.autoconfigure.RefreshAutoConfiguration");
-        return new ProxiedRootsBeanPostProcessor(stateListener, useHikariDataSourceAspect);
+        return new ProxiedRootsBeanPostProcessor(stateListener);
     }
 
     @Bean
     public HibernateCollectionInitialisationEventListener hibernateCollectionInitialisationEventListener(
             EntityManagerFactory entityManagerFactory, ActivationStateListener stateListener) {
         return new HibernateCollectionInitialisationEventListener(entityManagerFactory, stateListener);
-    }
-
-    @Bean
-    @ConditionalOnClass(name = "com.zaxxer.hikari.HikariDataSource")
-    @ConditionalOnBean(type = { "org.springframework.cloud.autoconfigure.RefreshAutoConfiguration"})
-    public HikariDataSourceAspect hikariDataSourceAspect(ActivationStateListener stateListener) {
-        return new HikariDataSourceAspect(stateListener);
     }
 
     @Bean

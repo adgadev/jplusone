@@ -48,6 +48,7 @@
         <module>jplusone-tests-compat-springboot22</module>
         <module>jplusone-tests-compat-springboot23</module>
         <module>jplusone-tests-compat-springcloud</module>
+        <module>jplusone-tests-compat-embedded-database</module>
     </modules>
 
 </project>
