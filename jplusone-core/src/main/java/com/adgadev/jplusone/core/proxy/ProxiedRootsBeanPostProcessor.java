@@ -16,7 +16,7 @@
 
 package com.adgadev.jplusone.core.proxy;
 
-import com.adgadev.jplusone.core.proxy.datasource.DataSourceProxy;
+import com.adgadev.jplusone.core.proxy.datasource.DataSourceAopProxyFactory;
 import com.adgadev.jplusone.core.proxy.jpa.EntityManagerFactoryAopProxyFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,8 +32,6 @@ public class ProxiedRootsBeanPostProcessor implements BeanPostProcessor {
 
     private final StateListener stateListener;
 
-    private final boolean useHikariDataSourceAspect;
-
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         return bean;
@@ -42,16 +40,12 @@ public class ProxiedRootsBeanPostProcessor implements BeanPostProcessor {
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         if (bean instanceof DataSource) {
-            if (useHikariDataSourceAspect) {
-                log.debug("Using HikariDataSource aspect to intercept datasource connection creation");
-            } else {
-                log.debug("DataSource wrapped in the proxy");
-                return new DataSourceProxy((DataSource) bean, stateListener);
-            }
+            log.debug("DataSource wrapped in the proxy, beanName: {}", beanName);
+            return DataSourceAopProxyFactory.createProxy((DataSource) bean, stateListener);
         }
 
         if (bean instanceof EntityManagerFactory) {
-            log.debug("EntityManagerFactory wrapped in the proxy");
+            log.debug("EntityManagerFactory wrapped in the proxy, beanName: {}", beanName);
             return EntityManagerFactoryAopProxyFactory.createProxy((EntityManagerFactory) bean, stateListener);
         }
 

@@ -20,9 +20,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>jplusone-tests-compat-springcloud</artifactId>
-    <name>JPlusOne Compatibility Test - Spring Cloud</name>
-    <description>JPlusOne Test Project for compatibility with Spring Cloud</description>
+    <artifactId>jplusone-tests-compat-embedded-database</artifactId>
+    <name>JPlusOne Compatibility Test - Embedded Database</name>
+    <description>JPlusOne Test Project for compatibility with Zonky Embedded Database and Spring Cloud</description>
 
     <parent>
         <artifactId>jplusone-tests</artifactId>
@@ -31,8 +31,10 @@
     </parent>
 
     <properties>
-        <spring-boot.version>2.1.5.RELEASE</spring-boot.version>
-        <spring-cloud.version>Greenwich.SR2</spring-cloud.version>
+        <spring-boot.version>2.5.8</spring-boot.version>
+        <spring-cloud.version>2020.0.5</spring-cloud.version>
+        <embedded-database-spring-test.version>2.1.1</embedded-database-spring-test.version>
+        <postgresql.version>42.2.18</postgresql.version>
     </properties>
 
     <dependencyManagement>
@@ -77,9 +79,15 @@
             <artifactId>flyway-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
+            <groupId>io.zonky.test</groupId>
+            <artifactId>embedded-database-spring-test</artifactId>
+            <version>${embedded-database-spring-test.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -91,23 +99,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-            <!-- exclude junit 4 -->
-            <exclusions>
-                <exclusion>
-                    <groupId>junit</groupId>
-                    <artifactId>junit</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency> <!-- junit 5 -->
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
