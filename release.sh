@@ -23,11 +23,11 @@ fi
 
 
 echo ">>>>>> Releasing version $RELEASE_VERSION <<<<<<"
-mvn3 versions:set-property -Dproperty=revision -DnewVersion=$RELEASE_VERSION -DgenerateBackupPoms=false
+mvn versions:set-property -Dproperty=revision -DnewVersion=$RELEASE_VERSION -DgenerateBackupPoms=false
 # active -Pmaven-central profile cases than only deployable modules are build, hence mvn clean install before that
-mvn3 clean install
-mvn3 clean deploy -Ddeployable-modules-only -Prelease -Pmaven-central -s ~/.m2/settings-central.xml
-#mvn3 clean deploy -Prelease -Pgrexdev-ssh
+mvn clean install
+mvn clean deploy -Ddeployable-modules-only -Prelease -Pmaven-central -s ~/.m2/settings-central.xml
+#mvn clean deploy -Prelease -Pgrexdev-ssh
 
 git add pom.xml
 git commit -m "Release $RELEASE_VERSION"
@@ -35,7 +35,7 @@ git tag $RELEASE_VERSION
 git push --tags
 
 echo ">>>>>> Next development version will be set to $DEVELOPMENT_VERSION <<<<<<<"
-mvn3 versions:set-property -Dproperty=revision -DnewVersion=$DEVELOPMENT_VERSION -DgenerateBackupPoms=false
+mvn versions:set-property -Dproperty=revision -DnewVersion=$DEVELOPMENT_VERSION -DgenerateBackupPoms=false
 git add pom.xml
 git commit -m "Next development version"
 git push origin master

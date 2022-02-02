@@ -9,9 +9,9 @@ if [[ -z "$RELEASE_VERSION" ]]; then
 fi
 
 echo ">>>>>> Releasing version $RELEASE_VERSION <<<<<<"
-mvn3 versions:set-property -Dproperty=revision -DnewVersion=$RELEASE_VERSION -DgenerateBackupPoms=false
-#mvn3 clean deploy -Prelease -Pgrexdev-ssh
-#mvn3 clean deploy -Prelease -Pmaven-central -s ~/.m2/settings-central.xml
+mvn versions:set-property -Dproperty=revision -DnewVersion=$RELEASE_VERSION -DgenerateBackupPoms=false
+#mvn clean deploy -Prelease -Pgrexdev-ssh
+#mvn clean deploy -Prelease -Pmaven-central -s ~/.m2/settings-central.xml
 
 git add pom.xml
 git commit -m "Release $RELEASE_VERSION"
