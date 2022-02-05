@@ -30,7 +30,7 @@
 
 :assertion-api-gif: https://github.com/adgadev/jplusone/blob/master/fluent-api.gif
 
-:release_version: 1.1.0
+:release_version: 1.1.1
 
 = JPlusOne
 
