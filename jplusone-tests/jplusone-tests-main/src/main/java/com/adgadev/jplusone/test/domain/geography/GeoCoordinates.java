@@ -16,7 +16,7 @@
 
 package com.adgadev.jplusone.test.domain.geography;
 
-import javax.persistence.Embeddable;
+import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class GeoCoordinates {

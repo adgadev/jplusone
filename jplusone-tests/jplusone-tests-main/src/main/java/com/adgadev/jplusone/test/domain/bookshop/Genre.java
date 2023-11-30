@@ -19,8 +19,8 @@ package com.adgadev.jplusone.test.domain.bookshop;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
 @Slf4j
 @Getter

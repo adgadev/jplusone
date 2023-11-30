@@ -46,7 +46,7 @@ class TextFileWriterImplTest {
     }
 
     @Test
-    public void shouldCreateNewEmptyFile() throws IOException {
+    public void shouldCreexitateNewEmptyFile() throws IOException {
         // given
         Path reportFilePath = fileSystem.getPath("virtual/reports/jplusone-report.txt");
 

@@ -43,7 +43,8 @@ public class FramesProvider {
             "$$EnhancerBySpringCGLIB",
             "$$FastClassBySpringCGLIB",
             "$$_javassist",
-            "$$_jvst"
+            "$$_jvst",
+            "$$SpringCGLIB"
     };
     private final FrameClassFactory frameClassFactory;
 

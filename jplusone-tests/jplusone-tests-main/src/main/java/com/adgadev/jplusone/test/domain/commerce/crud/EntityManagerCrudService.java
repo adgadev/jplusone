@@ -20,8 +20,8 @@ import com.adgadev.jplusone.test.domain.commerce.Manufacturer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 
 @Service
 @RequiredArgsConstructor

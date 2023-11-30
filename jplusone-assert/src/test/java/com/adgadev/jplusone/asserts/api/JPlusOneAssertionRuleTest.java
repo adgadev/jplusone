@@ -23,7 +23,7 @@ import com.adgadev.jplusone.test.domain.bookshop.BookRepository;
 import com.adgadev.jplusone.test.domain.bookshop.BookshopService;
 import org.junit.jupiter.api.Test;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 
 import static com.adgadev.jplusone.asserts.api.builder.AmountMatcher.*;
 import static com.adgadev.jplusone.asserts.api.builder.SqlStatementType.INSERT_STATEMENT;

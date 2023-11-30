@@ -15,15 +15,15 @@
   ~ limitations under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>jplusone-tests-compat-springboot23</artifactId>
-    <name>JPlusOne Compatibility Test - Spring Boot 2.3.x</name>
-    <description>JPlusOne Test Project for compatibility with Spring Boot 2.3.x</description>
+    <artifactId>jplusone-tests-compat-springboot31</artifactId>
+    <name>JPlusOne Compatibility Test - Spring Boot 3.1x</name>
+    <description>JPlusOne Test Project for compatibility with Spring Boot 3.1.x</description>
 
     <parent>
         <artifactId>jplusone-tests</artifactId>
@@ -32,7 +32,7 @@
     </parent>
 
     <properties>
-        <spring-boot.version>2.3.7.RELEASE</spring-boot.version>
+        <spring-boot.version>3.1.6</spring-boot.version>
     </properties>
 
     <dependencyManagement>
@@ -81,12 +81,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.junit.vintage</groupId>
-                    <artifactId>junit-vintage-engine</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.adgadev.jplusone</groupId>
@@ -115,6 +109,14 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>

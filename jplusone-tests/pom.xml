@@ -33,20 +33,17 @@
     </parent>
 
     <properties>
-        <maven.compiler.release>11</maven.compiler.release>
+        <maven.compiler.release>17</maven.compiler.release>
         <maven.deploy.skip>true</maven.deploy.skip>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <commons-io.version>2.8.0</commons-io.version>
-        <logcaptor.version>2.3.1</logcaptor.version>
+        <commons-io.version>2.15.1</commons-io.version>
+        <logcaptor.version>2.9.1</logcaptor.version>
     </properties>
 
     <modules>
         <module>jplusone-tests-main</module>
-        <module>jplusone-tests-compat-springboot20</module>
-        <module>jplusone-tests-compat-springboot21</module>
-        <module>jplusone-tests-compat-springboot22</module>
-        <module>jplusone-tests-compat-springboot23</module>
+        <module>jplusone-tests-compat-springboot31</module>
         <module>jplusone-tests-compat-springcloud</module>
         <module>jplusone-tests-compat-embedded-database</module>
     </modules>

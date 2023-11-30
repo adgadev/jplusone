@@ -30,7 +30,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.ActiveProfiles;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 
 import static com.adgadev.jplusone.core.registry.LazyInitialisation.collectionLazyInitialisation;
@@ -62,7 +62,7 @@ class CommerceServiceTest {
 
         SessionNodeView sessionNode = rootNode.getSessions().get(rootNode.getSessions().size() - 1);
         assertThat(sessionNode, notNullValue());
-        assertThat(sessionNode.getOperations(), hasSize(equalTo(6)));
+        assertThat(sessionNode.getOperations(), hasSize(equalTo(7)));
 
         assertThat(sessionNode.getSessionFrameStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(CommerceServiceTest.class, "shouldLoadVariousObjects"),
@@ -103,16 +103,17 @@ class CommerceServiceTest {
         assertThat(operationNodeView4, notNullValue());
         assertThat(operationNodeView4.getOperationType(), equalTo(OperationType.IMPLICIT));
         assertThat(operationNodeView4.getStatements(), hasSize(equalTo(1)));
-        assertThat(operationNodeView4.getLazyInitialisations(), contains(collectionLazyInitialisation(Client.class.getName(), "orders")));
+        assertThat(operationNodeView4.getLazyInitialisations(), contains(entityLazyInitialisation(ClientProfile.class.getName())));
         assertThat(operationNodeView4.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
-                FrameExtractSpecification.anyAppMethodCallFrame(CommerceService.class, "loadVariousObjects")
+                FrameExtractSpecification.anyAppMethodCallFrame(CommerceService.class, "loadVariousObjects"),
+                FrameExtractSpecification.anyProxyMethodCallFrame(ClientProfile.class, "getPhotoLink")  // TODO: verify if stack is correct
         )));
 
         OperationNodeView operationNodeView5 = sessionNode.getOperations().get(4);
         assertThat(operationNodeView5, notNullValue());
         assertThat(operationNodeView5.getOperationType(), equalTo(OperationType.IMPLICIT));
         assertThat(operationNodeView5.getStatements(), hasSize(equalTo(1)));
-        assertThat(operationNodeView5.getLazyInitialisations(), contains(collectionLazyInitialisation(Order.class.getName(), "products")));
+        assertThat(operationNodeView5.getLazyInitialisations(), contains(collectionLazyInitialisation(Client.class.getName(), "orders")));
         assertThat(operationNodeView5.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(CommerceService.class, "loadVariousObjects")
         )));
@@ -121,8 +122,17 @@ class CommerceServiceTest {
         assertThat(operationNodeView6, notNullValue());
         assertThat(operationNodeView6.getOperationType(), equalTo(OperationType.IMPLICIT));
         assertThat(operationNodeView6.getStatements(), hasSize(equalTo(1)));
-        assertThat(operationNodeView6.getLazyInitialisations(), contains(entityLazyInitialisation(Manufacturer.class.getName())));
+        assertThat(operationNodeView6.getLazyInitialisations(), contains(collectionLazyInitialisation(Order.class.getName(), "products")));
         assertThat(operationNodeView6.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
+                FrameExtractSpecification.anyAppMethodCallFrame(CommerceService.class, "loadVariousObjects")
+        )));
+
+        OperationNodeView operationNodeView7 = sessionNode.getOperations().get(6);
+        assertThat(operationNodeView7, notNullValue());
+        assertThat(operationNodeView7.getOperationType(), equalTo(OperationType.IMPLICIT));
+        assertThat(operationNodeView7.getStatements(), hasSize(equalTo(1)));
+        assertThat(operationNodeView7.getLazyInitialisations(), contains(entityLazyInitialisation(Manufacturer.class.getName())));
+        assertThat(operationNodeView7.getCallFramesStack(), JPlusOneMatchers.frameCallSequenceMatcher(List.of(
                 FrameExtractSpecification.anyAppMethodCallFrame(CommerceService.class, "loadVariousObjects"),
                 FrameExtractSpecification.anyProxyMethodCallFrame(Manufacturer.class, "getName")
         )));
@@ -131,32 +141,37 @@ class CommerceServiceTest {
         StatementNodeView statementNodeView1 = operationNodeView1.getStatements().get(0);
         assertThat(statementNodeView1, notNullValue());
         assertThat(statementNodeView1.getStatementType(), equalTo(StatementType.SELECT));
-        assertThat(statementNodeView1.getSql(), endsWith("from client client0_ where client0_.id=1"));
+        assertThat(statementNodeView1.getSql(), endsWith("from client c1_0 where c1_0.id=1"));
 
         StatementNodeView statementNodeView2 = operationNodeView2.getStatements().get(0);
         assertThat(statementNodeView2, notNullValue());
         assertThat(statementNodeView2.getStatementType(), equalTo(StatementType.SELECT));
-        assertThat(statementNodeView2.getSql(), endsWith("from user user0_ where user0_.client_id=1"));
+        assertThat(statementNodeView2.getSql(), endsWith("from users u1_0 where u1_0.client_id=1"));
 
         StatementNodeView statementNodeView3 = operationNodeView3.getStatements().get(0);
         assertThat(statementNodeView3, notNullValue());
         assertThat(statementNodeView3.getStatementType(), equalTo(StatementType.SELECT));
-        assertThat(statementNodeView3.getSql(), endsWith("from client_profile clientprof0_ where clientprof0_.id=1"));
+        assertThat(statementNodeView3.getSql(), endsWith("from client_profile c1_0 where c1_0.id=1"));
 
         StatementNodeView statementNodeView4 = operationNodeView4.getStatements().get(0);
         assertThat(statementNodeView4, notNullValue());
         assertThat(statementNodeView4.getStatementType(), equalTo(StatementType.SELECT));
-        assertThat(statementNodeView4.getSql(), endsWith("from orders orders0_ where orders0_.client_id=1"));
+        assertThat(statementNodeView4.getSql(), endsWith("from client c1_0 where c1_0.client_profile_id=1"));
 
         StatementNodeView statementNodeView5 = operationNodeView5.getStatements().get(0);
         assertThat(statementNodeView5, notNullValue());
         assertThat(statementNodeView5.getStatementType(), equalTo(StatementType.SELECT));
-        assertThat(statementNodeView5.getSql(), endsWith("from order_product products0_ inner join product product1_ on products0_.product_id=product1_.id where products0_.order_id=1"));
+        assertThat(statementNodeView5.getSql(), endsWith("from orders o1_0 where o1_0.client_id=1"));
 
         StatementNodeView statementNodeView6 = operationNodeView6.getStatements().get(0);
         assertThat(statementNodeView6, notNullValue());
         assertThat(statementNodeView6.getStatementType(), equalTo(StatementType.SELECT));
-        assertThat(statementNodeView6.getSql(), endsWith("from manufacturer manufactur0_ where manufactur0_.id=1"));
+        assertThat(statementNodeView6.getSql(), endsWith("from order_product p1_0 join product p1_1 on p1_1.id=p1_0.product_id where p1_0.order_id=1"));
+
+        StatementNodeView statementNodeView7 = operationNodeView7.getStatements().get(0);
+        assertThat(statementNodeView7, notNullValue());
+        assertThat(statementNodeView7.getStatementType(), equalTo(StatementType.SELECT));
+        assertThat(statementNodeView7.getSql(), endsWith("from manufacturer m1_0 where m1_0.id=1"));
     }
 
 }

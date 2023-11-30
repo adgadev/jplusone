@@ -24,7 +24,7 @@ import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.framework.ProxyFactory;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 
 @Slf4j
 public class EntityManagerAopProxyFactory {

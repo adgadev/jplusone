@@ -32,9 +32,9 @@
     </parent>
 
     <properties>
-        <maven.compiler.release>9</maven.compiler.release>
+        <maven.compiler.release>17</maven.compiler.release>
         <maven.deploy.skip>true</maven.deploy.skip>
-        <spring-boot.version>2.2.9.RELEASE</spring-boot.version>
+        <spring-boot.version>3.0.13</spring-boot.version>
     </properties>
 
     <dependencyManagement>
