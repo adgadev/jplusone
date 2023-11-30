@@ -34,8 +34,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.ActiveProfiles;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import java.sql.PreparedStatement;
 import java.util.List;
 
@@ -112,13 +112,13 @@ class JpaCascadeCrudServiceTest {
         assertThat(statementNodeView1, notNullValue());
         assertThat(statementNodeView1.getStatementType(), equalTo(StatementType.SELECT));
         assertThat(statementNodeView1.getSql(), endsWith(String.format(
-                "from manufacturer manufactur0_ where manufactur0_.id=%d", MANUFACTURER_ID)));
+                "from manufacturer m1_0 where m1_0.id=%d", MANUFACTURER_ID)));
 
         StatementNodeView statementNodeView2 = operationNodeView2.getStatements().get(0);
         assertThat(statementNodeView2, notNullValue());
         assertThat(statementNodeView2.getStatementType(), equalTo(StatementType.SELECT));
         assertThat(statementNodeView2.getSql(), endsWith(String.format(
-                "from product products0_ where products0_.manufacturer_id=%d", MANUFACTURER_ID)));
+                "from product p1_0 where p1_0.manufacturer_id=%d", MANUFACTURER_ID)));
 
         StatementNodeView statementNodeView3 = operationNodeView3.getStatements().get(0);
         assertThat(statementNodeView3, notNullValue());
@@ -188,13 +188,13 @@ class JpaCascadeCrudServiceTest {
         assertThat(statementNodeView1, notNullValue());
         assertThat(statementNodeView1.getStatementType(), equalTo(StatementType.SELECT));
         assertThat(statementNodeView1.getSql(), endsWith(String.format(
-                "from manufacturer manufactur0_ where manufactur0_.id=%d", MANUFACTURER_ID)));
+                "from manufacturer m1_0 where m1_0.id=%d", MANUFACTURER_ID)));
 
         StatementNodeView statementNodeView2 = operationNodeView2.getStatements().get(0);
         assertThat(statementNodeView2, notNullValue());
         assertThat(statementNodeView2.getStatementType(), equalTo(StatementType.SELECT));
         assertThat(statementNodeView2.getSql(), endsWith(String.format(
-                "from product products0_ where products0_.manufacturer_id=%d", MANUFACTURER_ID)));
+                "from product p1_0 where p1_0.manufacturer_id=%d", MANUFACTURER_ID)));
 
         StatementNodeView statementNodeView3 = operationNodeView3.getStatements().get(0);
         assertThat(statementNodeView3, notNullValue());
@@ -265,13 +265,13 @@ class JpaCascadeCrudServiceTest {
         assertThat(statementNodeView1, notNullValue());
         assertThat(statementNodeView1.getStatementType(), equalTo(StatementType.SELECT));
         assertThat(statementNodeView1.getSql(), endsWith(String.format(
-                "from manufacturer manufactur0_ where manufactur0_.id=%d", MANUFACTURER_ID)));
+                "from manufacturer m1_0 where m1_0.id=%d", MANUFACTURER_ID)));
 
         StatementNodeView statementNodeView2 = operationNodeView2.getStatements().get(0);
         assertThat(statementNodeView2, notNullValue());
         assertThat(statementNodeView2.getStatementType(), equalTo(StatementType.SELECT));
         assertThat(statementNodeView2.getSql(), endsWith(String.format(
-                "from product products0_ where products0_.manufacturer_id=%d", MANUFACTURER_ID)));
+                "from product p1_0 where p1_0.manufacturer_id=%d", MANUFACTURER_ID)));
 
         StatementNodeView statementNodeView3 = operationNodeView3.getStatements().get(0);
         assertThat(statementNodeView3, notNullValue());

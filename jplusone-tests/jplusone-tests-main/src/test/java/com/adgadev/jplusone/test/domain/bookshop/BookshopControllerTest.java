@@ -32,7 +32,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 
 import static com.adgadev.jplusone.core.registry.LazyInitialisation.collectionLazyInitialisation;
@@ -119,17 +119,17 @@ class BookshopControllerTest {
         StatementNodeView statementNodeView1 = operationNodeView1.getStatements().get(0);
         assertThat(statementNodeView1, notNullValue());
         assertThat(statementNodeView1.getStatementType(), equalTo(StatementType.SELECT));
-        assertThat(statementNodeView1.getSql(), endsWith("from book book0_ where book0_.id=1"));
+        assertThat(statementNodeView1.getSql(), endsWith("from book b1_0 where b1_0.id=1"));
 
         StatementNodeView statementNodeView2 = operationNodeView2.getStatements().get(0);
         assertThat(statementNodeView2, notNullValue());
         assertThat(statementNodeView2.getStatementType(), equalTo(StatementType.SELECT));
-        assertThat(statementNodeView2.getSql(), endsWith("from author author0_ left outer join genre genre1_ on author0_.genre_id=genre1_.id where author0_.id=1"));
+        assertThat(statementNodeView2.getSql(), endsWith("from author a1_0 left join genre g1_0 on g1_0.id=a1_0.genre_id where a1_0.id=1"));
 
         StatementNodeView statementNodeView3 = operationNodeView3.getStatements().get(0);
         assertThat(statementNodeView3, notNullValue());
         assertThat(statementNodeView3.getStatementType(), equalTo(StatementType.SELECT));
-        assertThat(statementNodeView3.getSql(), endsWith("from book books0_ where books0_.author_id=1"));
+        assertThat(statementNodeView3.getSql(), endsWith("from book b1_0 where b1_0.author_id=1"));
     }
 
     @Test
@@ -182,11 +182,11 @@ class BookshopControllerTest {
         StatementNodeView statementNodeView1 = operationNodeView1.getStatements().get(0);
         assertThat(statementNodeView1, notNullValue());
         assertThat(statementNodeView1.getStatementType(), equalTo(StatementType.SELECT));
-        assertThat(statementNodeView1.getSql(), endsWith("from book book0_ left outer join author author1_ on book0_.author_id=author1_.id left outer join book books2_ on author1_.id=books2_.author_id where book0_.id=1"));
+        assertThat(statementNodeView1.getSql(), endsWith("from book b1_0 left join author a1_0 on a1_0.id=b1_0.author_id left join book b2_0 on a1_0.id=b2_0.author_id where b1_0.id=1"));
 
         StatementNodeView statementNodeView2 = operationNodeView2.getStatements().get(0);
         assertThat(statementNodeView2, notNullValue());
         assertThat(statementNodeView2.getStatementType(), equalTo(StatementType.SELECT));
-        assertThat(statementNodeView2.getSql(), endsWith("from genre genre0_ where genre0_.id=1"));
+        assertThat(statementNodeView2.getSql(), endsWith("from genre g1_0 where g1_0.id=1"));
     }
 }

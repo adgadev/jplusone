@@ -81,14 +81,12 @@ class SqlFormatterTest {
                                 "        A1 = 2 \n" +
                                 "    where\n" +
                                 "        B1 = 'ABC' \n" +
-                                "        and C2 in (\n" +
-                                "            select\n" +
-                                "                C3 \n" +
-                                "            from\n" +
-                                "                T2 \n" +
-                                "            where\n" +
-                                "                C4 = 0\n" +
-                                "        )"
+                                "        and C2 in (select\n" +
+                                "            C3 \n" +
+                                "        from\n" +
+                                "            T2 \n" +
+                                "        where\n" +
+                                "            C4 = 0)"
                 )
         );
     }

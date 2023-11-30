@@ -13,3 +13,6 @@ jplusone:
     operation-filtering-mode: ALL_OPERATIONS
     statement-filtering-mode: ALL_STATEMENTS
 
+spring:
+  flyway:
+    clean-disabled: false

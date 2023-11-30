@@ -1,5 +1,0 @@
-spring.jpa.open-in-view: false
-
-logging:
-  level:
-    com.adgadev.jplusone: DEBUG

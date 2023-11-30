@@ -28,21 +28,21 @@ import com.adgadev.jplusone.core.tracking.LoggingStateListener;
 import com.adgadev.jplusone.core.tracking.TrackingContext;
 import com.adgadev.jplusone.core.tracking.TrackingStateListener;
 import com.adgadev.jplusone.core.utils.ApplicationScanner;
+import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-import javax.persistence.EntityManagerFactory;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Configuration
+@AutoConfiguration
 @RequiredArgsConstructor
 @EnableConfigurationProperties(JPlusOneProperties.class)
 @ConditionalOnProperty(prefix = "jplusone", name = "enabled", matchIfMissing = true)

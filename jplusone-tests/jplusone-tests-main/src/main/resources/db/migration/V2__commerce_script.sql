@@ -27,7 +27,7 @@ CREATE TABLE client (
     FOREIGN KEY (client_profile_id) REFERENCES client_profile(id)
 );
 
-CREATE TABLE user (
+CREATE TABLE users (
     id INT PRIMARY KEY,
     username VARCHAR(50) NOT NULL,
     client_id INT,
@@ -66,8 +66,8 @@ INSERT INTO client_profile(id, photo_link) VALUES (1, 'http://example.com/me.jpg
 INSERT INTO client(id, first_name, last_name, client_profile_id) VALUES (1, 'John', 'Smith', 1);
 INSERT INTO client(id, first_name, last_name, client_profile_id) VALUES (2, 'James', 'Jones', null);
 
-INSERT INTO user(id, username, client_id) VALUES (1, 'john.smith', 1);
-INSERT INTO user(id, username, client_id) VALUES (2, 'james.jones', 2);
+INSERT INTO users(id, username, client_id) VALUES (1, 'john.smith', 1);
+INSERT INTO users(id, username, client_id) VALUES (2, 'james.jones', 2);
 
 INSERT INTO manufacturer(id, name) VALUES (1, 'Wayne Enterpreises');
 

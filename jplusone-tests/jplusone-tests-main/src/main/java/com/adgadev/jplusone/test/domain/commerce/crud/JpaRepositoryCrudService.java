@@ -20,7 +20,7 @@ import com.adgadev.jplusone.test.domain.commerce.Manufacturer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
 @Service
 @RequiredArgsConstructor

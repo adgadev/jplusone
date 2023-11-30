@@ -31,10 +31,10 @@
     </parent>
 
     <properties>
-        <spring-boot.version>2.5.8</spring-boot.version>
-        <spring-cloud.version>2020.0.5</spring-cloud.version>
-        <embedded-database-spring-test.version>2.1.1</embedded-database-spring-test.version>
-        <postgresql.version>42.2.25</postgresql.version>
+        <spring-boot.version>3.0.13</spring-boot.version>
+        <spring-cloud.version>2022.0.1</spring-cloud.version>
+        <embedded-database-spring-test.version>2.4.0</embedded-database-spring-test.version>
+        <postgresql.version>42.7.0</postgresql.version>
     </properties>
 
     <dependencyManagement>
@@ -128,6 +128,14 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>

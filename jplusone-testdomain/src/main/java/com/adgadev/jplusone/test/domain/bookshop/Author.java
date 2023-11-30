@@ -18,8 +18,8 @@ package com.adgadev.jplusone.test.domain.bookshop;
 
 import lombok.Getter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
 @Getter
 @Entity

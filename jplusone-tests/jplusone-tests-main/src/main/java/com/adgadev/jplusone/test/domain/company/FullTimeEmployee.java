@@ -16,7 +16,7 @@
 
 package com.adgadev.jplusone.test.domain.company;
 
-import javax.persistence.Entity;
+import jakarta.persistence.Entity;
 
 @Entity
 public class FullTimeEmployee extends Employee {

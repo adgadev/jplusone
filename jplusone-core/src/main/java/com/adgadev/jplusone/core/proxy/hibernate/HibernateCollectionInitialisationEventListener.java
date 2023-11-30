@@ -26,7 +26,7 @@ import org.hibernate.event.spi.InitializeCollectionEvent;
 import org.hibernate.event.spi.InitializeCollectionEventListener;
 import org.hibernate.internal.SessionFactoryImpl;
 
-import javax.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityManagerFactory;
 import java.lang.reflect.Field;
 import java.util.Optional;
 

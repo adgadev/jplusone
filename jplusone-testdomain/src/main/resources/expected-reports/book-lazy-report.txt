@@ -9,15 +9,15 @@
                     com.adgadev.jplusone.test.domain.bookshop.BookRepository.findById [PROXY]
                         STATEMENT [READ]
                             select [...] from
-                                book book0_ 
+                                book b1_0 
                             where
-                                book0_.id=1
+                                b1_0.id=1
                 OPERATION [IMPLICIT]
                     com.adgadev.jplusone.test.domain.bookshop.BookshopService.getSampleBookDetailsUsingLazyLoading(BookshopService.java:35)
                     com.adgadev.jplusone.test.domain.bookshop.Author.getName [PROXY]
                     com.adgadev.jplusone.test.domain.bookshop.Author [FETCHING ENTITY]
                         STATEMENT [READ]
                             select [...] from
-                                author author0_ 
+                                author a1_0 
                             where
-                                author0_.id=1
+                                a1_0.id=1

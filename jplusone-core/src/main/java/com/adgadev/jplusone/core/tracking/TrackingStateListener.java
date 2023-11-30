@@ -24,10 +24,11 @@ import com.adgadev.jplusone.core.registry.LazyInitialisation;
 import com.adgadev.jplusone.core.registry.RootNode;
 import com.adgadev.jplusone.core.registry.SessionNode;
 import com.adgadev.jplusone.core.report.ReportGenerator;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.persistence.EntityManager;
 import java.util.Stack;
 import java.util.function.Supplier;
 
@@ -89,7 +90,7 @@ public class TrackingStateListener implements StateListener {
         Stack<SessionNode> sessionStack = currentSessionStack.get();
         FrameStack frameStack = framesProvider.captureCallFrames();
 
-        if (isExecutedByEntityManager(frameStack)) {
+        if (isExecutedByEntityManager(frameStack) || isExecutedByJpaQuery(frameStack)) {
             if (!sessionStack.empty()) {
                 SessionNode session = sessionStack.peek();
                 session.addStatement(sql, frameStack);
@@ -120,6 +121,12 @@ public class TrackingStateListener implements StateListener {
     private boolean isExecutedByEntityManager(FrameStack frameStack) {
         return frameStack
                 .findLastMatchingFrame(frameExtract -> EntityManager.class.isAssignableFrom(frameExtract.getClazz()))
+                .isPresent();
+    }
+
+    private boolean isExecutedByJpaQuery(FrameStack frameStack) {
+        return frameStack
+                .findLastMatchingFrame(frameExtract -> Query.class.isAssignableFrom(frameExtract.getClazz()))
                 .isPresent();
     }
 }

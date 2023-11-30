@@ -33,9 +33,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.ActiveProfiles;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.transaction.Transactional;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
+import jakarta.transaction.Transactional;
 import java.sql.PreparedStatement;
 import java.util.List;
 
@@ -103,9 +103,9 @@ class JpaRepositoryCrudServiceTest {
         assertThat(statementNodeView1, notNullValue());
         assertThat(statementNodeView1.getStatementType(), equalTo(StatementType.SELECT));
         assertThat(statementNodeView1.getSql(), endsWith(String.format(
-                "from manufacturer manufactur0_ " +
-                        "left outer join product products1_ on manufactur0_.id=products1_.manufacturer_id " +
-                        "where manufactur0_.id=%d", NEW_ID)));
+                "from manufacturer m1_0 " +
+                        "left join product p1_0 on m1_0.id=p1_0.manufacturer_id " +
+                        "where m1_0.id=%d", NEW_ID)));
 
         StatementNodeView statementNodeView = operationNodeView2.getStatements().get(0);
         assertThat(statementNodeView, notNullValue());
@@ -160,9 +160,9 @@ class JpaRepositoryCrudServiceTest {
         assertThat(statementNodeView1, notNullValue());
         assertThat(statementNodeView1.getStatementType(), equalTo(StatementType.SELECT));
         assertThat(statementNodeView1.getSql(), endsWith(String.format(
-                "from manufacturer manufactur0_ " +
-                        "left outer join product products1_ on manufactur0_.id=products1_.manufacturer_id " +
-                        "where manufactur0_.id=%d", NEW_ID + 1)));
+                "from manufacturer m1_0 " +
+                        "left join product p1_0 on m1_0.id=p1_0.manufacturer_id " +
+                        "where m1_0.id=%d", NEW_ID + 1)));
 
         StatementNodeView statementNodeView2 = operationNodeView2.getStatements().get(0);
         assertThat(statementNodeView2, notNullValue());
@@ -217,7 +217,7 @@ class JpaRepositoryCrudServiceTest {
         assertThat(statementNodeView1, notNullValue());
         assertThat(statementNodeView1.getStatementType(), equalTo(StatementType.SELECT));
         assertThat(statementNodeView1.getSql(), endsWith(String.format(
-                "from manufacturer manufactur0_ where manufactur0_.id=%d", NEW_ID + 2)));
+                "from manufacturer m1_0 where m1_0.id=%d", NEW_ID + 2)));
 
         StatementNodeView statementNodeView2 = operationNodeView2.getStatements().get(0);
         assertThat(statementNodeView2, notNullValue());
@@ -283,13 +283,13 @@ class JpaRepositoryCrudServiceTest {
         assertThat(statementNodeView1, notNullValue());
         assertThat(statementNodeView1.getStatementType(), equalTo(StatementType.SELECT));
         assertThat(statementNodeView1.getSql(), endsWith(String.format(
-                "from manufacturer manufactur0_ where manufactur0_.id=%d", NEW_ID + 3)));
+                "from manufacturer m1_0 where m1_0.id=%d", NEW_ID + 3)));
 
         StatementNodeView statementNodeView2 = operationNodeView2.getStatements().get(0);
         assertThat(statementNodeView2, notNullValue());
         assertThat(statementNodeView2.getStatementType(), equalTo(StatementType.SELECT));
         assertThat(statementNodeView2.getSql(), endsWith(String.format(
-                "from product products0_ where products0_.manufacturer_id=%d", NEW_ID + 3)));
+                "from product p1_0 where p1_0.manufacturer_id=%d", NEW_ID + 3)));
 
         StatementNodeView statementNodeView3 = operationNodeView3.getStatements().get(0);
         assertThat(statementNodeView3, notNullValue());
@@ -357,13 +357,13 @@ class JpaRepositoryCrudServiceTest {
         assertThat(statementNodeView1, notNullValue());
         assertThat(statementNodeView1.getStatementType(), equalTo(StatementType.SELECT));
         assertThat(statementNodeView1.getSql(), endsWith(String.format(
-                "from manufacturer manufactur0_ where manufactur0_.id=%d", NEW_ID + 4)));
+                "from manufacturer m1_0 where m1_0.id=%d", NEW_ID + 4)));
 
         StatementNodeView statementNodeView2 = operationNodeView2.getStatements().get(0);
         assertThat(statementNodeView2, notNullValue());
         assertThat(statementNodeView2.getStatementType(), equalTo(StatementType.SELECT));
         assertThat(statementNodeView2.getSql(), endsWith(String.format(
-                "from product products0_ where products0_.manufacturer_id=%d", NEW_ID + 4)));
+                "from product p1_0 where p1_0.manufacturer_id=%d", NEW_ID + 4)));
 
         StatementNodeView statementNodeView3 = operationNodeView3.getStatements().get(0);
         assertThat(statementNodeView3, notNullValue());
