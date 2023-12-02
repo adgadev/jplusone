@@ -10,7 +10,7 @@ fi
 
 echo ">>>>>> Releasing version $RELEASE_VERSION <<<<<<"
 mvn versions:set-property -Dproperty=revision -DnewVersion=$RELEASE_VERSION -DgenerateBackupPoms=false
-#mvn clean deploy -Prelease -Pgrexdev-ssh
+#mvn clean deploy -Prelease -Padgadev-ssh
 #mvn clean deploy -Prelease -Pmaven-central -s ~/.m2/settings-central.xml
 
 git add pom.xml
