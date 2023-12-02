@@ -72,7 +72,7 @@
             <extension>
                 <groupId>org.apache.maven.wagon</groupId>
                 <artifactId>wagon-ssh</artifactId>
-                <version>3.3.4</version>
+                <version>3.5.3</version>
             </extension>
         </extensions>
 
@@ -80,17 +80,17 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.11.0</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8.2</version>
+                <version>3.1.1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.2</version>
+                <version>3.2.2</version>
             </plugin>
         </plugins>
 
@@ -99,7 +99,7 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>flatten-maven-plugin</artifactId>
-                    <version>1.2.2</version>
+                    <version>1.5.0</version>
                     <configuration>
                         <flattenMode>oss</flattenMode>
                     </configuration>
@@ -160,7 +160,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>3.2.1</version>
+                        <version>3.3.0</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -173,7 +173,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.2.0</version>
+                        <version>3.6.2</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -185,12 +185,13 @@
                         <configuration>
                             <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
                             <detectJavaApiLink>false</detectJavaApiLink>
+                            <additionalJOption>-Xdoclint:none</additionalJOption>
                         </configuration>
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
+                        <version>3.1.0</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -222,7 +223,7 @@
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.8</version>
+                        <version>1.6.13</version>
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>sonatype-nexus-staging</serverId>
@@ -247,11 +248,11 @@
         </profile>
 
         <profile>
-            <id>grexdev-ssh</id>
+            <id>adgadev-ssh</id>
             <distributionManagement>
                 <repository>
-                    <id>grexdev-ssh-repository</id>
-                    <url>sftp://grexdev.com/home/mavenrepo</url>
+                    <id>adgadev-ssh-repository</id>
+                    <url>sftp://vps.adgadev.com/home/mavenrepo</url>
                 </repository>
             </distributionManagement>
         </profile>

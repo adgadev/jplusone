@@ -27,7 +27,7 @@ mvn versions:set-property -Dproperty=revision -DnewVersion=$RELEASE_VERSION -Dge
 # active -Pmaven-central profile cases than only deployable modules are build, hence mvn clean install before that
 mvn clean install
 mvn clean deploy -Ddeployable-modules-only -Prelease -Pmaven-central -s ~/.m2/settings-central.xml
-#mvn clean deploy -Prelease -Pgrexdev-ssh
+#mvn clean deploy -Prelease -Padgadev-ssh
 
 git add pom.xml
 git commit -m "Release $RELEASE_VERSION"
