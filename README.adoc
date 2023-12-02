@@ -55,10 +55,16 @@ Moreover JPlusOne provides API which allows to write tests checking how effectiv
 == Prerequisites
 JPlusOne can be applied only to projects which meets following requirements:
 
-* Java 9 or later
-* Spring Boot 2.x
-* JPA 2.x (Hibernate as implementation provider required)
-* Slf4j
+* JPlusOne v1.x (1.1.1 is the latest)
+** Java 9 or later
+** Spring Boot 2.x
+** JPA 2.x (Hibernate as implementation provider required)
+** Slf4j
+* JPlusOne v2.x
+** Java 17 or later
+** Spring Boot 3.x
+** JPA 3.x (Hibernate 6 or higher)
+** Slf4j
 
 == Quickstart
 Add the following Maven dependency to your project:
