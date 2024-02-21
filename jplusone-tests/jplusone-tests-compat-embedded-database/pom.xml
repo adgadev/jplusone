@@ -34,7 +34,7 @@
         <spring-boot.version>3.0.13</spring-boot.version>
         <spring-cloud.version>2022.0.1</spring-cloud.version>
         <embedded-database-spring-test.version>2.4.0</embedded-database-spring-test.version>
-        <postgresql.version>42.7.0</postgresql.version>
+        <postgresql.version>42.7.2</postgresql.version>
     </properties>
 
     <dependencyManagement>
